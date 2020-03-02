@@ -1,0 +1,130 @@
+package gramaticas;
+import java_cup.runtime.Symbol;
+import java.util.ArrayList;
+
+parser code {:
+
+    public SintaxCreacionMapa(AnalizadorLexico lex){
+     super(lex);
+    }
+
+    public void syntas_error(Symbol s){
+        setAccion("ERROR", "Error sintaxis token: "+s.right,"");
+    }
+:}
+
+
+    terminal VERDADERO, FALSO, LLAVE_A, LLAVE_B, AGRUPACION_A, AGRUPACION_B, DOS_PUNTOS, COMA, PUNTO, COMILLAS,
+             MAPA, id, size, alAzar, pNeutrales, mapaCiego, acumular, NEUTRALES, mostrarNaves, mostrarEstadisticas,
+             produccion, finalizacion, PLANETAS, nombre, naves, porcMuertes, PLANETAS_NEUTRALES, JUGADORES, planetas,
+             tipo, HUMANO, DIFICIL, FACIL, ENTERO, DECIMAL, ID;
+             
+    non terminal a, b, c, d, e, f, g, h, i, j, j2, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z, aa, 
+                 ab, ac, ad, ae, af, ag, ah, ai, aj, ak, pn, jug, q2, q3, q5, q7, cierre;
+
+    start with a;
+
+    a ::= LLAVE_A b |
+          LLAVE_A p |
+          LLAVE_A pn |
+          LLAVE_A jug |
+          COMA q2 |
+          LLAVE_B
+;
+    b ::= MAPA DOS_PUNTOS LLAVE_A c
+;
+    c ::= d | e | f | g | h | i | j2 | k | COMA q | LLAVE_B a
+;
+    q ::= d | e | f | g | h | i | j2 | k
+;
+    d ::= id DOS_PUNTOS COMILLAS ID COMILLAS c 
+    e ::= size DOS_PUNTOS LLAVE_A j LLAVE_B c
+    j ::= filas DOS_PUNTOS ENTERO COMA columnas DOS_PUNTOS ENTERO |
+          columnas DOS_PUNTOS ENTERO COMA filas DOS_PUNTOS ENTERO
+;
+    f ::= alAzar DOS_PUNTOS VERDADERO c |
+          alAzar DOS_PUNTOS FALSO c 
+;
+    g ::= pNeutrales DOS_PUNTOS ENTERO c
+;
+    h ::= mapaCiego DOS_PUNTOS VERDADERO c |
+          mapaCiego DOS_PUNTOS FALSO c
+;
+    i ::= acumular DOS_PUNTOS VERDADERO c |
+          acumular DOS_PUNTOS FALSO c 
+;
+    j2 ::= NEUTRALES DOS_PUNTOS LLAVE_A l
+;
+    l ::= m COMA | n COMA | o COMA | LLAVE_B c
+;
+    m ::= mostrarNaves DOS_PUNTOS VERDADERO l |
+          mostrarNaves DOS_PUNTOS FALSO l
+;
+    n ::= mostrarEstadisticas DOS_PUNTOS VERDADERO l |
+          mostrarEstadisticas DOS_PUNTOS FALSO l 
+;
+    o ::= produccion DOS_PUNTOS ENTERO l
+;
+    k ::= finalizacion DOS_PUNTOS ENTERO c
+;
+    q2 ::= b | p | pn | jug
+;
+    p ::= PLANETAS DOS_PUNTOS AGRUPACION_A r |
+          PLANETAS DOS_PUNTOS AGRUPACION_A cierre
+;
+    r ::= LLAVE_A s
+;
+    s ::= t | u | v | w | COMA q3 | LLAVE_B COMA R | LLAVE_B cierre
+;
+    q3 ::= t | u | v | w
+;
+    t ::= nombre DOS_PUNTOS COMILLAS ID COMILLAS s
+;
+    u ::= naves DOS_PUNTOS ENTERO s
+;
+    v ::= produccion DOS_PUNTOS ENTERO s
+;
+    w ::= porcMuertes DOS_PUNTOS DECIMAL s
+;
+    pn ::= PLANETAS_NEUTRALES DOS_PUNTOS AGRUPACION_A x |
+           PLANETAS_NEUTRALES DOS_PUNTOS AGRUPACION_A cierre
+;
+    x ::= LLAVE_A y
+;
+    y ::= z | aa | ab | ac | COMA q5 | LLAVE_B COMA x | LLAVE_B cierre
+;
+    q5 ::= z | aa | ab | ac
+;
+    z::= nombre DOS_PUNTOS COMILLAS ID COMILLAS y
+;
+    aa ::= naves DOS_PUNTOS ENTERO y
+;
+    ab ::= produccion DOS_PUNTOS ENTERO y
+;
+    ac ::= porcMuertes DOS_PUNTOS DECIMAL y
+;
+    jug ::= JUGADORES DOS_PUNTOS AGRUPACION_A ad |
+            JUGADORES DOS_PUNTOS AGRUPACION_A cierre
+;
+    ad ::= AGRUPACION_A ae
+;
+    ae ::= af | ag | ah | COMA q7 | LLAVE_B COMA ad | LLAVE_B cierre
+;
+    q7 ::= af | ag | ah
+;
+    af ::= nombre DOS_PUNTOS COMILLAS ID COMILLAS ae
+;
+    ag ::= planetas DOS_PUNTOS AGRUPACION_A ai
+;
+    ai ::= COMILLAS ID COMILLAS COMA ai | 
+           AGRUPACION_B ae
+;
+    ah ::= tipo DOS_PUNTOS FACIL ae |
+           tipo DOS_PUNTOS DIFICIL ae
+;
+    cierre ::= AGRUPACION_B a
+;
+                    
+
+
+
