@@ -16,7 +16,9 @@ Numero2 = [123456789]
 Caracteres1 = [$_]
 Caracteres2 = [-]
 Punto = [.]
-
+Salto = \r|\n|\r\n
+Espacio = {Salto} | [ \t\f]
+    
 %{
     private Symbol symbol(int tipo){
         return new Symbol(tipo, yyline+1, yycolumn+1);
@@ -28,20 +30,21 @@ Punto = [.]
 %}
 %%
 <YYINITIAL> {
-
-         "true"                                                             {return symbol(sym.VERDADERO);}
-         "false"                                                            {return symbol(sym.FALSO);}
+         ","                                                              {return symbol(sym.COMA);}  
+         "true"                                                             {return symbol(sym.VERDADERO, new String(yytext()));}
+         "false"                                                            {return symbol(sym.FALSO, new String(yytext()));}
          "{"                                                                {return symbol(sym.LLAVE_A);}    
          "}"                                                                {return symbol(sym.LLAVE_B);}
          "["                                                                {return symbol(sym.AGRUPACION_A);}
          "]"                                                                {return symbol(sym.AGRUPACION_B);}
          ":"                                                                {return symbol(sym.DOS_PUNTOS);}
-         ","                                                                {return symbol(sym.COMA);}        
-         Punto                                                              {return symbol(sym.PUNTO);}    
+         "."                                                                {return symbol(sym.PUNTO);}    
          "\""                                                               {return symbol(sym.COMILLAS);}    
          "MAPA"                                                             {return symbol(sym.MAPA);}
          "id"                                                               {return symbol(sym.id);}
          "size"                                                             {return symbol(sym.size);}
+         "filas"                                                            {return symbol(sym.filas);}
+         "columnas"                                                         {return symbol(sym.columnas);}
          "alAzar"                                                           {return symbol(sym.alAzar);}
          "planetasNeutrales"                                                {return symbol(sym.pNeutrales);}    
          "mapaCiego"                                                        {return symbol(sym.mapaCiego);}            
@@ -60,11 +63,13 @@ Punto = [.]
          "planetas"                                                         {return symbol(sym.planetas);}
          "tipo"                                                             {return symbol(sym.tipo);}
          "HUMANO"                                                           {return symbol(sym.HUMANO);}
-         "DIFICIL"                                                          {return symbol(sym.DIFICIL):}
+         "DIFICIL"                                                                   {return symbol(sym.DIFICIL);}
          "FACIL"                                                                     {return symbol(sym.FACIL);}
-         ("(-"{Numero}+")") | {Numero}+                                              {return symbol(sym.ENTERO);}
-         ({Numero2}{Numero}*{Punto}|{Punto}){Numero}*{Numero2}                       {return symbol(sym.DECIMAL);}
-         ({Letra}|{Caracteres1})({Letra}|{Numero}|{Caracteres1}|{Caracteres2})*      {return symbol(sym.ID);}
-
+         ("(-"{Numero}+")") | {Numero}+                                              {return symbol(sym.ENTERO, new Integer(yytext()));}
+         ({Numero2}{Numero}*{Punto}|{Punto}|{Numero}{Punto}){Numero}*{Numero}                       {return symbol(sym.DECIMAL, new Double(yytext()));}
+         ({Letra}|{Caracteres1})({Letra}|{Numero}|{Caracteres1}|{Caracteres2})*      {return symbol(sym.ID, new String(yytext()));}
+         {Espacio}*                                                                  {/*Ignore*/}
+          .                                                                          {}
+            
 
 }

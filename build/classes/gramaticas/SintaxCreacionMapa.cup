@@ -1,35 +1,105 @@
 package gramaticas;
 import java_cup.runtime.Symbol;
 import java.util.ArrayList;
+import Pollitos.ArchivoConfiguracion;
 
 parser code {:
 
-    public SintaxCreacionMapa(AnalizadorLexico lex){
-     super(lex);
+    public static int cont = 0;
+    public static boolean interruptor = true;
+    ArrayList<ArchivoConfiguracion> listArchivos;
+    public int contadorPlanetas = 0;
+    public int contPlanetasNeutrales = 0;
+    public int contJugadores = 0;
+    
+    public SintaxCreacionMapa(AnalizadorLexico lex, ArrayList<ArchivoConfiguracion> listArchivos){
+        super(lex);
+        this.listArchivos = listArchivos;
     }
 
-    public void syntas_error(Symbol s){
-        setAccion("ERROR", "Error sintaxis token: "+s.right,"");
+    public void setAccion(String tipo, String mensaje, String accion){
+        System.out.println(tipo+" "+mensaje);
     }
+  
+    public void syntax_error(Symbol s){
+        setAccion("ERROR", "Error sintaxis columna: "+s.right+" fila: "+s.left,"");
+    }
+
+    public static boolean getInterruptor(){
+        return interruptor;
+    }   
+    
+    public static boolean verificador(){
+        cont++;
+        System.out.println(cont+" yo soy el contador");
+        if(cont == 2){
+
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public static boolean comprobador(boolean interruptor, ArrayList<ArchivoConfiguracion> listArchivos, Object atributo, String nombreAtributo, String tipo, int no){
+        if(interruptor == true){
+            if(listArchivos.isEmpty()){
+                ArchivoConfiguracion elemento = new ArchivoConfiguracion();
+                elemento.setTipo(tipo); 
+                elemento.setNumero(no);
+                elemento.setNombreAtributo(nombreAtributo);
+                elemento.setAtributo(atributo);
+                listArchivos.add(elemento);
+            } else {
+                if(atributo == "MAPA"){
+                    for(int i = 0; i < listArchivos.size(); i++){
+                        if(nombreAtributo == listArchivos.get(i).getNombreAtributo()){
+                            interruptor = false;
+                            break;
+                        }
+                    }   
+                } else {
+                    for(int i = 0; i < listArchivos.size(); i++){
+                        if(nombreAtributo == listArchivos.get(i).getNombreAtributo() && no == listArchivos.get(i).getNumero() && tipo == listArchivos.get(i).getTipo()){
+                            interruptor = false;    
+                            break;
+                        }
+                    }
+                }
+                if(interruptor == true){
+                    ArchivoConfiguracion elemento = new ArchivoConfiguracion();
+                    elemento.setTipo(tipo); 
+                    elemento.setNumero(no);
+                    elemento.setNombreAtributo(nombreAtributo);
+                    elemento.setAtributo(atributo);
+                    listArchivos.add(elemento);
+                }
+            }
+        } 
+        return interruptor;
+    }
+    
+
+    
+
 :}
 
 
     terminal VERDADERO, FALSO, LLAVE_A, LLAVE_B, AGRUPACION_A, AGRUPACION_B, DOS_PUNTOS, COMA, PUNTO, COMILLAS,
              MAPA, id, size, alAzar, pNeutrales, mapaCiego, acumular, NEUTRALES, mostrarNaves, mostrarEstadisticas,
              produccion, finalizacion, PLANETAS, nombre, naves, porcMuertes, PLANETAS_NEUTRALES, JUGADORES, planetas,
-             tipo, HUMANO, DIFICIL, FACIL, ENTERO, DECIMAL, ID;
+             tipo, HUMANO, DIFICIL, FACIL, ENTERO, DECIMAL, ID, filas, columnas;
              
     non terminal a, b, c, d, e, f, g, h, i, j, j2, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z, aa, 
-                 ab, ac, ad, ae, af, ag, ah, ai, aj, ak, pn, jug, q2, q3, q5, q7, cierre;
+                 ab, ac, ad, ae, af, ag, ah, ai, pn, jug, q2, q3, q5, q7, q8, cierre;
 
     start with a;
 
-    a ::= LLAVE_A b |
-          LLAVE_A p |
-          LLAVE_A pn |
-          LLAVE_A jug |
-          COMA q2 |
-          LLAVE_B
+    a ::= LLAVE_A MAPA DOS_PUNTOS LLAVE_A c
+        | LLAVE_A p 
+        | LLAVE_A pn 
+        | LLAVE_A jug 
+        | COMA q2   
+        | LLAVE_B
 ;
     b ::= MAPA DOS_PUNTOS LLAVE_A c
 ;
@@ -37,57 +107,61 @@ parser code {:
 ;
     q ::= d | e | f | g | h | i | j2 | k
 ;
-    d ::= id DOS_PUNTOS COMILLAS ID COMILLAS c 
+    d ::= id DOS_PUNTOS COMILLAS ID:a COMILLAS c {: parser.interruptor = parser.comprobador(parser.interruptor, parser.listArchivos, a, "id", "MAPA", 1); :}
+;
     e ::= size DOS_PUNTOS LLAVE_A j LLAVE_B c
-    j ::= filas DOS_PUNTOS ENTERO COMA columnas DOS_PUNTOS ENTERO |
-          columnas DOS_PUNTOS ENTERO COMA filas DOS_PUNTOS ENTERO
 ;
-    f ::= alAzar DOS_PUNTOS VERDADERO c |
-          alAzar DOS_PUNTOS FALSO c 
+    j ::= filas DOS_PUNTOS ENTERO:a COMA columnas DOS_PUNTOS ENTERO:b {:  parser.interruptor = parser.comprobador(parser.interruptor, parser.listArchivos, a, "filas", "MAPA", 1);   parser.interruptor = parser.comprobador(parser.interruptor, parser.listArchivos, b, "columnas", "MAPA", 1);     :}
+          | columnas DOS_PUNTOS ENTERO:b COMA filas DOS_PUNTOS ENTERO:a {:  parser.interruptor = parser.comprobador(parser.interruptor, parser.listArchivos, a, "filas", "MAPA", 1);   parser.interruptor = parser.comprobador(parser.interruptor, parser.listArchivos, b, "columnas", "MAPA", 1);     :}
 ;
-    g ::= pNeutrales DOS_PUNTOS ENTERO c
+    f ::= alAzar DOS_PUNTOS VERDADERO:a c {: parser.interruptor = parser.comprobador(parser.interruptor, parser.listArchivos, a, "alAzar", "MAPA", 1); :}  
+          | alAzar DOS_PUNTOS FALSO:a c {: parser.interruptor = parser.comprobador(parser.interruptor, parser.listArchivos, a, "alAzar", "MAPA", 1); :}
 ;
-    h ::= mapaCiego DOS_PUNTOS VERDADERO c |
-          mapaCiego DOS_PUNTOS FALSO c
+    g ::= pNeutrales DOS_PUNTOS ENTERO:a c {: parser.interruptor = parser.comprobador(parser.interruptor, parser.listArchivos, a, "pNeutrales", "MAPA", 1); :}
 ;
-    i ::= acumular DOS_PUNTOS VERDADERO c |
-          acumular DOS_PUNTOS FALSO c 
+    h ::= mapaCiego DOS_PUNTOS VERDADERO:a c {: parser.interruptor = parser.comprobador(parser.interruptor, parser.listArchivos, a, "mapaCiego", "MAPA", 1); :}
+         | mapaCiego DOS_PUNTOS FALSO:a c {: parser.interruptor = parser.comprobador(parser.interruptor, parser.listArchivos, a, "mapaCiego", "MAPA", 1); :}
+;
+    i ::= acumular DOS_PUNTOS VERDADERO:a c {: parser.interruptor = parser.comprobador(parser.interruptor, parser.listArchivos, a, "acumular", "MAPA", 1); :} 
+         | acumular DOS_PUNTOS FALSO:a c {: parser.interruptor = parser.comprobador(parser.interruptor, parser.listArchivos, a, "acumular", "MAPA", 1); :}
 ;
     j2 ::= NEUTRALES DOS_PUNTOS LLAVE_A l
 ;
-    l ::= m COMA | n COMA | o COMA | LLAVE_B c
+    l ::= m | n | o | COMA q8 | LLAVE_B c
 ;
-    m ::= mostrarNaves DOS_PUNTOS VERDADERO l |
-          mostrarNaves DOS_PUNTOS FALSO l
+    q8 ::= m | n | o
 ;
-    n ::= mostrarEstadisticas DOS_PUNTOS VERDADERO l |
-          mostrarEstadisticas DOS_PUNTOS FALSO l 
+    m ::= mostrarNaves DOS_PUNTOS VERDADERO:a l {: parser.interruptor = parser.comprobador(parser.interruptor, parser.listArchivos, a, "mostrarNaves", "MAPA", 1); :}
+        | mostrarNaves DOS_PUNTOS FALSO:a l {: parser.interruptor = parser.comprobador(parser.interruptor, parser.listArchivos, a, "mostrarNaves", "MAPA", 1); :}
 ;
-    o ::= produccion DOS_PUNTOS ENTERO l
+    n ::= mostrarEstadisticas DOS_PUNTOS VERDADERO:a l {: parser.interruptor = parser.comprobador(parser.interruptor, parser.listArchivos, a, "mostrarEstadisticas", "MAPA", 1); :}
+        |  mostrarEstadisticas DOS_PUNTOS FALSO:a l  {: parser.interruptor = parser.comprobador(parser.interruptor, parser.listArchivos, a, "mostrarEstadisticas", "MAPA", 1); :}
 ;
-    k ::= finalizacion DOS_PUNTOS ENTERO c
+    o ::= produccion DOS_PUNTOS ENTERO:a l {: parser.interruptor = parser.comprobador(parser.interruptor, parser.listArchivos, a, "produccion", "MAPA", 1); :}
+;
+    k ::= finalizacion DOS_PUNTOS ENTERO:a c {: parser.interruptor = parser.comprobador(parser.interruptor, parser.listArchivos, a, "finalizacion", "MAPA", 1); :}
 ;
     q2 ::= b | p | pn | jug
 ;
-    p ::= PLANETAS DOS_PUNTOS AGRUPACION_A r |
-          PLANETAS DOS_PUNTOS AGRUPACION_A cierre
+    p ::= PLANETAS DOS_PUNTOS AGRUPACION_A r 
+         | PLANETAS DOS_PUNTOS AGRUPACION_A cierre
 ;
-    r ::= LLAVE_A s
+    r ::= LLAVE_A s {: parser.contadorPlanetas++; :}
 ;
-    s ::= t | u | v | w | COMA q3 | LLAVE_B COMA R | LLAVE_B cierre
+    s ::= t | u | v | w | COMA q3 | LLAVE_B COMA r | LLAVE_B cierre
 ;
     q3 ::= t | u | v | w
 ;
-    t ::= nombre DOS_PUNTOS COMILLAS ID COMILLAS s
+    t ::= nombre DOS_PUNTOS COMILLAS ID:a COMILLAS s {: parser.interruptor = parser.comprobador(parser.interruptor, parser.listArchivos, a, "nombre", "PLANETAS", parser.contadorPlanetas); :}
 ;
-    u ::= naves DOS_PUNTOS ENTERO s
+    u ::= naves DOS_PUNTOS ENTERO:a s {: parser.interruptor = parser.comprobador(parser.interruptor, parser.listArchivos, a, "naves", "PLANETAS", parser.contadorPlanetas); :}
 ;
-    v ::= produccion DOS_PUNTOS ENTERO s
+    v ::= produccion DOS_PUNTOS ENTERO:a s  {: parser.interruptor = parser.comprobador(parser.interruptor, parser.listArchivos, a, "produccion", "PLANETAS", parser.contadorPlanetas); :} 
 ;
-    w ::= porcMuertes DOS_PUNTOS DECIMAL s
+    w ::= porcMuertes DOS_PUNTOS DECIMAL:a s {: parser.interruptor = parser.comprobador(parser.interruptor, parser.listArchivos, a, "porcMuertes", "PLANETAS", parser.contadorPlanetas); :} 
 ;
-    pn ::= PLANETAS_NEUTRALES DOS_PUNTOS AGRUPACION_A x |
-           PLANETAS_NEUTRALES DOS_PUNTOS AGRUPACION_A cierre
+    pn ::= PLANETAS_NEUTRALES DOS_PUNTOS AGRUPACION_A x 
+         |  PLANETAS_NEUTRALES DOS_PUNTOS AGRUPACION_A cierre
 ;
     x ::= LLAVE_A y
 ;
@@ -103,10 +177,10 @@ parser code {:
 ;
     ac ::= porcMuertes DOS_PUNTOS DECIMAL y
 ;
-    jug ::= JUGADORES DOS_PUNTOS AGRUPACION_A ad |
-            JUGADORES DOS_PUNTOS AGRUPACION_A cierre
+    jug ::= JUGADORES DOS_PUNTOS AGRUPACION_A ad 
+           | JUGADORES DOS_PUNTOS AGRUPACION_A cierre
 ;
-    ad ::= AGRUPACION_A ae
+    ad ::= LLAVE_A ae
 ;
     ae ::= af | ag | ah | COMA q7 | LLAVE_B COMA ad | LLAVE_B cierre
 ;
@@ -116,11 +190,13 @@ parser code {:
 ;
     ag ::= planetas DOS_PUNTOS AGRUPACION_A ai
 ;
-    ai ::= COMILLAS ID COMILLAS COMA ai | 
-           AGRUPACION_B ae
+    ai ::= COMILLAS ID COMILLAS COMA ai 
+         | COMILLAS ID COMILLAS ai
+         |  AGRUPACION_B ae
 ;
-    ah ::= tipo DOS_PUNTOS FACIL ae |
-           tipo DOS_PUNTOS DIFICIL ae
+    ah ::= tipo DOS_PUNTOS FACIL ae 
+         |  tipo DOS_PUNTOS DIFICIL ae 
+        |   tipo DOS_PUNTOS HUMANO ae
 ;
     cierre ::= AGRUPACION_B a
 ;
