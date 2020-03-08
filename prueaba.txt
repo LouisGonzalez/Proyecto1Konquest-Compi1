@@ -23,7 +23,7 @@
   	  porcentajeMuertes: 0.44
 	},
 	{
-  	  nombre: "B",
+  	  nombre: "C",
   	  naves: 15,
   	  produccion: 9,
   	  porcentajeMuertes: 0.40

@@ -15,6 +15,7 @@ Numero = [0123456789]
 Numero2 = [123456789]
 Caracteres1 = [$_]
 Caracteres2 = [-]
+Coma = [,]
 Punto = [.]
 Salto = \r|\n|\r\n
 Espacio = {Salto} | [ \t\f]
@@ -57,14 +58,18 @@ Espacio = {Salto} | [ \t\f]
          "PLANETAS"                                                         {return symbol(sym.PLANETAS);}
          "nombre"                                                           {return symbol(sym.nombre);}
          "naves"                                                            {return symbol(sym.naves);}
+         "posicionX"                                                        {return symbol(sym.posX);}    
+         "posicionY"                                                        {return symbol(sym.posY);}
          "porcentajeMuertes"                                                {return symbol(sym.porcMuertes);}    
          "PLANETAS_NEUTRALES"                                               {return symbol(sym.PLANETAS_NEUTRALES);}
          "JUGADORES"                                                        {return symbol(sym.JUGADORES);}
          "planetas"                                                         {return symbol(sym.planetas);}
          "tipo"                                                             {return symbol(sym.tipo);}
-         "HUMANO"                                                           {return symbol(sym.HUMANO);}
-         "DIFICIL"                                                                   {return symbol(sym.DIFICIL);}
-         "FACIL"                                                                     {return symbol(sym.FACIL);}
+         "color"                                                            {return symbol(sym.color);}
+         "HUMANO"                                                           {return symbol(sym.HUMANO, new String(yytext()));}
+         "DIFICIL"                                                                   {return symbol(sym.DIFICIL, new String(yytext()));}
+         "FACIL"                                                                     {return symbol(sym.FACIL, new String(yytext()));}
+         {Numero}*{Coma}{Numero}*{Coma}{Numero}*{Coma}{Numero}*                      {return symbol(sym.COLOR, new String(yytext()));}
          ("(-"{Numero}+")") | {Numero}+                                              {return symbol(sym.ENTERO, new Integer(yytext()));}
          ({Numero2}{Numero}*{Punto}|{Punto}|{Numero}{Punto}){Numero}*{Numero}                       {return symbol(sym.DECIMAL, new Double(yytext()));}
          ({Letra}|{Caracteres1})({Letra}|{Numero}|{Caracteres1}|{Caracteres2})*      {return symbol(sym.ID, new String(yytext()));}

@@ -2,19 +2,39 @@ package gramaticas;
 import java_cup.runtime.Symbol;
 import java.util.ArrayList;
 import Pollitos.ArchivoConfiguracion;
+import Pollitos.Mapa;
+import Pollitos.Planetas;
+import Pollitos.PlanetasNeutrales;
+import Pollitos.Jugadores;
+import mapa.CreacionMapa;
+import javax.swing.JLabel;
+import javax.swing.JTextArea;
+
 
 parser code {:
 
-    public static int cont = 0;
-    public static boolean interruptor = true;
+    CreacionMapa tablero;
     ArrayList<ArchivoConfiguracion> listArchivos;
-    public int contadorPlanetas = 0;
-    public int contPlanetasNeutrales = 0;
-    public int contJugadores = 0;
-    
-    public SintaxCreacionMapa(AnalizadorLexico lex, ArrayList<ArchivoConfiguracion> listArchivos){
+    ArrayList<Planetas> listPlanetas;
+    ArrayList<PlanetasNeutrales> listPlanetasNeutrales;
+    ArrayList<Jugadores> listJugadores;
+    Mapa mapita;
+    Planetas planeta;
+    PlanetasNeutrales neutral;
+    Jugadores jugador;
+    String planetaNombre;
+    JLabel[][] matrizJuego;
+    boolean interruptor = true;
+    JTextArea panelMensajes;
+    public static String totalErrores;
+
+
+    public SintaxCreacionMapa(AnalizadorLexico lex, ArrayList<ArchivoConfiguracion> listArchivos, CreacionMapa tablero, JTextArea panelMensajes){
         super(lex);
         this.listArchivos = listArchivos;
+        this.tablero = tablero;
+        this.matrizJuego = matrizJuego;
+        this.panelMensajes = panelMensajes;
     }
 
     public void setAccion(String tipo, String mensaje, String accion){
@@ -23,107 +43,156 @@ parser code {:
   
     public void syntax_error(Symbol s){
         setAccion("ERROR", "Error sintaxis columna: "+s.right+" fila: "+s.left,"");
+        totalErrores += "ERROR: Error sintaxis columna: "+s.right+" fila: "+s.left+"\n";
     }
 
-    public static boolean getInterruptor(){
-        return interruptor;
-    }   
-    
-    public static boolean verificador(){
-        cont++;
-        System.out.println(cont+" yo soy el contador");
-        if(cont == 2){
+    public void crearCuadriculaJuego(int filas, int columnas, ArrayList<Jugadores> listJugadores){
+        tablero.creacionCuadricula(filas, columnas, listJugadores);
+    }
 
-            return true;
-        } else {
-            return false;
+
+    public boolean verificadorNombresJugadores(ArrayList<Jugadores> listJugadores, String nombre, boolean verificador){
+        if(verificador == true){
+            if(nombre.length() > 10){
+                verificador = false;
+                totalErrores += "Atributo nombre sobrepaso la cantidad de caracteres permitidos (10)\n";
+            }
         }
-    }
-
-    public static boolean comprobador(boolean interruptor, ArrayList<ArchivoConfiguracion> listArchivos, Object atributo, String nombreAtributo, String tipo, int no){
-        if(interruptor == true){
-            if(listArchivos.isEmpty()){
-                ArchivoConfiguracion elemento = new ArchivoConfiguracion();
-                elemento.setTipo(tipo); 
-                elemento.setNumero(no);
-                elemento.setNombreAtributo(nombreAtributo);
-                elemento.setAtributo(atributo);
-                listArchivos.add(elemento);
-            } else {
-                if(atributo == "MAPA"){
-                    for(int i = 0; i < listArchivos.size(); i++){
-                        if(nombreAtributo == listArchivos.get(i).getNombreAtributo()){
-                            interruptor = false;
-                            break;
-                        }
+        if(verificador == true){
+            if(!listJugadores.isEmpty()){
+                for(int i = 0; i < listJugadores.size(); i++){
+                    if(listJugadores.get(i).getNombre().equals(nombre)){
+                        verificador = false;
+                        totalErrores += "Dos o mas jugadores llevan el mismo nombre\n";
+                        break;
                     }   
-                } else {
-                    for(int i = 0; i < listArchivos.size(); i++){
-                        if(nombreAtributo == listArchivos.get(i).getNombreAtributo() && no == listArchivos.get(i).getNumero() && tipo == listArchivos.get(i).getTipo()){
-                            interruptor = false;    
-                            break;
-                        }
-                    }
-                }
-                if(interruptor == true){
-                    ArchivoConfiguracion elemento = new ArchivoConfiguracion();
-                    elemento.setTipo(tipo); 
-                    elemento.setNumero(no);
-                    elemento.setNombreAtributo(nombreAtributo);
-                    elemento.setAtributo(atributo);
-                    listArchivos.add(elemento);
                 }
             }
-        } 
-        return interruptor;
+        }
+        return verificador;
     }
-    
 
-    
+    public boolean verificadorNombresPlanetas(ArrayList<Planetas> listPlanetas, String nombre, boolean verificador){
+        if(verificador == true){
+            if(nombre.length() > 3){
+                verificador = false;
+                totalErrores += "Atributo nombre sobrepaso la cantidad de caracteres permitidos (3)\n";
+            }
+        }
+        if(verificador == true){
+            if(!listPlanetas.isEmpty()){
+                for(int i = 0; i < listPlanetas.size(); i++){
+                    if(listPlanetas.get(i).getNombre().equals(nombre)){
+                        totalErrores += "Dos o mas planetas llevan el mismo nombre\n";
+                        verificador = false;
+                        break;
+                    }
+                }
+            }
+        }
+        return verificador;
+    }
 
+    public boolean verificadorNombresPlanetasNeutrales(ArrayList<PlanetasNeutrales> listPNeutrales, String nombre, boolean verificador){
+        if(verificador == true){    
+            if(nombre.length() > 3){
+                verificador = false;
+                totalErrores += "Atributo nombre sobrepaso la cantidad de caracteres permitidos (3)\n";
+            }
+        }
+        if(verificador == true){        
+            if(!listPlanetas.isEmpty()){
+                for(int i = 0; i < listPNeutrales.size(); i++){
+                    if(listPNeutrales.get(i).getNombre().equals(nombre)){
+                        verificador = false;
+                        totalErrores += "Dos o mas planetas neutrales llevan el mismo nombre\n";
+                        break;
+                    }
+                }
+            }
+        }
+        return verificador;
+    }
+
+    public void creacionMapa(ArrayList<Jugadores> listJugadores, boolean verificador, ArrayList<Planetas> listPlanetas, Mapa mapita, JTextArea panelMensajes, String totalErroress){
+        tablero.agregarPlanetasTablero(Integer.parseInt(mapita.getSize_filas()), Integer.parseInt(mapita.getSize_columnas()), listJugadores, listPlanetas);
+        if(!listPlanetas.isEmpty()){
+            verificador = false;
+            totalErroress += "Hay mas planetas de los sentenciados para los jugadores\n";
+            panelMensajes.setText(totalErroress);
+        }
+        for(int i = 0; i < listJugadores.size(); i++){
+            if(!listJugadores.get(i).getPlanetas().isEmpty()){
+                verificador = false;
+                totalErroress += "Hay mas planetas de los sentenciados para los jugadores\n";
+                panelMensajes.setText(totalErroress);
+                break;
+            }
+        }
+        if(verificador == true){
+            verificador = tablero.comparacionFilasColumnasPosPlanetas(mapita, listJugadores, verificador);
+            if(verificador == false){
+                totalErroress += "Algun planeta esta situado en una posicion que no existe dentro del mapa\n";
+            }
+        }
+        if(verificador == true){
+            verificador = tablero.comparacionPosPlanetas(listJugadores, verificador);
+            if(verificador == false){
+                totalErroress += "Dos planetas estan situados en la misma posicion\n";
+            }
+        }
+        if(verificador == true) {
+            crearCuadriculaJuego(Integer.parseInt(mapita.getSize_filas()), Integer.parseInt(mapita.getSize_columnas()), listJugadores);
+        } else { 
+            panelMensajes.setText(totalErroress);
+        }    
+        
+    }
+  
 :}
-
 
     terminal VERDADERO, FALSO, LLAVE_A, LLAVE_B, AGRUPACION_A, AGRUPACION_B, DOS_PUNTOS, COMA, PUNTO, COMILLAS,
              MAPA, id, size, alAzar, pNeutrales, mapaCiego, acumular, NEUTRALES, mostrarNaves, mostrarEstadisticas,
              produccion, finalizacion, PLANETAS, nombre, naves, porcMuertes, PLANETAS_NEUTRALES, JUGADORES, planetas,
-             tipo, HUMANO, DIFICIL, FACIL, ENTERO, DECIMAL, ID, filas, columnas;
+             tipo, HUMANO, DIFICIL, FACIL, ENTERO, DECIMAL, ID, filas, columnas, color, posX, posY, COLOR;
              
     non terminal a, b, c, d, e, f, g, h, i, j, j2, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z, aa, 
-                 ab, ac, ad, ae, af, ag, ah, ai, pn, jug, q2, q3, q5, q7, q8, cierre;
+                 ab, ac, ad, ae, af, ag, ah, ai, pn, jug, q2, q3, q5, q7, q8, cierre, a1, aj, ak, al;
 
     start with a;
-
-    a ::= LLAVE_A MAPA DOS_PUNTOS LLAVE_A c
+    
+    a ::= LLAVE_A b 
         | LLAVE_A p 
         | LLAVE_A pn 
         | LLAVE_A jug 
         | COMA q2   
-        | LLAVE_B
+        | LLAVE_B {: if(parser.mapita==null || parser.listPlanetas == null || parser.listPlanetasNeutrales == null || parser.listJugadores == null) { parser.interruptor = false; parser.syntax_error(parser.getSymbolFactory().newSymbol("a",0, ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), RESULT));}  parser.creacionMapa(parser.listJugadores, parser.interruptor, parser.listPlanetas, parser.mapita, parser.panelMensajes, parser.totalErrores);    :} 
 ;
-    b ::= MAPA DOS_PUNTOS LLAVE_A c
+
+    b ::= MAPA DOS_PUNTOS LLAVE_A {: if(parser.mapita==null){ parser.mapita = new Mapa();    } else {  parser.interruptor = false; parser.syntax_error(parser.getSymbolFactory().newSymbol("b",1, ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.elementAt(CUP$SintaxCreacionMapa$top-3)), ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), RESULT));  parser.totalErrores += "MAPA senteciado mas de una vez dentro del archivo\n";  }  :}  c 
 ;
-    c ::= d | e | f | g | h | i | j2 | k | COMA q | LLAVE_B a
+
+    c ::= d | e | f | g | h | i | j2 | k | COMA q | LLAVE_B {: if(parser.mapita.getId() != null && parser.mapita.getSize_filas() != null && parser.mapita.getSize_columnas() != null && parser.mapita.getAlAzar() != null && parser.mapita.getPlanetasNeutrales() != null && parser.mapita.getMapaCiego() != null && parser.mapita.getAcumular() != null && parser.mapita.getMostrarNaves() != null && parser.mapita.getMostrarEstadisticas() != null && parser.mapita.getProduccion() != null) { } else { parser.interruptor = false; parser.syntax_error(parser.getSymbolFactory().newSymbol("NT$1",46, ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), RESULT)); parser.totalErrores += "Falta de un atributo en MAPA\n";  }:} a
 ;
     q ::= d | e | f | g | h | i | j2 | k
 ;
-    d ::= id DOS_PUNTOS COMILLAS ID:a COMILLAS c {: parser.interruptor = parser.comprobador(parser.interruptor, parser.listArchivos, a, "id", "MAPA", 1); :}
+    d ::= id DOS_PUNTOS COMILLAS ID:a COMILLAS  {: if(parser.mapita.getId()==null){ parser.mapita.setId(a.toString());  } else { parser.interruptor = false; parser.syntax_error(parser.getSymbolFactory().newSymbol("d",3, ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.elementAt(CUP$SintaxCreacionMapa$top-5)), ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), RESULT)); parser.totalErrores += "Atributo ID sentenciado mas de una vez dentro de MAPA\n";    } :} c  
 ;
     e ::= size DOS_PUNTOS LLAVE_A j LLAVE_B c
 ;
-    j ::= filas DOS_PUNTOS ENTERO:a COMA columnas DOS_PUNTOS ENTERO:b {:  parser.interruptor = parser.comprobador(parser.interruptor, parser.listArchivos, a, "filas", "MAPA", 1);   parser.interruptor = parser.comprobador(parser.interruptor, parser.listArchivos, b, "columnas", "MAPA", 1);     :}
-          | columnas DOS_PUNTOS ENTERO:b COMA filas DOS_PUNTOS ENTERO:a {:  parser.interruptor = parser.comprobador(parser.interruptor, parser.listArchivos, a, "filas", "MAPA", 1);   parser.interruptor = parser.comprobador(parser.interruptor, parser.listArchivos, b, "columnas", "MAPA", 1);     :}
+    j ::= filas DOS_PUNTOS ENTERO:a COMA columnas DOS_PUNTOS ENTERO:b  {: if(parser.mapita.getSize_filas()==null && parser.mapita.getSize_columnas()==null){ parser.mapita.setSize_filas(a.toString()); parser.mapita.setSize_columnas(b.toString()); } else { parser.interruptor = false; parser.syntax_error(parser.getSymbolFactory().newSymbol("j",9, ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.elementAt(CUP$SintaxCreacionMapa$top-6)), ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), RESULT)); parser.totalErrores += "Atributo sentenciado mas de una vez\n"; }    :}
+          | columnas DOS_PUNTOS ENTERO:b COMA filas DOS_PUNTOS ENTERO:a  {: if(parser.mapita.getSize_filas()==null && parser.mapita.getSize_columnas()==null){ parser.mapita.setSize_filas(a.toString()); parser.mapita.setSize_columnas(b.toString()); } else { parser.interruptor = false; parser.syntax_error(parser.getSymbolFactory().newSymbol("j",9, ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.elementAt(CUP$SintaxCreacionMapa$top-6)), ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), RESULT)); parser.totalErrores += "Atributo sentenciado mas de una vez\n";  }  :}
 ;
-    f ::= alAzar DOS_PUNTOS VERDADERO:a c {: parser.interruptor = parser.comprobador(parser.interruptor, parser.listArchivos, a, "alAzar", "MAPA", 1); :}  
-          | alAzar DOS_PUNTOS FALSO:a c {: parser.interruptor = parser.comprobador(parser.interruptor, parser.listArchivos, a, "alAzar", "MAPA", 1); :}
+    f ::= alAzar DOS_PUNTOS VERDADERO:a  {: if(parser.mapita.getAlAzar()==null){ parser.mapita.setAlAzar(a.toString()); } else { parser.interruptor = false; parser.syntax_error(parser.getSymbolFactory().newSymbol("NT$2",47, ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), RESULT)); parser.totalErrores += "Atributo alAzar sentenciado mas de una vez\n";  } :} c 
+          | alAzar DOS_PUNTOS FALSO:a  {: if(parser.mapita.getAlAzar()==null){ parser.mapita.setAlAzar(a.toString()); } else { parser.interruptor = false; parser.syntax_error(parser.getSymbolFactory().newSymbol("NT$2",47, ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), RESULT));  parser.totalErrores += "Atributo alAzar sentenciado mas de una vez\n"; } :} c
 ;
-    g ::= pNeutrales DOS_PUNTOS ENTERO:a c {: parser.interruptor = parser.comprobador(parser.interruptor, parser.listArchivos, a, "pNeutrales", "MAPA", 1); :}
+    g ::= pNeutrales DOS_PUNTOS ENTERO:a {: if(parser.mapita.getPlanetasNeutrales()==null){ parser.mapita.setPlanetasNeutrales(a.toString());  }else{ parser.interruptor = false; parser.syntax_error(parser.getSymbolFactory().newSymbol("NT$4",49, ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), RESULT)); parser.totalErrores += "Atributo planetasNeutrales sentenciado mas de una vez"; }  :}   c 
 ;
-    h ::= mapaCiego DOS_PUNTOS VERDADERO:a c {: parser.interruptor = parser.comprobador(parser.interruptor, parser.listArchivos, a, "mapaCiego", "MAPA", 1); :}
-         | mapaCiego DOS_PUNTOS FALSO:a c {: parser.interruptor = parser.comprobador(parser.interruptor, parser.listArchivos, a, "mapaCiego", "MAPA", 1); :}
+    h ::= mapaCiego DOS_PUNTOS VERDADERO:a {: if(parser.mapita.getMapaCiego()==null){ parser.mapita.setMapaCiego(a.toString()); } else { parser.interruptor = false; parser.syntax_error(parser.getSymbolFactory().newSymbol("NT$5",50, ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), RESULT)); parser.totalErrores += "Atributo mapaCiego sentenciado mas de una vez\n"; } :}  c 
+         | mapaCiego DOS_PUNTOS FALSO:a {: if(parser.mapita.getMapaCiego()==null){ parser.mapita.setMapaCiego(a.toString()); } else { parser.interruptor = false; parser.syntax_error(parser.getSymbolFactory().newSymbol("NT$5",50, ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), RESULT)); parser.totalErrores += "Atributo mapaCiego sentenciado mas de una vez\n"; } :}  c 
 ;
-    i ::= acumular DOS_PUNTOS VERDADERO:a c {: parser.interruptor = parser.comprobador(parser.interruptor, parser.listArchivos, a, "acumular", "MAPA", 1); :} 
-         | acumular DOS_PUNTOS FALSO:a c {: parser.interruptor = parser.comprobador(parser.interruptor, parser.listArchivos, a, "acumular", "MAPA", 1); :}
+    i ::= acumular DOS_PUNTOS VERDADERO:a {: if(parser.mapita.getAcumular()==null){ parser.mapita.setAcumular(a.toString()); } else { parser.interruptor = false; parser.syntax_error(parser.getSymbolFactory().newSymbol("NT$7",52, ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), RESULT)); parser.totalErrores += "Atributo acumular sentenciado mas de una vez\n"; } :} c 
+         | acumular DOS_PUNTOS FALSO:a {: if(parser.mapita.getAcumular()==null){ parser.mapita.setAcumular(a.toString()); } else { parser.interruptor = false; parser.syntax_error(parser.getSymbolFactory().newSymbol("NT$7",52, ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), RESULT)); parser.totalErrores += "Atributo acumular sentenciado mas de una vez\n";  } :} c 
 ;
     j2 ::= NEUTRALES DOS_PUNTOS LLAVE_A l
 ;
@@ -131,72 +200,98 @@ parser code {:
 ;
     q8 ::= m | n | o
 ;
-    m ::= mostrarNaves DOS_PUNTOS VERDADERO:a l {: parser.interruptor = parser.comprobador(parser.interruptor, parser.listArchivos, a, "mostrarNaves", "MAPA", 1); :}
-        | mostrarNaves DOS_PUNTOS FALSO:a l {: parser.interruptor = parser.comprobador(parser.interruptor, parser.listArchivos, a, "mostrarNaves", "MAPA", 1); :}
+    m ::= mostrarNaves DOS_PUNTOS VERDADERO:a {: if(parser.mapita.getMostrarNaves()==null){ parser.mapita.setMostrarNaves(a.toString()); } else { parser.interruptor = false;  parser.syntax_error(parser.getSymbolFactory().newSymbol("NT$9",54, ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), RESULT)); parser.totalErrores += "Atributo mostrarNaves sentenciado mas de una vez\n"; } :}   l
+        | mostrarNaves DOS_PUNTOS FALSO:a {: if(parser.mapita.getMostrarNaves()==null){ parser.mapita.setMostrarNaves(a.toString()); } else { parser.interruptor = false; parser.syntax_error(parser.getSymbolFactory().newSymbol("NT$9",54, ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), RESULT));  parser.totalErrores += "Atributo mostrarNaves sentenciado mas de una vez\n"; } :} l 
 ;
-    n ::= mostrarEstadisticas DOS_PUNTOS VERDADERO:a l {: parser.interruptor = parser.comprobador(parser.interruptor, parser.listArchivos, a, "mostrarEstadisticas", "MAPA", 1); :}
-        |  mostrarEstadisticas DOS_PUNTOS FALSO:a l  {: parser.interruptor = parser.comprobador(parser.interruptor, parser.listArchivos, a, "mostrarEstadisticas", "MAPA", 1); :}
+    n ::= mostrarEstadisticas DOS_PUNTOS VERDADERO:a {: if(parser.mapita.getMostrarEstadisticas()==null) { parser.mapita.setMostrarEstadisticas(a.toString()); } else { parser.interruptor = false; parser.syntax_error(parser.getSymbolFactory().newSymbol("NT$11",56, ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), RESULT)); parser.totalErrores += "Atributo mostrarEstadisticas sentenciado mas de una vez\n"; } :} l 
+        |  mostrarEstadisticas DOS_PUNTOS FALSO:a {: if(parser.mapita.getMostrarEstadisticas()==null) { parser.mapita.setMostrarEstadisticas(a.toString()); } else { parser.interruptor = false; parser.syntax_error(parser.getSymbolFactory().newSymbol("NT$11",56, ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), RESULT)); parser.totalErrores += "Atributo mostrarEstadisticas sentenciado mas de una vez\n"; } :} l 
 ;
-    o ::= produccion DOS_PUNTOS ENTERO:a l {: parser.interruptor = parser.comprobador(parser.interruptor, parser.listArchivos, a, "produccion", "MAPA", 1); :}
+    o ::= produccion DOS_PUNTOS ENTERO:a {: if(parser.mapita.getProduccion()==null) {parser.mapita.setProduccion(a.toString()); } else { parser.interruptor = false; parser.syntax_error(parser.getSymbolFactory().newSymbol("NT$13",58, ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), RESULT)); parser.totalErrores += "Atributo produccion sentenciado mas de una vez\n"; } :} l 
 ;
-    k ::= finalizacion DOS_PUNTOS ENTERO:a c {: parser.interruptor = parser.comprobador(parser.interruptor, parser.listArchivos, a, "finalizacion", "MAPA", 1); :}
+    k ::= finalizacion DOS_PUNTOS ENTERO:a {: if(parser.mapita.getFinalizacion()==null) { parser.mapita.setFinalizacion(a.toString()); } else { parser.interruptor = false; parser.syntax_error(parser.getSymbolFactory().newSymbol("NT$14",59, ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), RESULT)); parser.totalErrores += "Atributo finalizacion sentenciado mas de una vez\n"; } :} c
 ;
     q2 ::= b | p | pn | jug
 ;
-    p ::= PLANETAS DOS_PUNTOS AGRUPACION_A r 
-         | PLANETAS DOS_PUNTOS AGRUPACION_A cierre
+    p ::= PLANETAS DOS_PUNTOS AGRUPACION_A {: if(parser.listPlanetas==null) { parser.listPlanetas = new ArrayList<>();} else { parser.interruptor = false; parser.syntax_error(parser.getSymbolFactory().newSymbol("p",16, ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.elementAt(CUP$SintaxCreacionMapa$top-3)), ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), RESULT)); parser.totalErrores += "Campo PLANETAS ya habia sido sentenciado anteriormente\n"; } :} r 
+         | PLANETAS DOS_PUNTOS AGRUPACION_A cierre 
 ;
-    r ::= LLAVE_A s {: parser.contadorPlanetas++; :}
+    r ::= LLAVE_A {: parser.planeta = new Planetas(); :}  s 
 ;
-    s ::= t | u | v | w | COMA q3 | LLAVE_B COMA r | LLAVE_B cierre
+    s ::= t 
+        | u 
+        | v 
+        | w 
+        | aj
+        | ak
+        | COMA q3   
+        | LLAVE_B COMA {: if(parser.planeta.getPosicionX()!=null && parser.planeta.getProduccion()!=null && parser.planeta.getNaves()!=null && parser.planeta.getPorcentajeMuertes()!=null && parser.planeta.getNombre()!=null ) { parser.interruptor = parser.verificadorNombresPlanetas(parser.listPlanetas, parser.planeta.getNombre(), parser.interruptor);  if(parser.interruptor == true) { parser.listPlanetas.add(parser.planeta); } else { parser.syntax_error(parser.getSymbolFactory().newSymbol("NT$18",63, ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), RESULT)); }  } else { parser.interruptor = false; parser.syntax_error(parser.getSymbolFactory().newSymbol("NT$17",62, ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), RESULT)); parser.totalErrores += "Falta de uno o mas atributos en un planeta\n"; } :} r 
+        | LLAVE_B {: if(parser.planeta.getPosicionY()!=null && parser.planeta.getProduccion()!=null && parser.planeta.getNaves()!=null && parser.planeta.getPorcentajeMuertes()!=null && parser.planeta.getNombre()!=null ) {   parser.interruptor = parser.verificadorNombresPlanetas(parser.listPlanetas, parser.planeta.getNombre(), parser.interruptor);  if(parser.interruptor == true) { parser.listPlanetas.add(parser.planeta); } else { parser.syntax_error(parser.getSymbolFactory().newSymbol("NT$19",64, ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), RESULT));  }  } else { parser.interruptor = false; parser.syntax_error(parser.getSymbolFactory().newSymbol("NT$17",62, ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), RESULT)); parser.totalErrores += "Falta de uno o mas atributos en un planeta\n";  } :}  cierre
 ;
-    q3 ::= t | u | v | w
+    q3 ::= t | u | v | w | aj | ak
 ;
-    t ::= nombre DOS_PUNTOS COMILLAS ID:a COMILLAS s {: parser.interruptor = parser.comprobador(parser.interruptor, parser.listArchivos, a, "nombre", "PLANETAS", parser.contadorPlanetas); :}
+    t ::= nombre DOS_PUNTOS COMILLAS ID:a COMILLAS  {: if(parser.planeta.getNombre()==null) { parser.planeta.setNombre(a.toString()); } else { parser.interruptor = false; parser.syntax_error(parser.getSymbolFactory().newSymbol("NT$17",62, ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), RESULT)); parser.totalErrores += "Atributo nombre en un campo PLANETAS sentenciado mas de una vez\n"; } :}  s
 ;
-    u ::= naves DOS_PUNTOS ENTERO:a s {: parser.interruptor = parser.comprobador(parser.interruptor, parser.listArchivos, a, "naves", "PLANETAS", parser.contadorPlanetas); :}
+    u ::= naves DOS_PUNTOS ENTERO:a {: if(parser.planeta.getNaves()==null) { parser.planeta.setNaves(a.toString()); } else { parser.interruptor = false; parser.syntax_error(parser.getSymbolFactory().newSymbol("NT$18",63, ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), RESULT)); parser.totalErrores += "Atributo naves en un campo PLANETAS sentenciado mas de una vez\n"; } :}  s 
 ;
-    v ::= produccion DOS_PUNTOS ENTERO:a s  {: parser.interruptor = parser.comprobador(parser.interruptor, parser.listArchivos, a, "produccion", "PLANETAS", parser.contadorPlanetas); :} 
+    v ::= produccion DOS_PUNTOS ENTERO:a {: if(parser.planeta.getProduccion()==null) { parser.planeta.setProduccion(a.toString()); } else { parser.interruptor = false; parser.syntax_error(parser.getSymbolFactory().newSymbol("NT$19",64, ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), RESULT)); parser.totalErrores += "Atributo produccion en un campo PLANETAS sentenciado mas de una vez\n"; } :} s  
 ;
-    w ::= porcMuertes DOS_PUNTOS DECIMAL:a s {: parser.interruptor = parser.comprobador(parser.interruptor, parser.listArchivos, a, "porcMuertes", "PLANETAS", parser.contadorPlanetas); :} 
+    w ::= porcMuertes DOS_PUNTOS DECIMAL:a {: if(parser.planeta.getPorcentajeMuertes() == null) { parser.planeta.setPorcentajeMuertes(a.toString()); } else { parser.interruptor = false; parser.syntax_error(parser.getSymbolFactory().newSymbol("NT$20",65, ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), RESULT)); parser.totalErrores += "Atributo porcentajeMuertes en un campo PLANETAS sentenciado mas de una vez\n"; } :} s 
 ;
-    pn ::= PLANETAS_NEUTRALES DOS_PUNTOS AGRUPACION_A x 
+    aj ::= posX DOS_PUNTOS ENTERO:a {: if(parser.planeta.getPosicionX()==null) { parser.planeta.setPosicionX(a.toString()); } else { parser.interruptor = false; parser.syntax_error(parser.getSymbolFactory().newSymbol("aj",45, ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.elementAt(CUP$SintaxCreacionMapa$top-2)), ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), RESULT)); parser.totalErrores += "Atributo posicionX en un campo PLANETAS sentenciado mas de una vez\n"; } :} s
+;
+    ak ::= posY DOS_PUNTOS ENTERO:a {: if(parser.planeta.getPosicionY()==null) { parser.planeta.setPosicionY(a.toString()); } else { parser.interruptor = false; parser.syntax_error(parser.getSymbolFactory().newSymbol("ak",46, ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.elementAt(CUP$SintaxCreacionMapa$top-2)), ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), RESULT)); parser.totalErrores += "Atributo posicionY en un campo PLANETAS sentenciado mas de una vez\n"; } :} s
+;
+    pn ::= PLANETAS_NEUTRALES DOS_PUNTOS AGRUPACION_A {: if(parser.listPlanetasNeutrales == null) { parser.listPlanetasNeutrales = new ArrayList<>(); } else { parser.interruptor = false; parser.syntax_error(parser.getSymbolFactory().newSymbol("NT$23",68, ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), RESULT)); parser.totalErrores += "Atributo PLANETAS NEUTRALES ya habia sido sentenciado anteriormente\n"; } :}  x 
          |  PLANETAS_NEUTRALES DOS_PUNTOS AGRUPACION_A cierre
 ;
-    x ::= LLAVE_A y
+    x ::= LLAVE_A {: parser.neutral = new PlanetasNeutrales(); :} y
 ;
-    y ::= z | aa | ab | ac | COMA q5 | LLAVE_B COMA x | LLAVE_B cierre
+    y ::= z 
+        | aa 
+        | ab 
+        | ac 
+        | COMA q5 
+        | LLAVE_B COMA {: if(parser.neutral.getNombre() != null && parser.neutral.getNaves() != null && parser.neutral.getProduccion() != null && parser.neutral.getPorcentajeMuertes() != null) { parser.interruptor = parser.verificadorNombresPlanetasNeutrales(parser.listPlanetasNeutrales, parser.neutral.getNombre(), parser.interruptor); if(parser.interruptor == true) { parser.listPlanetasNeutrales.add(parser.neutral); } else { parser.syntax_error(parser.getSymbolFactory().newSymbol("NT$26",71, ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), RESULT));  } } else { parser.interruptor = false; parser.syntax_error(parser.getSymbolFactory().newSymbol("NT$25",70, ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), RESULT)); parser.totalErrores += "Falta de uno o mas atributos en un planeta neutral\n"; } :}  x 
+        | LLAVE_B {: if(parser.neutral.getNombre() != null && parser.neutral.getNaves() != null && parser.neutral.getProduccion() != null && parser.neutral.getPorcentajeMuertes() != null) { parser.interruptor = parser.verificadorNombresPlanetasNeutrales(parser.listPlanetasNeutrales, parser.neutral.getNombre(), parser.interruptor); if(parser.interruptor == true) { parser.listPlanetasNeutrales.add(parser.neutral); } else { parser.syntax_error(parser.getSymbolFactory().newSymbol("NT$26",71, ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), RESULT)); } } else { parser.interruptor = false; parser.syntax_error(parser.getSymbolFactory().newSymbol("NT$25",70, ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), RESULT)); parser.totalErrores += "Falta de uno o mas atributos en un planeta neutral\n"; } :} cierre
 ;
     q5 ::= z | aa | ab | ac
 ;
-    z::= nombre DOS_PUNTOS COMILLAS ID COMILLAS y
+    z::= nombre DOS_PUNTOS COMILLAS ID:a COMILLAS  {: if(parser.neutral.getNombre() == null) { parser.neutral.setNombre(a.toString()); } else { parser.interruptor = false; parser.syntax_error(parser.getSymbolFactory().newSymbol("NT$25",70, ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), RESULT)); parser.totalErrores += "Atributo nombre en un campo PLANETAS NEUTRALES sentenciado mas de una vez\n"; } :} y 
 ;
-    aa ::= naves DOS_PUNTOS ENTERO y
+    aa ::= naves DOS_PUNTOS ENTERO:a {: if(parser.neutral.getNaves() == null) { parser.neutral.setNaves(a.toString()); } else { parser.interruptor = false; parser.syntax_error(parser.getSymbolFactory().newSymbol("NT$26",71, ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), RESULT)); parser.totalErrores += "Atributo naves en un campo PLANETA NEUTRAL sentenciado mas de una vez\n"; } :} y 
 ;
-    ab ::= produccion DOS_PUNTOS ENTERO y
+    ab ::= produccion DOS_PUNTOS ENTERO:a {: if(parser.neutral.getProduccion() == null) { parser.neutral.setProduccion(a.toString()); } else { parser.interruptor = false; parser.syntax_error(parser.getSymbolFactory().newSymbol("NT$27",72, ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), RESULT)); parser.totalErrores += "Atributo producion en un campo PLANETA NEUTRAL sentenciado mas de una vez\n"; } :} y 
 ;
-    ac ::= porcMuertes DOS_PUNTOS DECIMAL y
+    ac ::= porcMuertes DOS_PUNTOS DECIMAL:a {: if(parser.neutral.getPorcentajeMuertes() == null) { parser.neutral.setPorcentajeMuertes(a.toString()); } else { parser.interruptor = false; parser.syntax_error(parser.getSymbolFactory().newSymbol("NT$28",73, ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), RESULT)); parser.totalErrores += "Atributo porcentajeMuertes en un campo PLANETA NEUTRAL sentenciado mas de una vez\n"; } :} y
 ;
-    jug ::= JUGADORES DOS_PUNTOS AGRUPACION_A ad 
+    jug ::= JUGADORES DOS_PUNTOS AGRUPACION_A {: if(parser.listJugadores == null){ parser.listJugadores = new ArrayList<>(); } else { parser.interruptor = false; parser.syntax_error(parser.getSymbolFactory().newSymbol("NT$31",76, ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), RESULT)); parser.totalErrores += "Atributo JUGADORES ya habia sido sentenciado anteriormente\n"; } :} ad 
            | JUGADORES DOS_PUNTOS AGRUPACION_A cierre
 ;
-    ad ::= LLAVE_A ae
+    ad ::= LLAVE_A {: parser.jugador = new Jugadores(); :} ae 
 ;
-    ae ::= af | ag | ah | COMA q7 | LLAVE_B COMA ad | LLAVE_B cierre
+    ae ::= af 
+         | ag 
+         | ah 
+         | al
+         | COMA q7 
+         | LLAVE_B COMA {: if(parser.jugador.getColor()!=null && parser.jugador.getNombre() != null && parser.jugador.getPlanetas() != null && parser.jugador.getTipo() != null) {  parser.interruptor = parser.verificadorNombresJugadores(parser.listJugadores, parser.jugador.getNombre(), parser.interruptor); if(parser.interruptor == true) { parser.listJugadores.add(parser.jugador); } else { parser.syntax_error(parser.getSymbolFactory().newSymbol("NT$34",79, ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), RESULT)); }  } else { parser.interruptor = false; parser.syntax_error(parser.getSymbolFactory().newSymbol("NT$33",78, ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), RESULT)); parser.totalErrores += "Falta de uno o mas atributos en un jugador\n"; } :}  ad 
+         | LLAVE_B {: if(parser.jugador.getColor()!=null && parser.jugador.getNombre() != null && parser.jugador.getPlanetas() != null && parser.jugador.getTipo() != null) {  parser.interruptor = parser.verificadorNombresJugadores(parser.listJugadores, parser.jugador.getNombre(), parser.interruptor); if(parser.interruptor == true) { parser.listJugadores.add(parser.jugador); } else { parser.syntax_error(parser.getSymbolFactory().newSymbol("NT$35",80, ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), RESULT)); }  }  else { parser.interruptor = false; parser.syntax_error(parser.getSymbolFactory().newSymbol("NT$34",79, ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), RESULT)); parser.totalErrores += "Falta de uno o mas atributos en un jugador\n"; }  :} cierre
 ;
-    q7 ::= af | ag | ah
+    q7 ::= af | ag | ah | al
 ;
-    af ::= nombre DOS_PUNTOS COMILLAS ID COMILLAS ae
+    af ::= nombre DOS_PUNTOS COMILLAS ID:a COMILLAS {: if(parser.jugador.getNombre() == null) { parser.jugador.setNombre(a.toString());  parser.jugador.setMisPlanetas(new ArrayList<>()); } else { parser.interruptor = false; parser.syntax_error(parser.getSymbolFactory().newSymbol("NT$33",78, ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), RESULT)); parser.totalErrores += "Atributo nombre en un campo JUGADOR sentenciado mas de una vez\n"; } :} ae 
 ;
-    ag ::= planetas DOS_PUNTOS AGRUPACION_A ai
+    ag ::= planetas DOS_PUNTOS AGRUPACION_A {: if(parser.jugador.getPlanetas() == null) { parser.jugador.setPlanetas(new ArrayList<>());  } else { parser.interruptor = false; parser.syntax_error(parser.getSymbolFactory().newSymbol("NT$34",79, ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), RESULT)); parser.totalErrores += "Atributo planetas en un campo JUGADOR sentenciado mas de una vez\n"; } :} ai 
 ;
-    ai ::= COMILLAS ID COMILLAS COMA ai 
-         | COMILLAS ID COMILLAS ai
-         |  AGRUPACION_B ae
+    al ::= color DOS_PUNTOS COMILLAS COLOR:a COMILLAS {: if(parser.jugador.getColor() == null) { parser.jugador.setColor(a.toString()); } else { parser.interruptor = false; parser.syntax_error(parser.getSymbolFactory().newSymbol("NT$40",88, ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), RESULT)); parser.totalErrores += "Atributo color en un campo JUGADOR sentenciado mas de una vez\n"; }  :} ae
 ;
-    ah ::= tipo DOS_PUNTOS FACIL ae 
-         |  tipo DOS_PUNTOS DIFICIL ae 
-        |   tipo DOS_PUNTOS HUMANO ae
+    ai ::= COMILLAS ID:a COMILLAS COMA {: parser.planetaNombre = a.toString(); parser.jugador.getPlanetas().add(a.toString());  :} ai 
+         | COMILLAS ID:a COMILLAS {: parser.planetaNombre = a.toString(); parser.jugador.getPlanetas().add(a.toString()); :} ai 
+         | AGRUPACION_B ae  
+;
+    ah ::= tipo DOS_PUNTOS FACIL:a {: if(parser.jugador.getTipo() == null) { parser.jugador.setTipo(a.toString()); } else { parser.interruptor = false; parser.syntax_error(parser.getSymbolFactory().newSymbol("NT$37",82, ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), RESULT)); parser.totalErrores += "Atributo tipo en un campo JUGADOR sentenciado mas de una vez\n"; } :} ae 
+         |  tipo DOS_PUNTOS DIFICIL:a {: if(parser.jugador.getTipo() == null) { parser.jugador.setTipo(a.toString()); } else { parser.interruptor = false; parser.syntax_error(parser.getSymbolFactory().newSymbol("NT$37",82, ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), RESULT)); parser.totalErrores += "Atributo tipo en un campo JUGADOR sentenciado mas de una vez\n"; } :} ae  
+         |  tipo DOS_PUNTOS HUMANO:a {: if(parser.jugador.getTipo() == null) { parser.jugador.setTipo(a.toString()); } else { parser.interruptor = false; parser.syntax_error(parser.getSymbolFactory().newSymbol("NT$37",82, ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), RESULT)); parser.totalErrores += "Atributo tipo en un campo JUGADOR sentenciado mas de una vez\n"; } :} ae 
 ;
     cierre ::= AGRUPACION_B a
 ;

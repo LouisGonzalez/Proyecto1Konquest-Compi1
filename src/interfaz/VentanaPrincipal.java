@@ -3,6 +3,7 @@ package interfaz;
 import Pollitos.ArchivoConfiguracion;
 import gramaticas.AnalizadorLexico;
 import gramaticas.SintaxCreacionMapa;
+import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -13,7 +14,9 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import mapa.CreacionMapa;
 
 /**
  *
@@ -22,10 +25,14 @@ import javax.swing.JOptionPane;
 public class VentanaPrincipal extends javax.swing.JFrame {
 
     private File proyecto;
-    String archivo;
-
+    String archivo; 
+    public CreacionMapa mapa;
+    public JLabel[][] tablero;
+    
     public VentanaPrincipal() {
         initComponents();
+        panelJuego.setBackground(new Color(255,255,255,100));
+        mapa = new CreacionMapa(this.panelJuego, tablero);
         setLocationRelativeTo(null);
     }
 
@@ -33,39 +40,83 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jButton1 = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        panelMensajes = new javax.swing.JTextArea();
+        panelJuego = new javax.swing.JPanel();
+        labelFondo = new javax.swing.JLabel();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        itemNuevo = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
+        itemLectura = new javax.swing.JMenuItem();
+        jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jButton1.setText("preuba");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        panelMensajes.setBackground(new java.awt.Color(6, 6, 39));
+        panelMensajes.setColumns(20);
+        panelMensajes.setForeground(new java.awt.Color(255, 255, 255));
+        panelMensajes.setRows(5);
+        jScrollPane1.setViewportView(panelMensajes);
+
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 510, 800, 110));
+
+        panelJuego.setBackground(new java.awt.Color(255, 255, 255));
+        panelJuego.setForeground(new java.awt.Color(255, 255, 255));
+
+        javax.swing.GroupLayout panelJuegoLayout = new javax.swing.GroupLayout(panelJuego);
+        panelJuego.setLayout(panelJuegoLayout);
+        panelJuegoLayout.setHorizontalGroup(
+            panelJuegoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 770, Short.MAX_VALUE)
+        );
+        panelJuegoLayout.setVerticalGroup(
+            panelJuegoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 460, Short.MAX_VALUE)
+        );
+
+        getContentPane().add(panelJuego, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 30, 770, 460));
+
+        labelFondo.setIcon(new javax.swing.ImageIcon("/home/luisitopapurey/Escritorio/Compiladores 1/Proyecto1.Konquest/fondo.jpg")); // NOI18N
+        getContentPane().add(labelFondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 840, 640));
+
+        itemNuevo.setText("Juego");
+
+        jMenuItem1.setText("Nuevo");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                jMenuItem1ActionPerformed(evt);
             }
         });
+        itemNuevo.add(jMenuItem1);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(140, 140, 140)
-                .addComponent(jButton1)
-                .addContainerGap(296, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(92, 92, 92)
-                .addComponent(jButton1)
-                .addContainerGap(258, Short.MAX_VALUE))
-        );
+        itemLectura.setText("Leer archivo JSON");
+        itemLectura.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itemLecturaActionPerformed(evt);
+            }
+        });
+        itemNuevo.add(itemLectura);
+
+        jMenuBar1.add(itemNuevo);
+
+        jMenu2.setText("Edit");
+        jMenuBar1.add(jMenu2);
+
+        setJMenuBar(jMenuBar1);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        JFileChooser chooser = new JFileChooser();
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void itemLecturaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemLecturaActionPerformed
+
+JFileChooser chooser = new JFileChooser();
+        panelMensajes.setText("");
+        SintaxCreacionMapa.totalErrores = "";
         String path = "";
         String seleccion = "Seleccione el JSON para abrir el juego";
         chooser.setCurrentDirectory(new File("."));
@@ -99,20 +150,12 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                   
                 AnalizadorLexico lexico = new AnalizadorLexico(new StringReader(texto));
                 try {
-                    new SintaxCreacionMapa(lexico, listArchivos).parse();
-                    boolean v = SintaxCreacionMapa.interruptor;
-                    if(v == true){
-                        System.out.println("COMPILACION REALIZADA EXITOSAMENTE");
-                        SintaxCreacionMapa.interruptor = true;
-                    } else {
-                        System.out.println("ERROR DE COMPILACION");
-                        SintaxCreacionMapa.interruptor = true;
-                    }
-                   // boolean v = SintaxCreacionMapa.getInterruptor();
-                    //System.out.println(v);
-                    
+                    new SintaxCreacionMapa(lexico, listArchivos, mapa, panelMensajes).parse();
+                   
                  } catch (Exception ex) {
                     Logger.getLogger(VentanaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+                    JOptionPane.showMessageDialog(null, "ERROR");
+                    panelMensajes.setText(SintaxCreacionMapa.totalErrores);
                 }
                 
                 
@@ -124,11 +167,18 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         } else {
             JOptionPane.showMessageDialog(null, "No hubo ninguna seleccion");
         }
-
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_itemLecturaActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JMenuItem itemLectura;
+    private javax.swing.JMenu itemNuevo;
+    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel labelFondo;
+    private javax.swing.JPanel panelJuego;
+    private javax.swing.JTextArea panelMensajes;
     // End of variables declaration//GEN-END:variables
 }

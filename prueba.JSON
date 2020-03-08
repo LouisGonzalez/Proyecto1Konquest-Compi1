@@ -1,13 +1,39 @@
 {
+  PLANETAS: [
+	{
+  	  nombre: "A",
+  	  posicionX: 1,
+    	  posicionY: 2,
+          naves: 15,
+  	  produccion: 10,
+  	  porcentajeMuertes: 0.44
+	},
+	{
+  	  nombre: "B",
+  	  posicionX: 2,
+    	  posicionY: 2,
+          naves: 15,
+  	  produccion: 9,
+  	  porcentajeMuertes: 0.40
+	},
+	{
+  	  nombre: "C",
+  	  naves: 15,
+  	  posicionX: 2,
+    	  posicionY: 3,
+          produccion: 12,
+  	  porcentajeMuertes: 0.8
+	}
+  ],
   MAPA: {
 	id: "_mapa1_",
 	size: {
-  	  filas: 10,
-  	  columnas: 10
+  	  filas: 4,
+  	  columnas: 4
 	},
-	alAzar: false,
 	planetasNeutrales: 20,
 	mapaCiego: false,
+	alAzar: false,
 	acumular: false,
 	NEUTRALES: {
   	  mostrarNaves: true,
@@ -16,24 +42,23 @@
 	},
 	finalizacion: 50
   },
-  PLANETAS: [
+  JUGADORES: [
 	{
-  	  nombre: "A",
- 	  naves: 10,
-  	  produccion: 10,
-  	  porcentajeMuertes: 0.44
+  	  nombre: "pc1",
+	  color: "25,145,150,100",
+  	  planetas: [
+    	    "A",
+    	    "C"
+  	  ],
+  	  tipo: HUMANO
 	},
 	{
-  	  nombre: "B",
-  	  naves: 15,
-  	  produccion: 9,
-  	  porcentajeMuertes: 0.40
-	},
-	{
-  	  nombre: "C",
-  	  naves: 15,
-  	  produccion: 12,
-  	  porcentajeMuertes: 0.8
+  	  nombre: "p1",
+	  color: "255,240,245,100",
+  	  planetas: [
+    	    "B"
+  	  ],
+  	  tipo: DIFICIL
 	}
   ],
   PLANETAS_NEUTRALES: [
@@ -50,27 +75,10 @@
   	  porcentajeMuertes: 0.998501
 	},
 	{
-  	  nombre: "F",
-  	  naves: 20,
   	  produccion: 25,
+  	  nombre: "F",
+	  naves: 2,
   	  porcentajeMuertes: 0.21502
-	}
-  ],
-  JUGADORES: [
-	{
- 	  nombre: "Jose",
-  	  planetas: [
-    	    "A",
-    	    "C"
-  	  ],
-  	  tipo: HUMANO
-	},
-	{
-  	  nombre: "pc1",
-  	  planetas: [
-    	    "B"
-  	  ],
-  	  tipo: DIFICIL
-	}
+  	}
   ]
 }
