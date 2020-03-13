@@ -10,6 +10,24 @@ public class PlanetasNeutrales {
     private String naves;
     private String produccion;
     private String porcentajeMuertes;
+    private String posicionX;
+    private String posicionY;
+
+    public String getPosicionX() {
+        return posicionX;
+    }
+
+    public void setPosicionX(String posicionX) {
+        this.posicionX = posicionX;
+    }
+
+    public String getPosicionY() {
+        return posicionY;
+    }
+
+    public void setPosicionY(String posicionY) {
+        this.posicionY = posicionY;
+    }
 
     public String getNombre() {
         return nombre;

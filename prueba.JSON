@@ -1,51 +1,69 @@
 {
-  PLANETAS: [
-	{
-  	  nombre: "A",
-  	  posicionX: 1,
-    	  posicionY: 2,
-          naves: 15,
-  	  produccion: 10,
-  	  porcentajeMuertes: 0.44
-	},
-	{
-  	  nombre: "B",
-  	  posicionX: 2,
-    	  posicionY: 2,
-          naves: 15,
-  	  produccion: 9,
-  	  porcentajeMuertes: 0.40
-	},
-	{
-  	  nombre: "C",
-  	  naves: 15,
-  	  posicionX: 2,
-    	  posicionY: 3,
-          produccion: 12,
-  	  porcentajeMuertes: 0.8
-	}
-  ],
   MAPA: {
 	id: "_mapa1_",
 	size: {
-  	  filas: 4,
-  	  columnas: 4
+  	  filas: 10,
+  	  columnas: 10
 	},
+	alAzar: false,
 	planetasNeutrales: 20,
 	mapaCiego: false,
-	alAzar: false,
 	acumular: false,
 	NEUTRALES: {
   	  mostrarNaves: true,
   	  mostrarEstadisticas: true,
-  	  produccion: 12
+	  produccion: 12
 	},
 	finalizacion: 50
-  },
+ },
+  PLANETAS: [
+	{
+       	  nombre: "B",
+  	  naves: 15,
+  	  produccion: 9,
+  	  porcentajeMuertes: 0.40,
+	  posicionX: 2,
+	  posicionY: 3
+	},
+	{
+  	  nombre: "AS",
+  	  naves: 15,
+  	  produccion: 9,
+  	  porcentajeMuertes: 0.40,
+	  posicionX: 1,
+	  posicionY: 9	
+	}
+  ],
+PLANETAS_NEUTRALES: [
+	{
+  	  nombre: "D",
+  	  naves: 15,
+  	  produccion: 12,
+  	  porcentajeMuertes: 0.8,
+	  posicionX: 3,
+	  posicionY: 1
+	},
+	{
+  	  nombre: "E",
+  	  naves: 11,
+  	  produccion: 9,
+  	  porcentajeMuertes: 0.998501
+	  posicionX: 3,
+	  posicionY: 1
+	},
+	{
+  	  nombre: "F",
+  	  naves: 20,
+  	  produccion: 25,
+  	  porcentajeMuertes: 0.21502
+	  posicionX: 3,
+	  posicionY: 1
+	}
+  ],
   JUGADORES: [
 	{
-  	  nombre: "pc1",
-	  color: "25,145,150,100",
+ 	  nombre: "Jose",
+	  color: "15,13,546,2",
   	  planetas: [
     	    "A",
     	    "C"
@@ -53,32 +71,12 @@
   	  tipo: HUMANO
 	},
 	{
-  	  nombre: "p1",
-	  color: "255,240,245,100",
+  	  nombre: "pc1",
+	  color: "32,45,9,12",
   	  planetas: [
     	    "B"
   	  ],
   	  tipo: DIFICIL
 	}
-  ],
-  PLANETAS_NEUTRALES: [
-	{
-  	  nombre: "D",
-  	  naves: 15,
-  	  produccion: 12,
-  	  porcentajeMuertes: 0.8
-	},
-	{
-  	  nombre: "E",
-  	  naves: 11,
-  	  produccion: 9,
-  	  porcentajeMuertes: 0.998501
-	},
-	{
-  	  produccion: 25,
-  	  nombre: "F",
-	  naves: 2,
-  	  porcentajeMuertes: 0.21502
-  	}
   ]
 }

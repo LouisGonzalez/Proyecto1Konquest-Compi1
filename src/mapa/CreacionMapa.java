@@ -163,6 +163,7 @@ public class CreacionMapa {
             matriz.setOpaque(false);
             matriz.setBorder(new LineBorder(Color.black));
             matrizJuego[x][y] = matriz; 
+            
         }
         
     }

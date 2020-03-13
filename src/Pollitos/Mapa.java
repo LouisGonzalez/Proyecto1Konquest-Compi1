@@ -19,6 +19,15 @@ public class Mapa {
     private String mapaCiego;
     private String acumular;
     private String finalizacion;
+    private MapaPNeutrales mapaPNeutral;
+
+    public MapaPNeutrales getMapaPNeutral() {
+        return mapaPNeutral;
+    }
+
+    public void setMapaPNeutral(MapaPNeutrales mapaPNeutral) {
+        this.mapaPNeutral = mapaPNeutral;
+    }
 
     public String getFinalizacion() {
         return finalizacion;

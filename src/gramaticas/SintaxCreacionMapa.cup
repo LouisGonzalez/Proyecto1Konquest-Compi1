@@ -6,6 +6,8 @@ import Pollitos.Mapa;
 import Pollitos.Planetas;
 import Pollitos.PlanetasNeutrales;
 import Pollitos.Jugadores;
+import Pollitos.MapaPNeutrales;
+import Pollitos.Juego;
 import mapa.CreacionMapa;
 import javax.swing.JLabel;
 import javax.swing.JTextArea;
@@ -19,9 +21,6 @@ parser code {:
     ArrayList<PlanetasNeutrales> listPlanetasNeutrales;
     ArrayList<Jugadores> listJugadores;
     Mapa mapita;
-    Planetas planeta;
-    PlanetasNeutrales neutral;
-    Jugadores jugador;
     String planetaNombre;
     JLabel[][] matrizJuego;
     boolean interruptor = true;
@@ -156,146 +155,204 @@ parser code {:
              produccion, finalizacion, PLANETAS, nombre, naves, porcMuertes, PLANETAS_NEUTRALES, JUGADORES, planetas,
              tipo, HUMANO, DIFICIL, FACIL, ENTERO, DECIMAL, ID, filas, columnas, color, posX, posY, COLOR;
              
-    non terminal a, b, c, d, e, f, g, h, i, j, j2, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z, aa, 
-                 ab, ac, ad, ae, af, ag, ah, ai, pn, jug, q2, q3, q5, q7, q8, cierre, a1, aj, ak, al;
+    non terminal a, cierre, a1;
+
+    non terminal Juego juego, q2;
+    
+    non terminal Mapa d, c, g, e, f, j, h, i, j2, q, k, b;
+    
+    non terminal Planetas t, s, q3, u, v, w, aj, ak;
+
+    non terminal PlanetasNeutrales am, an, y, q5, z, aa, ab, ac;
+
+    non terminal MapaPNeutrales m, n, o, l, q8;
+
+    non terminal Jugadores ae, q7, af, ag, al, ah;
+
+    non terminal ArrayList<String> ai;
+
+    non terminal ArrayList<Planetas> r, p;
+
+    non terminal ArrayList<PlanetasNeutrales> x, pn;
+
+    non terminal ArrayList<Jugadores> jug, ad;
 
     start with a;
     
-    a ::= LLAVE_A b 
-        | LLAVE_A p 
-        | LLAVE_A pn 
-        | LLAVE_A jug 
-        | COMA q2   
-        | LLAVE_B {: if(parser.mapita==null || parser.listPlanetas == null || parser.listPlanetasNeutrales == null || parser.listJugadores == null) { parser.interruptor = false; parser.syntax_error(parser.getSymbolFactory().newSymbol("a",0, ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), RESULT));}  parser.creacionMapa(parser.listJugadores, parser.interruptor, parser.listPlanetas, parser.mapita, parser.panelMensajes, parser.totalErrores);    :} 
+    a ::= LLAVE_A juego LLAVE_B 
+;
+    juego ::= b:a juego:e {: if(e!=null){ if(e.getMapa()==null){ e.setMapa(a); } else { System.out.println("errorzzzzzzz"); } } :}
+    | p:a juego:e {: if(e!=null){ if(e.getPlanetas()==null){ e.setPlanetas(a); } else { System.out.println("erroasdfr"); } } :}
+    | pn:a juego:e {: if(e!=null){ if(e.getpNeutrales()==null){e.setpNeutrales(a); } else { System.out.println("error"); } } :}
+    | jug:a juego:e {: if(e!=null){ if(e.getJugadores()==null){ e.setJugadores(a); } else { System.out.println("error"); } } :}
+    | COMA q2:a {: RESULT=a; :}
+    | {: RESULT=new Juego(); :}
+;
+    q2 ::= b:a juego:e {: if(e!=null){ if(e.getMapa()==null){ e.setMapa(a); } else { System.out.println("errorzzzzzzzzzz"); } } RESULT=e; :}
+    | p:a juego:e {: if(e!=null){ if(e.getPlanetas()==null){ e.setPlanetas(a);  } else { System.out.println("erroraaa"); } } RESULT=e; :}    
+    | pn:a juego:e {: if(e!=null){ if(e.getpNeutrales()==null){ e.setpNeutrales(a); } else { System.out.println("error"); } } RESULT=e; :}
+    | jug:a juego:e {: if(e!=null){ if(e.getJugadores()==null){ e.setJugadores(a); } else { System.out.println("error"); } } RESULT=e; :}
+;
+    b ::= MAPA DOS_PUNTOS LLAVE_A c:a {: RESULT=a; :}   
 ;
 
-    b ::= MAPA DOS_PUNTOS LLAVE_A {: if(parser.mapita==null){ parser.mapita = new Mapa();    } else {  parser.interruptor = false; parser.syntax_error(parser.getSymbolFactory().newSymbol("b",1, ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.elementAt(CUP$SintaxCreacionMapa$top-3)), ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), RESULT));  parser.totalErrores += "MAPA senteciado mas de una vez dentro del archivo\n";  }  :}  c 
+    c ::= d:a c:e {: if(e!=null){ if(e.getId()==null) { e.setId(a.getId());  } else { System.out.println("error"); }   } RESULT=e;  :} 
+    |   g:a c:e {: if(e!=null){ if(e.getPlanetasNeutrales()==null){ e.setPlanetasNeutrales(a.getPlanetasNeutrales()); } else { System.out.println("error"); }  } RESULT=e; :}
+    |   e:a c:e1 {: if(e1!=null){ if(e1.getSize_filas()==null && e1.getSize_columnas()==null) { e1.setSize_filas(a.getSize_filas()); e1.setSize_columnas(a.getSize_columnas()); } else { System.out.println("error"); } } RESULT=e1; :}
+    |   f:a c:e {: if(e!=null){ if(e.getAlAzar()==null) { e.setAlAzar(a.getAlAzar()); } else { System.out.println("error"); } } RESULT=e; :}
+    |   h:a c:e {: if(e!=null){ if(e.getMapaCiego()==null) { e.setMapaCiego(a.getAlAzar()); } else { System.out.println("error"); } } RESULT=e; :}
+    |   i:a c:e {: if(e!=null){ if(e.getAcumular()==null) { e.setAcumular(a.getAcumular()); } else { System.out.println("error"); } } RESULT=e; :}
+    |   j2:a c:e {: if(e!=null){ if(e.getMapaPNeutral()==null && a!=null) { e.setMapaPNeutral(a.getMapaPNeutral()); } else { System.out.println("error"); } } RESULT=e; :}
+    |   k:a c:e {: if(e!=null){ if(e.getFinalizacion()==null){ e.setFinalizacion(a.getFinalizacion()); } else { System.out.println("error"); } } RESULT=e; :}
+    |    COMA q:e {: RESULT=e; :}
+    |   LLAVE_B {:RESULT=new Mapa();:}
 ;
-
-    c ::= d | e | f | g | h | i | j2 | k | COMA q | LLAVE_B {: if(parser.mapita.getId() != null && parser.mapita.getSize_filas() != null && parser.mapita.getSize_columnas() != null && parser.mapita.getAlAzar() != null && parser.mapita.getPlanetasNeutrales() != null && parser.mapita.getMapaCiego() != null && parser.mapita.getAcumular() != null && parser.mapita.getMostrarNaves() != null && parser.mapita.getMostrarEstadisticas() != null && parser.mapita.getProduccion() != null) { } else { parser.interruptor = false; parser.syntax_error(parser.getSymbolFactory().newSymbol("NT$1",46, ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), RESULT)); parser.totalErrores += "Falta de un atributo en MAPA\n";  }:} a
+    q ::= d:a c:e {: if(e!=null){ if(e.getId()==null) { e.setId(a.getId());  } else { System.out.println("error"); }   } RESULT=e;  :} 
+    |     g:a c:e {: if(e!=null){ if(e.getPlanetasNeutrales()==null) { e.setPlanetasNeutrales(a.getPlanetasNeutrales());  } else { System.out.println("error"); }   } RESULT=e;  :} 
+    |   e:a c:e1 {: if(e1!=null){ if(e1.getSize_filas()==null && e1.getSize_columnas()==null) { e1.setSize_filas(a.getSize_filas()); e1.setSize_columnas(a.getSize_columnas()); } else { System.out.println("error"); } } RESULT=e1; :}
+    |   f:a c:e {: if(e!=null){ if(e.getAlAzar()==null) { e.setAlAzar(a.getAlAzar()); } else { System.out.println("error"); } } RESULT=e; :}
+    |   h:a c:e {: if(e!=null){ if(e.getMapaCiego()==null) { e.setMapaCiego(a.getAlAzar()); } else { System.out.println("error"); } } RESULT=e; :}
+    |   i:a c:e {: if(e!=null){ if(e.getAcumular()==null) { e.setAcumular(a.getAcumular()); } else { System.out.println("error"); } } RESULT=e; :}
+    |   j2:a c:e {: if(e!=null){ if(e.getMapaPNeutral()==null && a!=null) { e.setMapaPNeutral(a.getMapaPNeutral()); } else { System.out.println("error"); } } RESULT=e; :}
+    |   k:a c:e {: if(e!=null){ if(e.getFinalizacion()==null){ e.setFinalizacion(a.getFinalizacion()); } else { System.out.println("error"); } } RESULT=e; :}
 ;
-    q ::= d | e | f | g | h | i | j2 | k
+    e ::= size DOS_PUNTOS LLAVE_A j:a LLAVE_B {:  RESULT=a; :}
 ;
-    d ::= id DOS_PUNTOS COMILLAS ID:a COMILLAS  {: if(parser.mapita.getId()==null){ parser.mapita.setId(a.toString());  } else { parser.interruptor = false; parser.syntax_error(parser.getSymbolFactory().newSymbol("d",3, ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.elementAt(CUP$SintaxCreacionMapa$top-5)), ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), RESULT)); parser.totalErrores += "Atributo ID sentenciado mas de una vez dentro de MAPA\n";    } :} c  
+    f ::= alAzar DOS_PUNTOS VERDADERO:a {: Mapa mapa = new Mapa(); mapa.setAlAzar(a.toString()); RESULT=mapa; :}
+    | alAzar DOS_PUNTOS FALSO:a {: Mapa mapa = new Mapa(); mapa.setAlAzar(a.toString()); RESULT=mapa; :}
 ;
-    e ::= size DOS_PUNTOS LLAVE_A j LLAVE_B c
+    j ::= filas DOS_PUNTOS ENTERO:a COMA columnas DOS_PUNTOS ENTERO:b {: Mapa mapa = new Mapa(); mapa.setSize_filas(a.toString()); mapa.setSize_columnas(b.toString()); RESULT=mapa; :}
+    | columnas DOS_PUNTOS ENTERO:b COMA filas DOS_PUNTOS ENTERO:a {: Mapa mapa = new Mapa(); mapa.setSize_filas(a.toString()); mapa.setSize_columnas(b.toString()); RESULT=mapa;    :}
 ;
-    j ::= filas DOS_PUNTOS ENTERO:a COMA columnas DOS_PUNTOS ENTERO:b  {: if(parser.mapita.getSize_filas()==null && parser.mapita.getSize_columnas()==null){ parser.mapita.setSize_filas(a.toString()); parser.mapita.setSize_columnas(b.toString()); } else { parser.interruptor = false; parser.syntax_error(parser.getSymbolFactory().newSymbol("j",9, ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.elementAt(CUP$SintaxCreacionMapa$top-6)), ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), RESULT)); parser.totalErrores += "Atributo sentenciado mas de una vez\n"; }    :}
-          | columnas DOS_PUNTOS ENTERO:b COMA filas DOS_PUNTOS ENTERO:a  {: if(parser.mapita.getSize_filas()==null && parser.mapita.getSize_columnas()==null){ parser.mapita.setSize_filas(a.toString()); parser.mapita.setSize_columnas(b.toString()); } else { parser.interruptor = false; parser.syntax_error(parser.getSymbolFactory().newSymbol("j",9, ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.elementAt(CUP$SintaxCreacionMapa$top-6)), ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), RESULT)); parser.totalErrores += "Atributo sentenciado mas de una vez\n";  }  :}
+    d ::= id DOS_PUNTOS COMILLAS ID:a COMILLAS  {:  Mapa mapa = new Mapa(); mapa.setId(a.toString());  RESULT=mapa;                    /*if(parser.mapita.getId()==null){ parser.mapita.setId(a.toString());  } else { parser.interruptor = false; parser.syntax_error(parser.getSymbolFactory().newSymbol("d",3, ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.elementAt(CUP$SintaxCreacionMapa$top-5)), ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), RESULT)); parser.totalErrores += "Atributo ID sentenciado mas de una vez dentro de MAPA\n";    }*/ :} 
 ;
-    f ::= alAzar DOS_PUNTOS VERDADERO:a  {: if(parser.mapita.getAlAzar()==null){ parser.mapita.setAlAzar(a.toString()); } else { parser.interruptor = false; parser.syntax_error(parser.getSymbolFactory().newSymbol("NT$2",47, ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), RESULT)); parser.totalErrores += "Atributo alAzar sentenciado mas de una vez\n";  } :} c 
-          | alAzar DOS_PUNTOS FALSO:a  {: if(parser.mapita.getAlAzar()==null){ parser.mapita.setAlAzar(a.toString()); } else { parser.interruptor = false; parser.syntax_error(parser.getSymbolFactory().newSymbol("NT$2",47, ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), RESULT));  parser.totalErrores += "Atributo alAzar sentenciado mas de una vez\n"; } :} c
+    g ::= pNeutrales DOS_PUNTOS ENTERO:a {: Mapa mapa = new Mapa(); mapa.setPlanetasNeutrales(a.toString()); RESULT=mapa; :}
 ;
-    g ::= pNeutrales DOS_PUNTOS ENTERO:a {: if(parser.mapita.getPlanetasNeutrales()==null){ parser.mapita.setPlanetasNeutrales(a.toString());  }else{ parser.interruptor = false; parser.syntax_error(parser.getSymbolFactory().newSymbol("NT$4",49, ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), RESULT)); parser.totalErrores += "Atributo planetasNeutrales sentenciado mas de una vez"; }  :}   c 
+    h ::= mapaCiego DOS_PUNTOS VERDADERO:a {: Mapa mapa = new Mapa(); mapa.setMapaCiego(a.toString()); RESULT=mapa; :}
+    | mapaCiego DOS_PUNTOS FALSO:a {: Mapa mapa = new Mapa(); mapa.setMapaCiego(a.toString()); RESULT=mapa; :}
 ;
-    h ::= mapaCiego DOS_PUNTOS VERDADERO:a {: if(parser.mapita.getMapaCiego()==null){ parser.mapita.setMapaCiego(a.toString()); } else { parser.interruptor = false; parser.syntax_error(parser.getSymbolFactory().newSymbol("NT$5",50, ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), RESULT)); parser.totalErrores += "Atributo mapaCiego sentenciado mas de una vez\n"; } :}  c 
-         | mapaCiego DOS_PUNTOS FALSO:a {: if(parser.mapita.getMapaCiego()==null){ parser.mapita.setMapaCiego(a.toString()); } else { parser.interruptor = false; parser.syntax_error(parser.getSymbolFactory().newSymbol("NT$5",50, ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), RESULT)); parser.totalErrores += "Atributo mapaCiego sentenciado mas de una vez\n"; } :}  c 
+    i ::= acumular DOS_PUNTOS VERDADERO:a {: Mapa mapa = new Mapa(); mapa.setAcumular(a.toString()); RESULT=mapa; :}
+    | acumular DOS_PUNTOS FALSO:a {: Mapa mapa = new Mapa(); mapa.setAcumular(a.toString()); RESULT=mapa; :}
 ;
-    i ::= acumular DOS_PUNTOS VERDADERO:a {: if(parser.mapita.getAcumular()==null){ parser.mapita.setAcumular(a.toString()); } else { parser.interruptor = false; parser.syntax_error(parser.getSymbolFactory().newSymbol("NT$7",52, ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), RESULT)); parser.totalErrores += "Atributo acumular sentenciado mas de una vez\n"; } :} c 
-         | acumular DOS_PUNTOS FALSO:a {: if(parser.mapita.getAcumular()==null){ parser.mapita.setAcumular(a.toString()); } else { parser.interruptor = false; parser.syntax_error(parser.getSymbolFactory().newSymbol("NT$7",52, ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), RESULT)); parser.totalErrores += "Atributo acumular sentenciado mas de una vez\n";  } :} c 
+    j2 ::= NEUTRALES DOS_PUNTOS LLAVE_A l:a LLAVE_B {: Mapa mapa = new Mapa(); if(a.getMostrarNaves()==null || a.getMostrarEstadisticas()==null || a.getProduccion() == null) {System.out.println("ERROR, falta de atributo");} else { mapa.setMapaPNeutral(a); RESULT=mapa; }     :} 
 ;
-    j2 ::= NEUTRALES DOS_PUNTOS LLAVE_A l
+    l ::= m:a l:e {: if(e!=null){if(e.getMostrarNaves()==null){ e.setMostrarNaves(a.getMostrarNaves()); } else { System.out.println("error"); }  } RESULT=e; :}
+    | n:a l:e {: if(e!=null){ if(e.getMostrarEstadisticas()==null){ e.setMostrarEstadisticas(a.getMostrarEstadisticas()); } else { System.out.println("error"); } } RESULT=e; :}
+    | o:a l:e {: if(e!=null){ if(e.getProduccion()==null){ e.setProduccion(a.getProduccion()); } else { System.out.println("error"); } } RESULT=e; :}
+    | COMA q8:e {: RESULT=e; :}
+    | {:RESULT=new MapaPNeutrales();:}
 ;
-    l ::= m | n | o | COMA q8 | LLAVE_B c
+    q8 ::= m:a l:e {: if(e!=null){if(e.getMostrarNaves()==null){ e.setMostrarNaves(a.getMostrarNaves()); } else { System.out.println("error"); }  } RESULT=e; :}
+    | n:a l:e {: if(e!=null){ if(e.getMostrarEstadisticas()==null){ e.setMostrarEstadisticas(a.getMostrarEstadisticas()); } else { System.out.println("error"); } } RESULT=e; :}
+    | o:a l:e {: if(e!=null){ if(e.getProduccion()==null){ e.setProduccion(a.getProduccion()); } else { System.out.println("error"); } } RESULT=e; :}
 ;
-    q8 ::= m | n | o
+    m ::= mostrarNaves DOS_PUNTOS VERDADERO:a {: MapaPNeutrales mapa = new MapaPNeutrales(); mapa.setMostrarNaves(a.toString()); RESULT=mapa; :}
+    | mostrarNaves DOS_PUNTOS FALSO:a {: MapaPNeutrales mapa = new MapaPNeutrales(); mapa.setMostrarNaves(a.toString()); RESULT=mapa; :}
 ;
-    m ::= mostrarNaves DOS_PUNTOS VERDADERO:a {: if(parser.mapita.getMostrarNaves()==null){ parser.mapita.setMostrarNaves(a.toString()); } else { parser.interruptor = false;  parser.syntax_error(parser.getSymbolFactory().newSymbol("NT$9",54, ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), RESULT)); parser.totalErrores += "Atributo mostrarNaves sentenciado mas de una vez\n"; } :}   l
-        | mostrarNaves DOS_PUNTOS FALSO:a {: if(parser.mapita.getMostrarNaves()==null){ parser.mapita.setMostrarNaves(a.toString()); } else { parser.interruptor = false; parser.syntax_error(parser.getSymbolFactory().newSymbol("NT$9",54, ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), RESULT));  parser.totalErrores += "Atributo mostrarNaves sentenciado mas de una vez\n"; } :} l 
+    n ::= mostrarEstadisticas DOS_PUNTOS VERDADERO:a {: MapaPNeutrales mapa = new MapaPNeutrales(); mapa.setMostrarEstadisticas(a.toString()); RESULT=mapa; :}
+    | mostrarEstadisticas DOS_PUNTOS FALSO:a {: MapaPNeutrales mapa = new MapaPNeutrales(); mapa.setMostrarEstadisticas(a.toString()); RESULT=mapa; :}
 ;
-    n ::= mostrarEstadisticas DOS_PUNTOS VERDADERO:a {: if(parser.mapita.getMostrarEstadisticas()==null) { parser.mapita.setMostrarEstadisticas(a.toString()); } else { parser.interruptor = false; parser.syntax_error(parser.getSymbolFactory().newSymbol("NT$11",56, ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), RESULT)); parser.totalErrores += "Atributo mostrarEstadisticas sentenciado mas de una vez\n"; } :} l 
-        |  mostrarEstadisticas DOS_PUNTOS FALSO:a {: if(parser.mapita.getMostrarEstadisticas()==null) { parser.mapita.setMostrarEstadisticas(a.toString()); } else { parser.interruptor = false; parser.syntax_error(parser.getSymbolFactory().newSymbol("NT$11",56, ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), RESULT)); parser.totalErrores += "Atributo mostrarEstadisticas sentenciado mas de una vez\n"; } :} l 
+    o ::= produccion DOS_PUNTOS ENTERO:a {: MapaPNeutrales mapa = new MapaPNeutrales(); mapa.setProduccion(a.toString()); RESULT=mapa; :}
 ;
-    o ::= produccion DOS_PUNTOS ENTERO:a {: if(parser.mapita.getProduccion()==null) {parser.mapita.setProduccion(a.toString()); } else { parser.interruptor = false; parser.syntax_error(parser.getSymbolFactory().newSymbol("NT$13",58, ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), RESULT)); parser.totalErrores += "Atributo produccion sentenciado mas de una vez\n"; } :} l 
+    k ::= finalizacion DOS_PUNTOS ENTERO:a {: Mapa mapa = new Mapa(); mapa.setFinalizacion(a.toString()); RESULT=mapa; :}
 ;
-    k ::= finalizacion DOS_PUNTOS ENTERO:a {: if(parser.mapita.getFinalizacion()==null) { parser.mapita.setFinalizacion(a.toString()); } else { parser.interruptor = false; parser.syntax_error(parser.getSymbolFactory().newSymbol("NT$14",59, ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), RESULT)); parser.totalErrores += "Atributo finalizacion sentenciado mas de una vez\n"; } :} c
+    p ::= PLANETAS DOS_PUNTOS AGRUPACION_A r:a AGRUPACION_B  {: RESULT=a; :}
+    | PLANETAS DOS_PUNTOS AGRUPACION_A AGRUPACION_B 
 ;
-    q2 ::= b | p | pn | jug
+    r ::= LLAVE_A s:a LLAVE_B COMA r:e {: if(a.getNombre()==null || a.getNaves()==null || a.getProduccion()==null || a.getPorcentajeMuertes()==null || a.getPosicionX() ==null || a.getPosicionY()==null){ System.out.println("Falta un atributo"); } else { e.add(a); RESULT=e; } :}
+    | LLAVE_A s:a LLAVE_B {:  if(a.getNombre()==null || a.getNaves()==null || a.getProduccion()==null || a.getPorcentajeMuertes()==null || a.getPosicionX() ==null || a.getPosicionY()==null){ System.out.println("Falta un atributo"); } else {ArrayList<Planetas> misPlanetas = new ArrayList<>(); misPlanetas.add(a); RESULT=misPlanetas;  }   :}
 ;
-    p ::= PLANETAS DOS_PUNTOS AGRUPACION_A {: if(parser.listPlanetas==null) { parser.listPlanetas = new ArrayList<>();} else { parser.interruptor = false; parser.syntax_error(parser.getSymbolFactory().newSymbol("p",16, ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.elementAt(CUP$SintaxCreacionMapa$top-3)), ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), RESULT)); parser.totalErrores += "Campo PLANETAS ya habia sido sentenciado anteriormente\n"; } :} r 
-         | PLANETAS DOS_PUNTOS AGRUPACION_A cierre 
+    s ::= t:a s:e {: if(e!=null){ if(e.getNombre()==null) { e.setNombre(a.getNombre()); } else { System.out.println("error"); } } RESULT=e; :}
+    | u:a s:e {: if(e!=null){ if(e.getNaves()==null){ e.setNaves(a.getNaves()); } else { System.out.println("error"); } } RESULT=e; :}    
+    | v:a s:e {: if(e!=null){ if(e.getProduccion()==null){ e.setProduccion(a.getProduccion()); } else { System.out.println("error"); } } RESULT=e;  :}
+    | w:a s:e {: if(e!=null){ if(e.getPorcentajeMuertes()==null){ e.setPorcentajeMuertes(a.getPorcentajeMuertes()); } else { System.out.println("error"); } } RESULT=e; :}
+    | aj:a s:e {: if(e!=null){ if(e.getPosicionX()==null){ e.setPosicionX(a.getPosicionX()); } else { System.out.println("error"); } } RESULT=e; :}
+    | ak:a s:e {: if(e!=null){ if(e.getPosicionY()==null){e.setPosicionY(a.getPosicionY());} else { System.out.println("error"); } } RESULT=e; :}
+    | COMA q3:a {: RESULT=a; :}
+    | {: RESULT=new Planetas(); :} 
 ;
-    r ::= LLAVE_A {: parser.planeta = new Planetas(); :}  s 
+    q3 ::= t:a s:e {: if(e!=null){ if(e.getNombre()==null){ e.setNombre(a.getNombre()); } else { System.out.println("error"); } } RESULT=e; :}
+    | u:a s:e {: if(e!=null){ if(e.getNaves()==null){ e.setNaves(a.getNaves()); } else { System.out.println("error"); } } RESULT=e; :}    
+    | v:a s:e {: if(e!=null){ if(e.getProduccion()==null){ e.setProduccion(a.getProduccion()); } else { System.out.println("error"); } } RESULT=e;  :}
+    | w:a s:e {: if(e!=null){ if(e.getPorcentajeMuertes()==null){ e.setPorcentajeMuertes(a.getPorcentajeMuertes()); } else { System.out.println("error"); } } RESULT=e; :}
+    | aj:a s:e {: if(e!=null){ if(e.getPosicionX()==null){ e.setPosicionX(a.getPosicionX()); } else { System.out.println("error"); } } RESULT=e; :}
+    | ak:a s:e {: if(e!=null){ if(e.getPosicionY()==null){e.setPosicionY(a.getPosicionY());} else { System.out.println("error"); } } RESULT=e; :}
 ;
-    s ::= t 
-        | u 
-        | v 
-        | w 
-        | aj
-        | ak
-        | COMA q3   
-        | LLAVE_B COMA {: if(parser.planeta.getPosicionX()!=null && parser.planeta.getProduccion()!=null && parser.planeta.getNaves()!=null && parser.planeta.getPorcentajeMuertes()!=null && parser.planeta.getNombre()!=null ) { parser.interruptor = parser.verificadorNombresPlanetas(parser.listPlanetas, parser.planeta.getNombre(), parser.interruptor);  if(parser.interruptor == true) { parser.listPlanetas.add(parser.planeta); } else { parser.syntax_error(parser.getSymbolFactory().newSymbol("NT$18",63, ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), RESULT)); }  } else { parser.interruptor = false; parser.syntax_error(parser.getSymbolFactory().newSymbol("NT$17",62, ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), RESULT)); parser.totalErrores += "Falta de uno o mas atributos en un planeta\n"; } :} r 
-        | LLAVE_B {: if(parser.planeta.getPosicionY()!=null && parser.planeta.getProduccion()!=null && parser.planeta.getNaves()!=null && parser.planeta.getPorcentajeMuertes()!=null && parser.planeta.getNombre()!=null ) {   parser.interruptor = parser.verificadorNombresPlanetas(parser.listPlanetas, parser.planeta.getNombre(), parser.interruptor);  if(parser.interruptor == true) { parser.listPlanetas.add(parser.planeta); } else { parser.syntax_error(parser.getSymbolFactory().newSymbol("NT$19",64, ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), RESULT));  }  } else { parser.interruptor = false; parser.syntax_error(parser.getSymbolFactory().newSymbol("NT$17",62, ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), RESULT)); parser.totalErrores += "Falta de uno o mas atributos en un planeta\n";  } :}  cierre
+    t ::= nombre DOS_PUNTOS COMILLAS ID:a COMILLAS {: Planetas planetas = new Planetas(); planetas.setNombre(a.toString()); RESULT=planetas; :}
 ;
-    q3 ::= t | u | v | w | aj | ak
+    u ::= naves DOS_PUNTOS ENTERO:a {: Planetas planeta = new Planetas(); planeta.setNaves(a.toString()); RESULT = planeta; :}
 ;
-    t ::= nombre DOS_PUNTOS COMILLAS ID:a COMILLAS  {: if(parser.planeta.getNombre()==null) { parser.planeta.setNombre(a.toString()); } else { parser.interruptor = false; parser.syntax_error(parser.getSymbolFactory().newSymbol("NT$17",62, ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), RESULT)); parser.totalErrores += "Atributo nombre en un campo PLANETAS sentenciado mas de una vez\n"; } :}  s
+    v ::= produccion DOS_PUNTOS ENTERO:a {: Planetas planeta = new Planetas(); planeta.setProduccion(a.toString()); RESULT = planeta; :}
 ;
-    u ::= naves DOS_PUNTOS ENTERO:a {: if(parser.planeta.getNaves()==null) { parser.planeta.setNaves(a.toString()); } else { parser.interruptor = false; parser.syntax_error(parser.getSymbolFactory().newSymbol("NT$18",63, ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), RESULT)); parser.totalErrores += "Atributo naves en un campo PLANETAS sentenciado mas de una vez\n"; } :}  s 
+    w ::= porcMuertes DOS_PUNTOS DECIMAL:a {: Planetas planeta = new Planetas(); planeta.setPorcentajeMuertes(a.toString());  RESULT = planeta; :}
 ;
-    v ::= produccion DOS_PUNTOS ENTERO:a {: if(parser.planeta.getProduccion()==null) { parser.planeta.setProduccion(a.toString()); } else { parser.interruptor = false; parser.syntax_error(parser.getSymbolFactory().newSymbol("NT$19",64, ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), RESULT)); parser.totalErrores += "Atributo produccion en un campo PLANETAS sentenciado mas de una vez\n"; } :} s  
+    aj ::= posX DOS_PUNTOS ENTERO:a {: Planetas planeta = new Planetas(); planeta.setPosicionX(a.toString()); RESULT=planeta; :}
 ;
-    w ::= porcMuertes DOS_PUNTOS DECIMAL:a {: if(parser.planeta.getPorcentajeMuertes() == null) { parser.planeta.setPorcentajeMuertes(a.toString()); } else { parser.interruptor = false; parser.syntax_error(parser.getSymbolFactory().newSymbol("NT$20",65, ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), RESULT)); parser.totalErrores += "Atributo porcentajeMuertes en un campo PLANETAS sentenciado mas de una vez\n"; } :} s 
+    ak ::= posY DOS_PUNTOS ENTERO:a {: Planetas planeta = new Planetas(); planeta.setPosicionY(a.toString()); RESULT=planeta; :}
 ;
-    aj ::= posX DOS_PUNTOS ENTERO:a {: if(parser.planeta.getPosicionX()==null) { parser.planeta.setPosicionX(a.toString()); } else { parser.interruptor = false; parser.syntax_error(parser.getSymbolFactory().newSymbol("aj",45, ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.elementAt(CUP$SintaxCreacionMapa$top-2)), ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), RESULT)); parser.totalErrores += "Atributo posicionX en un campo PLANETAS sentenciado mas de una vez\n"; } :} s
+    pn ::= PLANETAS_NEUTRALES DOS_PUNTOS AGRUPACION_A x AGRUPACION_B 
+    | PLANETAS_NEUTRALES DOS_PUNTOS AGRUPACION_A AGRUPACION_B 
 ;
-    ak ::= posY DOS_PUNTOS ENTERO:a {: if(parser.planeta.getPosicionY()==null) { parser.planeta.setPosicionY(a.toString()); } else { parser.interruptor = false; parser.syntax_error(parser.getSymbolFactory().newSymbol("ak",46, ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.elementAt(CUP$SintaxCreacionMapa$top-2)), ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), RESULT)); parser.totalErrores += "Atributo posicionY en un campo PLANETAS sentenciado mas de una vez\n"; } :} s
+    x ::= LLAVE_A y:a LLAVE_B COMA x:e {: if(a.getNombre()==null || a.getNaves()==null || a.getProduccion()==null || a.getPorcentajeMuertes()==null || a.getPosicionX()==null || a.getPosicionY()==null){ System.out.println("ERROR, Falta un atributo"); } else { e.add(a); RESULT=e; } :}
+    | LLAVE_A y:a LLAVE_B {: if(a.getNombre()==null || a.getNaves()==null || a.getProduccion()==null || a.getPorcentajeMuertes()==null || a.getPosicionX()==null || a.getPosicionY()==null){ System.out.println("ERROR, Falta un atributo"); } else { ArrayList<PlanetasNeutrales> pNeutrales = new ArrayList<>(); pNeutrales.add(a); RESULT=pNeutrales; }  :}
 ;
-    pn ::= PLANETAS_NEUTRALES DOS_PUNTOS AGRUPACION_A {: if(parser.listPlanetasNeutrales == null) { parser.listPlanetasNeutrales = new ArrayList<>(); } else { parser.interruptor = false; parser.syntax_error(parser.getSymbolFactory().newSymbol("NT$23",68, ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), RESULT)); parser.totalErrores += "Atributo PLANETAS NEUTRALES ya habia sido sentenciado anteriormente\n"; } :}  x 
-         |  PLANETAS_NEUTRALES DOS_PUNTOS AGRUPACION_A cierre
+    y ::= z:a y:e {: if(e!=null){ if(e.getNombre()==null){ e.setNombre(a.getNombre()); } else { System.out.println("error"); } } RESULT=e; :}
+    | aa:a y:e {: if(e!=null){ if(e.getNaves()==null){ e.setNaves(a.getNaves()); } else { System.out.println("error"); } } RESULT=e; :}
+    | ab:a y:e {: if(e!=null){ if(e.getProduccion()==null){e.setProduccion(a.getProduccion());} else { System.out.println("error"); } } RESULT=e; :}
+    | ac:a y:e {: if(e!=null){ if(e.getPorcentajeMuertes()==null){ e.setPorcentajeMuertes(a.getPorcentajeMuertes()); } else { System.out.println("error"); } } RESULT=e; :}  
+    | am:a y:e {: if(e!=null){ if(e.getPosicionX()==null){ e.setPosicionX(a.getPosicionX()); } else { System.out.println("error"); } } RESULT=e; :}
+    | an:a y:e {: if(e!=null){ if(e.getPosicionY()==null){ e.setPosicionY(a.getPosicionY()); } else { System.out.println("error"); } } RESULT=e; :}
+    | COMA q5:a {: RESULT=a; :}
+    | {: RESULT=new PlanetasNeutrales(); :}
 ;
-    x ::= LLAVE_A {: parser.neutral = new PlanetasNeutrales(); :} y
+    q5 ::= z:a y:e {: if(e!=null){ if(e.getNombre()==null){ e.setNombre(a.getNombre()); } else { System.out.println("error"); } } RESULT=e; :}
+    | aa:a y:e {: if(e!=null){ if(e.getNaves()==null){ e.setNaves(a.getNaves()); } else { System.out.println("error"); } } RESULT=e; :}
+    | ab:a y:e {: if(e!=null){ if(e.getProduccion()==null){e.setProduccion(a.getProduccion());} else { System.out.println("error"); } } RESULT=e; :}
+    | ac:a y:e {: if(e!=null){ if(e.getPorcentajeMuertes()==null){ e.setPorcentajeMuertes(a.getPorcentajeMuertes()); } else { System.out.println("error"); } } RESULT=e; :}  
+    | am:a y:e {: if(e!=null){ if(e.getPosicionX()==null){ e.setPosicionX(a.getPosicionX()); } else { System.out.println("error"); } } RESULT=e; :}
+    | an:a y:e {: if(e!=null){ if(e.getPosicionY()==null){ e.setPosicionY(a.getPosicionY()); } else { System.out.println("error"); } } RESULT=e; :}
 ;
-    y ::= z 
-        | aa 
-        | ab 
-        | ac 
-        | COMA q5 
-        | LLAVE_B COMA {: if(parser.neutral.getNombre() != null && parser.neutral.getNaves() != null && parser.neutral.getProduccion() != null && parser.neutral.getPorcentajeMuertes() != null) { parser.interruptor = parser.verificadorNombresPlanetasNeutrales(parser.listPlanetasNeutrales, parser.neutral.getNombre(), parser.interruptor); if(parser.interruptor == true) { parser.listPlanetasNeutrales.add(parser.neutral); } else { parser.syntax_error(parser.getSymbolFactory().newSymbol("NT$26",71, ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), RESULT));  } } else { parser.interruptor = false; parser.syntax_error(parser.getSymbolFactory().newSymbol("NT$25",70, ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), RESULT)); parser.totalErrores += "Falta de uno o mas atributos en un planeta neutral\n"; } :}  x 
-        | LLAVE_B {: if(parser.neutral.getNombre() != null && parser.neutral.getNaves() != null && parser.neutral.getProduccion() != null && parser.neutral.getPorcentajeMuertes() != null) { parser.interruptor = parser.verificadorNombresPlanetasNeutrales(parser.listPlanetasNeutrales, parser.neutral.getNombre(), parser.interruptor); if(parser.interruptor == true) { parser.listPlanetasNeutrales.add(parser.neutral); } else { parser.syntax_error(parser.getSymbolFactory().newSymbol("NT$26",71, ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), RESULT)); } } else { parser.interruptor = false; parser.syntax_error(parser.getSymbolFactory().newSymbol("NT$25",70, ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), RESULT)); parser.totalErrores += "Falta de uno o mas atributos en un planeta neutral\n"; } :} cierre
+    z ::=  nombre DOS_PUNTOS COMILLAS ID:a COMILLAS {: PlanetasNeutrales neutral = new PlanetasNeutrales(); neutral.setNombre(a.toString()); RESULT=neutral; :}
 ;
-    q5 ::= z | aa | ab | ac
+    aa ::= naves DOS_PUNTOS ENTERO:a {: PlanetasNeutrales neutral = new PlanetasNeutrales(); neutral.setNaves(a.toString()); RESULT=neutral; :}
 ;
-    z::= nombre DOS_PUNTOS COMILLAS ID:a COMILLAS  {: if(parser.neutral.getNombre() == null) { parser.neutral.setNombre(a.toString()); } else { parser.interruptor = false; parser.syntax_error(parser.getSymbolFactory().newSymbol("NT$25",70, ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), RESULT)); parser.totalErrores += "Atributo nombre en un campo PLANETAS NEUTRALES sentenciado mas de una vez\n"; } :} y 
+    ab ::= produccion DOS_PUNTOS ENTERO:a {: PlanetasNeutrales neutral = new PlanetasNeutrales(); neutral.setProduccion(a.toString()); RESULT=neutral; :}
 ;
-    aa ::= naves DOS_PUNTOS ENTERO:a {: if(parser.neutral.getNaves() == null) { parser.neutral.setNaves(a.toString()); } else { parser.interruptor = false; parser.syntax_error(parser.getSymbolFactory().newSymbol("NT$26",71, ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), RESULT)); parser.totalErrores += "Atributo naves en un campo PLANETA NEUTRAL sentenciado mas de una vez\n"; } :} y 
+    ac ::= porcMuertes DOS_PUNTOS DECIMAL:a {: PlanetasNeutrales neutral = new PlanetasNeutrales(); neutral.setPorcentajeMuertes(a.toString()); RESULT=neutral; :}
 ;
-    ab ::= produccion DOS_PUNTOS ENTERO:a {: if(parser.neutral.getProduccion() == null) { parser.neutral.setProduccion(a.toString()); } else { parser.interruptor = false; parser.syntax_error(parser.getSymbolFactory().newSymbol("NT$27",72, ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), RESULT)); parser.totalErrores += "Atributo producion en un campo PLANETA NEUTRAL sentenciado mas de una vez\n"; } :} y 
+    am ::= posX DOS_PUNTOS ENTERO:a {: PlanetasNeutrales neutral = new PlanetasNeutrales(); neutral.setPosicionX(a.toString()); RESULT=neutral; :}
 ;
-    ac ::= porcMuertes DOS_PUNTOS DECIMAL:a {: if(parser.neutral.getPorcentajeMuertes() == null) { parser.neutral.setPorcentajeMuertes(a.toString()); } else { parser.interruptor = false; parser.syntax_error(parser.getSymbolFactory().newSymbol("NT$28",73, ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), RESULT)); parser.totalErrores += "Atributo porcentajeMuertes en un campo PLANETA NEUTRAL sentenciado mas de una vez\n"; } :} y
+    an ::= posY DOS_PUNTOS ENTERO:a {: PlanetasNeutrales neutral = new PlanetasNeutrales(); neutral.setPosicionY(a.toString()); RESULT=neutral; :}
 ;
-    jug ::= JUGADORES DOS_PUNTOS AGRUPACION_A {: if(parser.listJugadores == null){ parser.listJugadores = new ArrayList<>(); } else { parser.interruptor = false; parser.syntax_error(parser.getSymbolFactory().newSymbol("NT$31",76, ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), RESULT)); parser.totalErrores += "Atributo JUGADORES ya habia sido sentenciado anteriormente\n"; } :} ad 
-           | JUGADORES DOS_PUNTOS AGRUPACION_A cierre
+    jug ::= JUGADORES DOS_PUNTOS AGRUPACION_A ad AGRUPACION_B 
+    | JUGADORES DOS_PUNTOS AGRUPACION_A AGRUPACION_B 
 ;
-    ad ::= LLAVE_A {: parser.jugador = new Jugadores(); :} ae 
+    ad ::= LLAVE_A ae:a LLAVE_B COMA ad:e {: if(a.getNombre()==null || a.getPlanetas()==null || a.getColor()==null || a.getTipo()==null ){ System.out.println("ERROR, Falta de un archivo"); } else { e.add(a); RESULT=e; } :}
+    | LLAVE_A ae:a LLAVE_B {: if(a.getNombre()==null || a.getPlanetas()==null || a.getColor()==null || a.getTipo()==null ){ System.out.println("ERROR, Falta de un archivo"); } else { ArrayList<Jugadores> misJugadores = new ArrayList<>(); misJugadores.add(a); RESULT=misJugadores; } :}
 ;
-    ae ::= af 
-         | ag 
-         | ah 
-         | al
-         | COMA q7 
-         | LLAVE_B COMA {: if(parser.jugador.getColor()!=null && parser.jugador.getNombre() != null && parser.jugador.getPlanetas() != null && parser.jugador.getTipo() != null) {  parser.interruptor = parser.verificadorNombresJugadores(parser.listJugadores, parser.jugador.getNombre(), parser.interruptor); if(parser.interruptor == true) { parser.listJugadores.add(parser.jugador); } else { parser.syntax_error(parser.getSymbolFactory().newSymbol("NT$34",79, ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), RESULT)); }  } else { parser.interruptor = false; parser.syntax_error(parser.getSymbolFactory().newSymbol("NT$33",78, ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), RESULT)); parser.totalErrores += "Falta de uno o mas atributos en un jugador\n"; } :}  ad 
-         | LLAVE_B {: if(parser.jugador.getColor()!=null && parser.jugador.getNombre() != null && parser.jugador.getPlanetas() != null && parser.jugador.getTipo() != null) {  parser.interruptor = parser.verificadorNombresJugadores(parser.listJugadores, parser.jugador.getNombre(), parser.interruptor); if(parser.interruptor == true) { parser.listJugadores.add(parser.jugador); } else { parser.syntax_error(parser.getSymbolFactory().newSymbol("NT$35",80, ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), RESULT)); }  }  else { parser.interruptor = false; parser.syntax_error(parser.getSymbolFactory().newSymbol("NT$34",79, ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), RESULT)); parser.totalErrores += "Falta de uno o mas atributos en un jugador\n"; }  :} cierre
+    ae ::= af:a ae:e {: if(e!=null){ if(e.getNombre()==null){ e.setNombre(a.getNombre()); } else { System.out.println("error"); } } RESULT=e; :}
+    | ag:a ae:e {: if(e!=null){ if(e.getPlanetas()==null){ e.setPlanetas(a.getPlanetas()); } else { System.out.println("error"); } } RESULT=e; :}
+    | ah:a ae:e {: if(e!=null){ if(e.getTipo()==null){ e.setTipo(a.getTipo()); } else { System.out.println("error"); } } RESULT=e; :}
+    | al:a ae:e {: if(e!=null){ if(e.getColor()==null){ e.setColor(a.getColor()); } else { System.out.println("error"); } } RESULT=e; :}
+    | COMA q7:a {: RESULT=a; :}
+    | {: RESULT=new Jugadores(); :}
 ;
-    q7 ::= af | ag | ah | al
+    q7 ::= af:a ae:e {: if(e!=null){ if(e.getNombre()==null){ e.setNombre(a.getNombre()); } else { System.out.println("error"); } } RESULT=e; :}
+    | ag:a ae:e {: if(e!=null){ if(e.getPlanetas()==null){ e.setPlanetas(a.getPlanetas()); } else { System.out.println("error"); } } RESULT=e; :}
+    | ah:a ae:e {: if(e!=null){ if(e.getTipo()==null){ e.setTipo(a.getTipo()); } else { System.out.println("error"); } } RESULT=e; :}
+    | al:a ae:e {: if(e!=null){ if(e.getColor()==null){ e.setColor(a.getColor()); } else { System.out.println("error"); } } RESULT=e; :}
 ;
-    af ::= nombre DOS_PUNTOS COMILLAS ID:a COMILLAS {: if(parser.jugador.getNombre() == null) { parser.jugador.setNombre(a.toString());  parser.jugador.setMisPlanetas(new ArrayList<>()); } else { parser.interruptor = false; parser.syntax_error(parser.getSymbolFactory().newSymbol("NT$33",78, ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), RESULT)); parser.totalErrores += "Atributo nombre en un campo JUGADOR sentenciado mas de una vez\n"; } :} ae 
+    af ::= nombre DOS_PUNTOS COMILLAS ID:a COMILLAS {: Jugadores jugador = new Jugadores();  jugador.setNombre(a.toString()); RESULT=jugador; :}
 ;
-    ag ::= planetas DOS_PUNTOS AGRUPACION_A {: if(parser.jugador.getPlanetas() == null) { parser.jugador.setPlanetas(new ArrayList<>());  } else { parser.interruptor = false; parser.syntax_error(parser.getSymbolFactory().newSymbol("NT$34",79, ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), RESULT)); parser.totalErrores += "Atributo planetas en un campo JUGADOR sentenciado mas de una vez\n"; } :} ai 
+    ag ::= planetas DOS_PUNTOS AGRUPACION_A ai:a AGRUPACION_B {: Jugadores jugador = new Jugadores(); jugador.setPlanetas(a); RESULT=jugador; :}
 ;
-    al ::= color DOS_PUNTOS COMILLAS COLOR:a COMILLAS {: if(parser.jugador.getColor() == null) { parser.jugador.setColor(a.toString()); } else { parser.interruptor = false; parser.syntax_error(parser.getSymbolFactory().newSymbol("NT$40",88, ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), RESULT)); parser.totalErrores += "Atributo color en un campo JUGADOR sentenciado mas de una vez\n"; }  :} ae
+    ai ::= COMILLAS ID:a COMILLAS COMA ai:b {: b.add(a.toString()); RESULT=b; :}
+    | COMILLAS ID:a COMILLAS ai:b {: b.add(a.toString()); RESULT=b; :}
+    | {: RESULT=new ArrayList<>(); :}
 ;
-    ai ::= COMILLAS ID:a COMILLAS COMA {: parser.planetaNombre = a.toString(); parser.jugador.getPlanetas().add(a.toString());  :} ai 
-         | COMILLAS ID:a COMILLAS {: parser.planetaNombre = a.toString(); parser.jugador.getPlanetas().add(a.toString()); :} ai 
-         | AGRUPACION_B ae  
+    al ::= color DOS_PUNTOS COMILLAS COLOR:a COMILLAS {: Jugadores jugador = new Jugadores(); jugador.setColor(a.toString()); RESULT=jugador; :}
 ;
-    ah ::= tipo DOS_PUNTOS FACIL:a {: if(parser.jugador.getTipo() == null) { parser.jugador.setTipo(a.toString()); } else { parser.interruptor = false; parser.syntax_error(parser.getSymbolFactory().newSymbol("NT$37",82, ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), RESULT)); parser.totalErrores += "Atributo tipo en un campo JUGADOR sentenciado mas de una vez\n"; } :} ae 
-         |  tipo DOS_PUNTOS DIFICIL:a {: if(parser.jugador.getTipo() == null) { parser.jugador.setTipo(a.toString()); } else { parser.interruptor = false; parser.syntax_error(parser.getSymbolFactory().newSymbol("NT$37",82, ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), RESULT)); parser.totalErrores += "Atributo tipo en un campo JUGADOR sentenciado mas de una vez\n"; } :} ae  
-         |  tipo DOS_PUNTOS HUMANO:a {: if(parser.jugador.getTipo() == null) { parser.jugador.setTipo(a.toString()); } else { parser.interruptor = false; parser.syntax_error(parser.getSymbolFactory().newSymbol("NT$37",82, ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), RESULT)); parser.totalErrores += "Atributo tipo en un campo JUGADOR sentenciado mas de una vez\n"; } :} ae 
+    ah ::= tipo DOS_PUNTOS FACIL:a {: Jugadores jugador = new Jugadores(); jugador.setTipo(a.toString()); RESULT=jugador; :}
+    | tipo DOS_PUNTOS DIFICIL:a {: Jugadores jugador = new Jugadores(); jugador.setTipo(a.toString()); RESULT=jugador; :}
+    | tipo DOS_PUNTOS HUMANO:a {: Jugadores jugador = new Jugadores(); jugador.setTipo(a.toString()); RESULT=jugador; :}
 ;
-    cierre ::= AGRUPACION_B a
-;
-                    
-
-
-
