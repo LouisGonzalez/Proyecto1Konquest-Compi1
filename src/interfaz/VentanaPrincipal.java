@@ -109,12 +109,12 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        // TODO add your handling code here:
+        VentanaNuevoJuego nuevo = new VentanaNuevoJuego(this, true);
+        nuevo.setVisible(true);
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void itemLecturaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemLecturaActionPerformed
-
-JFileChooser chooser = new JFileChooser();
+        JFileChooser chooser = new JFileChooser();
         panelMensajes.setText("");
         SintaxCreacionMapa.totalErrores = "";
         String path = "";
@@ -145,9 +145,7 @@ JFileChooser chooser = new JFileChooser();
                 } catch (IOException ex) {
                     Logger.getLogger(VentanaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
                 }
-               // System.out.println(texto);
-                  ArrayList<ArchivoConfiguracion> listArchivos = new ArrayList<>();
-                  
+                ArrayList<ArchivoConfiguracion> listArchivos = new ArrayList<>();
                 AnalizadorLexico lexico = new AnalizadorLexico(new StringReader(texto));
                 try {
                     new SintaxCreacionMapa(lexico, listArchivos, mapa, panelMensajes).parse();

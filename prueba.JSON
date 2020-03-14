@@ -26,7 +26,15 @@
 	  posicionY: 3
 	},
 	{
-  	  nombre: "AS",
+       	  nombre: "C",
+  	  naves: 15,
+  	  produccion: 9,
+  	  porcentajeMuertes: 0.40,
+	  posicionX: 3,
+	  posicionY: 3
+	},
+	{
+  	  nombre: "A",
   	  naves: 15,
   	  produccion: 9,
   	  porcentajeMuertes: 0.40,
@@ -48,22 +56,22 @@ PLANETAS_NEUTRALES: [
   	  naves: 11,
   	  produccion: 9,
   	  porcentajeMuertes: 0.998501
-	  posicionX: 3,
-	  posicionY: 1
+	  posicionX: 2,
+	  posicionY: 9
 	},
 	{
   	  nombre: "F",
   	  naves: 20,
   	  produccion: 25,
   	  porcentajeMuertes: 0.21502
-	  posicionX: 3,
-	  posicionY: 1
+	  posicionX: 5,
+	  posicionY: 8
 	}
   ],
   JUGADORES: [
 	{
- 	  nombre: "Jose",
-	  color: "15,13,546,2",
+ 	  nombre: "Jode",
+	  color: "0,255,255,75",
   	  planetas: [
     	    "A",
     	    "C"
@@ -71,8 +79,8 @@ PLANETAS_NEUTRALES: [
   	  tipo: HUMANO
 	},
 	{
-  	  nombre: "pc1",
-	  color: "32,45,9,12",
+  	  nombre: "Jodde",
+	  color: "0,255,0,75",
   	  planetas: [
     	    "B"
   	  ],
