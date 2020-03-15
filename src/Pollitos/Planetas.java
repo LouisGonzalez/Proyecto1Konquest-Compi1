@@ -12,6 +12,24 @@ public class Planetas {
     private String porcentajeMuertes;
     private String posicionX;
     private String posicionY;
+    private String color;
+    private boolean interruptor;
+
+    public boolean isInterruptor() {
+        return interruptor;
+    }
+
+    public void setInterruptor(boolean interruptor) {
+        this.interruptor = interruptor;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
 
     public String getPosicionX() {
         return posicionX;

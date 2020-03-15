@@ -16,7 +16,6 @@ import javax.swing.JTextArea;
 parser code {:
 
     CreacionMapa tablero;
-    ArrayList<ArchivoConfiguracion> listArchivos;
     ArrayList<Planetas> listPlanetas;
     ArrayList<PlanetasNeutrales> listPlanetasNeutrales;
     ArrayList<Jugadores> listJugadores;
@@ -28,9 +27,8 @@ parser code {:
     Juego misDatos;
 
 
-    public SintaxCreacionMapa(AnalizadorLexico lex, ArrayList<ArchivoConfiguracion> listArchivos, CreacionMapa tablero, JTextArea panelMensajes){
+    public SintaxCreacionMapa(AnalizadorLexico lex, CreacionMapa tablero, JTextArea panelMensajes){
         super(lex);
-        this.listArchivos = listArchivos;
         this.tablero = tablero;
         this.matrizJuego = matrizJuego;
         this.panelMensajes = panelMensajes;

@@ -12,6 +12,15 @@ public class PlanetasNeutrales {
     private String porcentajeMuertes;
     private String posicionX;
     private String posicionY;
+    private boolean interruptor;
+
+    public boolean isInterruptor() {
+        return interruptor;
+    }
+
+    public void setInterruptor(boolean interruptor) {
+        this.interruptor = interruptor;
+    }
 
     public String getPosicionX() {
         return posicionX;

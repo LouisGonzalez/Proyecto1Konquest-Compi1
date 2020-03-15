@@ -109,7 +109,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        VentanaNuevoJuego nuevo = new VentanaNuevoJuego(this, true);
+        VentanaNuevoJuego nuevo = new VentanaNuevoJuego(this, true, mapa, panelMensajes);
         nuevo.setVisible(true);
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
@@ -145,10 +145,9 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 } catch (IOException ex) {
                     Logger.getLogger(VentanaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                ArrayList<ArchivoConfiguracion> listArchivos = new ArrayList<>();
                 AnalizadorLexico lexico = new AnalizadorLexico(new StringReader(texto));
                 try {
-                    new SintaxCreacionMapa(lexico, listArchivos, mapa, panelMensajes).parse();
+                    new SintaxCreacionMapa(lexico, mapa, panelMensajes).parse();
                    
                  } catch (Exception ex) {
                     Logger.getLogger(VentanaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
