@@ -18,7 +18,8 @@ import javax.swing.JTextField;
 public class Jugabilidad {
 
     public int turnos = 0;
-
+    public boolean evento = false;
+    
     public void circulacionTurnos(ArrayList<Jugadores> jugadores, Mapa mapita) {
         if (Integer.parseInt(mapita.getFinalizacion()) > 0) {
             while (turnos <= Integer.parseInt(mapita.getFinalizacion())) {
@@ -89,14 +90,18 @@ public class Jugabilidad {
                 @Override
                 public void keyPressed(KeyEvent e) {
                     if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                        if (!txtNaves.getText().equals("")) {
+                        JOptionPane.showMessageDialog(null, "esto ocurre varias veces tio");
+                        e.consume();
+                        txtNaves.removeKeyListener(this);
+                        /*           if (!txtNaves.getText().equals("")) {
                             envioNaves(txtNaves, nodoJalar, juego);
                         
                         } else {
                             JOptionPane.showMessageDialog(null, "Te falta enviar naves al destino");
-                        }
+                        }*/
                     }
                 }
+                
             });
         } else {
             CreacionMapa.contClicks--;
