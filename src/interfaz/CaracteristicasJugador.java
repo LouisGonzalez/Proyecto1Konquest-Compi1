@@ -2,10 +2,16 @@ package interfaz;
 
 import Pollitos.Jugadores;
 import Pollitos.Planetas;
+import Pollitos.PlanetasNeutrales;
 import java.awt.Color;
 import java.util.ArrayList;
+import javax.swing.JCheckBox;
 import javax.swing.JColorChooser;
 import javax.swing.JOptionPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import mapa.CreacionJSON;
+import mapa.CreacionMapa;
 
 /**
  *
@@ -15,10 +21,18 @@ public class CaracteristicasJugador extends javax.swing.JDialog {
 
     private ArrayList<Jugadores> misJugadores;
     private ArrayList<Planetas> planetas;
+    private ArrayList<PlanetasNeutrales> listNeutrales; 
     private Integer primero = null;
     private Integer segundo = null;
     private Integer tercero = null;
-
+    private JCheckBox alAzar;
+    private JTextField filas, columnas;
+    private CreacionJSON creacion;
+    private JTextArea panelMensajes;
+    private CreacionMapa mapa;
+    private int contador;
+    private JTextField txtNaves;
+        
     /**
      * Creates new form CaracteristicasJugador
      *
@@ -26,11 +40,19 @@ public class CaracteristicasJugador extends javax.swing.JDialog {
      * @param modal
      * @param misJugadores
      */
-    public CaracteristicasJugador(java.awt.Frame parent, boolean modal, ArrayList<Jugadores> misJugadores, ArrayList<Planetas> planetas) {
+    public CaracteristicasJugador(java.awt.Frame parent, boolean modal, ArrayList<Jugadores> misJugadores, ArrayList<Planetas> planetas, JCheckBox alAzar, JTextField filas, JTextField columnas, JTextArea panelMensajes, CreacionMapa mapa, ArrayList<PlanetasNeutrales> listNeutrales, int contador, JTextField txtNaves) {
         super(parent, modal);
         initComponents();
         this.misJugadores = misJugadores;
         this.planetas = planetas;
+        this.alAzar = alAzar;
+        this.filas = filas;
+        this.columnas = columnas;
+        this.mapa = mapa;
+        this.contador = contador;
+        this.panelMensajes = panelMensajes;
+        this.listNeutrales = listNeutrales;
+        this.txtNaves = txtNaves;
         setLocationRelativeTo(null);
     }
 
@@ -162,16 +184,30 @@ public class CaracteristicasJugador extends javax.swing.JDialog {
     }//GEN-LAST:event_txtNombreActionPerformed
 
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
+        creacion = new CreacionJSON(panelMensajes, mapa, contador, txtNaves);
         if (txtNombre.getText().equals("") || primero == null || segundo == null || tercero == null) {
             JOptionPane.showMessageDialog(null, "Falta llenar un parametro");
         } else {
-            Jugadores jugador = new Jugadores();
-            Planetas planeta = new Planetas();
-            seteoJugadores(jugador);
-            seteoPrimerPlaneta(planeta, jugador);
-            misJugadores.add(jugador);
-            planetas.add(planeta);
-            this.dispose();
+            if(!alAzar.isSelected()){
+                Jugadores jugador = new Jugadores();
+                Planetas planeta = new Planetas();
+                seteoJugadores(jugador);
+                seteoPrimerPlaneta(planeta, jugador);
+                misJugadores.add(jugador);
+                planetas.add(planeta);
+                this.dispose();
+            } else {
+                if(filas.getText().equals("") || columnas.getText().equals("")){
+                    JOptionPane.showMessageDialog(null, "Azar activado: debess llenar los parametros de fila y columna para continuar");
+                } else {
+                    int filaConver = Integer.parseInt(filas.getText());
+                    int columnaConver = Integer.parseInt(columnas.getText());
+                    Jugadores jugador = new Jugadores();
+                    seteoJugadores(jugador);
+                    misJugadores.add(jugador);
+                    creacion.atributosPlanetasJugadorAzar(jugador, listNeutrales, planetas, filaConver, columnaConver);
+                }
+            }
         }
     }//GEN-LAST:event_btnAceptarActionPerformed
 
@@ -180,7 +216,8 @@ public class CaracteristicasJugador extends javax.swing.JDialog {
         jugador.setTipo(comboTipo.getSelectedItem().toString());
         jugador.setColor(primero + "," + segundo + "," + tercero + ",75");
         jugador.setPlanetas(new ArrayList<>());
-        jugador.getPlanetas().add("P" + misJugadores.size() + 1);
+        int nombrePlaneta = planetas.size()+1;
+        jugador.getPlanetas().add("P" + Integer.toString(nombrePlaneta));
         return jugador;
     }
     

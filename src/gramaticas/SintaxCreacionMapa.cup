@@ -10,6 +10,7 @@ import Pollitos.MapaPNeutrales;
 import Pollitos.Juego;
 import mapa.CreacionMapa;
 import javax.swing.JLabel;
+import javax.swing.JTextField;
 import javax.swing.JTextArea;
 
 
@@ -24,14 +25,19 @@ parser code {:
     boolean interruptor = true;
     JTextArea panelMensajes;
     public static String totalErrores;
-    Juego misDatos;
+    public Juego misDatos = new Juego();
+    private int contador;
+    private JTextField txtNaves;
+    public ArrayList<Juego> datosJuego;
 
-
-    public SintaxCreacionMapa(AnalizadorLexico lex, CreacionMapa tablero, JTextArea panelMensajes){
+    public SintaxCreacionMapa(AnalizadorLexico lex, CreacionMapa tablero, JTextArea panelMensajes, int contador, JTextField txtNaves, ArrayList<Juego> datosJuego){
         super(lex);
         this.tablero = tablero;
         this.matrizJuego = matrizJuego;
         this.panelMensajes = panelMensajes;
+        this.contador = contador;
+        this.txtNaves = txtNaves;
+        this.datosJuego = datosJuego;
     }
 
     public void setAccion(String tipo, String mensaje, String accion){
@@ -43,8 +49,8 @@ parser code {:
         totalErrores += "ERROR: Error sintaxis columna: "+s.right+" fila: "+s.left+"\n";
     }
 
-    public void crearCuadriculaJuego(int filas, int columnas, ArrayList<Jugadores> listJugadores, ArrayList<PlanetasNeutrales> listNeutrales){
-        tablero.creacionCuadricula(filas, columnas, listJugadores, listNeutrales);
+    public void crearCuadriculaJuego(Juego misDatos){
+        tablero.creacionCuadricula(misDatos, txtNaves, contador);
     }
 
     public boolean verificadorNombresJugadores(ArrayList<Jugadores> listJugadores, boolean verificador){
@@ -131,16 +137,16 @@ parser code {:
         return verificador;
     }
 
-    public void creacionMapa(ArrayList<Jugadores> listJugadores, boolean verificador, ArrayList<Planetas> listPlanetas, Mapa mapita, JTextArea panelMensajes, String totalErroress, ArrayList<PlanetasNeutrales> listNeutrales){
+    public void creacionMapa(Juego misDatos, boolean verificador, JTextArea panelMensajes, String totalErroress){
         if(verificador == true){
-            tablero.agregarPlanetasTablero(Integer.parseInt(mapita.getSize_filas()), Integer.parseInt(mapita.getSize_columnas()), listJugadores, listPlanetas);
-            if(!listPlanetas.isEmpty()){
+            tablero.agregarPlanetasTablero(Integer.parseInt(misDatos.getMapa().getSize_filas()), Integer.parseInt(misDatos.getMapa().getSize_columnas()), misDatos.getJugadores(), misDatos.getPlanetas());
+            if(!misDatos.getPlanetas().isEmpty()){
                 verificador = false;
                 totalErroress += "Hay mas planetas de los sentenciados para los jugadores\n";
                 panelMensajes.setText(totalErroress);
             }
-            for(int i = 0; i < listJugadores.size(); i++){
-                if(!listJugadores.get(i).getPlanetas().isEmpty()){
+            for(int i = 0; i < misDatos.getJugadores().size(); i++){
+                if(!misDatos.getJugadores().get(i).getPlanetas().isEmpty()){
                     verificador = false;
                     totalErroress += "Hay mas planetas de los sentenciados para los jugadores\n";
                     panelMensajes.setText(totalErroress);
@@ -148,40 +154,40 @@ parser code {:
                 }
             }
             if(verificador == true){
-                verificador = tablero.comparacionFilasColumnasPosPlanetas(mapita, listJugadores, verificador);
+                verificador = tablero.comparacionFilasColumnasPosPlanetas(misDatos.getMapa(), misDatos.getJugadores(), verificador);
                 if(verificador == false){
                     totalErroress += "Algun planeta esta situado en una posicion que no existe dentro del mapa\n";
                 }
             }
             if(verificador == true){
-                verificador = tablero.comparacionFilasColumnasPosNeutrales(mapita, listNeutrales, verificador);
+                verificador = tablero.comparacionFilasColumnasPosNeutrales(misDatos.getMapa(), misDatos.getpNeutrales(), verificador);
                 if(verificador == false){
                     totalErrores += "Algun planeta neutral esta situado en una posicion que no existe dentro del mapa\n";
                     System.out.println("Algun planeta neutral esta situado en una posicion que no existe dentro del mapa");
                 }
             }
             if(verificador == true){
-                verificador = tablero.comparacionPosPlanetas(listJugadores, verificador);
+                verificador = tablero.comparacionPosPlanetas(misDatos.getJugadores(), verificador);
                 if(verificador == false){
                     totalErroress += "Dos planetas estan situados en la misma posicion\n";
                 }
             }
             if(verificador == true){
-                verificador = tablero.comparacionNeutralaNeutral(listNeutrales, verificador);
+                verificador = tablero.comparacionNeutralaNeutral(misDatos.getpNeutrales(), verificador);
                 if(verificador == false){
                     totalErrores += "Dos planetas neutrales estan situados en la misma posicion\n";
                     System.out.println("Dos planetas neutrales estan situados en la misma posicion");
                 }
             }
             if(verificador == true){
-                verificador = tablero.comparacionPlanetasyNeutrales(listNeutrales, listJugadores, verificador);
+                verificador = tablero.comparacionPlanetasyNeutrales(misDatos.getpNeutrales(), misDatos.getJugadores(), verificador);
                 if(verificador == false){
                     totalErrores += "Dos planetas (normal y un neutral) estan situados en la misma posicion\n";
                     System.out.println("Dos planetas(normal y un neutral) estan situados en la misma posicion\n");
                 }
             }
             if(verificador == true) {
-                crearCuadriculaJuego(Integer.parseInt(mapita.getSize_filas()), Integer.parseInt(mapita.getSize_columnas()), listJugadores, listNeutrales);
+                crearCuadriculaJuego(misDatos);
             } else { 
                 panelMensajes.setText(totalErroress);
             }  
@@ -220,7 +226,7 @@ parser code {:
 
     start with a;
     
-    a ::= LLAVE_A juego:a LLAVE_B {: if(a.getMapa()==null || a.getJugadores()==null || a.getpNeutrales()==null || a.getPlanetas()==null){ System.out.println("Falta un archivo principal"); } else { boolean interruptor = true;  interruptor = parser.verificadorNombresJugadores(a.getJugadores(), interruptor);  interruptor = parser.verificadorNombresPlanetas(interruptor, a.getPlanetas());  interruptor = parser.verificadorNombresPlanetasNeutrales(interruptor, a.getpNeutrales());   parser.creacionMapa(a.getJugadores(), interruptor, a.getPlanetas(), a.getMapa(), parser.panelMensajes, parser.totalErrores, a.getpNeutrales());               parser.misDatos = a; } :} 
+    a ::= LLAVE_A juego:a LLAVE_B {: if(a.getMapa()==null || a.getJugadores()==null || a.getpNeutrales()==null || a.getPlanetas()==null){ System.out.println("Falta un archivo principal"); } else { boolean interruptor = true;  interruptor = parser.verificadorNombresJugadores(a.getJugadores(), interruptor);  interruptor = parser.verificadorNombresPlanetas(interruptor, a.getPlanetas());  interruptor = parser.verificadorNombresPlanetasNeutrales(interruptor, a.getpNeutrales());  parser.misDatos = a;  parser.datosJuego.add(a);    parser.creacionMapa(parser.misDatos, interruptor, parser.panelMensajes, parser.totalErrores);               } :} 
 ;
     juego ::= b:a juego:e {: if(e!=null){ if(e.getMapa()==null){ e.setMapa(a); } else { System.out.println("errorzzzzzzz"); } } RESULT=e; :}
     | p:a juego:e {: if(e!=null){ if(e.getPlanetas()==null){ e.setPlanetas(a); System.out.println("agrego"); } else { System.out.println("erroasdfr"); } } RESULT=e; :}

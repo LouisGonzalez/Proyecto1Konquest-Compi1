@@ -175,8 +175,8 @@ public class UbicacionPlanetas extends javax.swing.JDialog {
                 neutral.setProduccion(txtProduccion.getText());
                 neutral.setPorcentajeMuertes(txtPMuertes.getText());
                 neutral.setInterruptor(true);
-                neutral.setPosicionX(Integer.toString(posX));
-                neutral.setPosicionY(Integer.toString(posY));
+                neutral.setPosicionX(Integer.toString(posY));
+                neutral.setPosicionY(Integer.toString(posX));
                 listNeutrales.set(concordancia, neutral);
                 pintarCasilla2();
            } else if (interruptor2 == true) {
@@ -187,8 +187,8 @@ public class UbicacionPlanetas extends javax.swing.JDialog {
                 planeta.setProduccion(txtProduccion.getText());
                 planeta.setPorcentajeMuertes(txtPMuertes.getText());
                 planeta.setInterruptor(true);
-                planeta.setPosicionX(Integer.toString(posX));
-                planeta.setPosicionY(Integer.toString(posY));
+                planeta.setPosicionX(Integer.toString(posY));
+                planeta.setPosicionY(Integer.toString(posX));
                 listPlanetas.set(concordancia, planeta);
                 pintarCasilla(listPlanetas.get(concordancia).getColor());
         }

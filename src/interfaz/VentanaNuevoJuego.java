@@ -1,5 +1,6 @@
 package interfaz;
 
+import Pollitos.Juego;
 import Pollitos.Jugadores;
 import Pollitos.Mapa;
 import Pollitos.Planetas;
@@ -14,10 +15,12 @@ import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 import mapa.CreacionJSON;
 import mapa.CreacionMapa;
+import mapa.MiniMapa;
 
 /**
  *
@@ -34,21 +37,29 @@ public class VentanaNuevoJuego extends javax.swing.JDialog {
     private int i, j;
     private CreacionMapa mapa;
     private JTextArea panelMensajes;
+    private MiniMapa mapita;
+    private int contador;
+    private JTextField txtNaves;
+    private ArrayList<Juego> datosJuego;
     //private JLabel[][] matrizPrevia;
 
     /**
      * Creates new form VentanaNuevoJuego
+     *
      * @param parent
      * @param modal
      * @param mapa
      * @param panelMensajes
      */
-    public VentanaNuevoJuego(java.awt.Frame parent, boolean modal, CreacionMapa mapa, JTextArea panelMensajes) {
+    public VentanaNuevoJuego(java.awt.Frame parent, boolean modal, CreacionMapa mapa, JTextArea panelMensajes, int contador, JTextField txtNaves, ArrayList<Juego> datosJuego) {
         super(parent, modal);
         initComponents();
         setLocationRelativeTo(null);
         this.mapa = mapa;
+        this.contador = contador;
         this.panelMensajes = panelMensajes;
+        this.txtNaves = txtNaves;
+        this.datosJuego = datosJuego;
         dtmModelNeutral = (DefaultTableModel) tablaNeutrales.getModel();
     }
 
@@ -504,15 +515,17 @@ public class VentanaNuevoJuego extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAgregarJugadorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarJugadorActionPerformed
-        creacion = new CreacionJSON(panelMensajes, mapa);
-        CaracteristicasJugador jugador = new CaracteristicasJugador(null, true, misJugadores, planetas);
+        creacion = new CreacionJSON(panelMensajes, mapa, contador, txtNaves);
+        CaracteristicasJugador jugador = new CaracteristicasJugador(null, true, misJugadores, planetas, checkAzar, txtFilas, txtColumnas, panelMensajes, mapa, neutrales, contador, txtNaves);
         jugador.setVisible(true);
         dtmModelJugadores = (DefaultTableModel) tablaJugadores.getModel();
         Object[] filas = new Object[dtmModelJugadores.getColumnCount()];
         int nuevo = misJugadores.size();
-        filas[0] = misJugadores.get(nuevo - 1).getNombre();
-        filas[1] = misJugadores.get(nuevo - 1).getTipo();
-        dtmModelJugadores.addRow(filas);
+        if (!misJugadores.isEmpty()) {
+            filas[0] = misJugadores.get(nuevo - 1).getNombre();
+            filas[1] = misJugadores.get(nuevo - 1).getTipo();
+            dtmModelJugadores.addRow(filas);
+        }
     }//GEN-LAST:event_btnAgregarJugadorActionPerformed
 
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
@@ -525,7 +538,7 @@ public class VentanaNuevoJuego extends javax.swing.JDialog {
             if (txtDirectorio.getText().equals("")) {
                 JOptionPane.showMessageDialog(null, "Aun no decides donde guardar tu partida");
             } else {
-                verificador = creacion.crearArchivoJSON(mapita, misJugadores, planetas, neutrales, txtDirectorio.getText());
+                verificador = creacion.crearArchivoJSON(mapita, misJugadores, planetas, neutrales, txtDirectorio.getText(), datosJuego);
                 if (verificador == true) {
                     this.dispose();
                 }
@@ -570,27 +583,77 @@ public class VentanaNuevoJuego extends javax.swing.JDialog {
                 for (j = 0; j < columnas; j++) {
                     JLabel previo = new JLabel();
                     previo.setOpaque(true);
-                    previo.setBackground(Color.white);
-                    previo.setBorder(new LineBorder(Color.black));
-                    matrizPrevia[i][j] = previo;
-                    matrizPrevia[i][j].addMouseListener(new MouseAdapter() {
-                        @Override
-                        public void mouseClicked(MouseEvent event) {
-                            for (int k = 0; k < i; k++) {
-                                for (int l = 0; l < j; l++) {
-                                    if (previo == matrizPrevia[k][l]) {
-                                        if (Color.white.equals(previo.getBackground())) {
-                                            UbicacionPlanetas ubicacion = new UbicacionPlanetas(null, true, planetas, neutrales, k, l, previo, matrizPrevia);
-                                            ubicacion.setVisible(true);
-                                        } else {
-                                            datosPlanetas(k, l);
+                    if (!checkAzar.isSelected()) {
+                        previo.setBackground(Color.white);
+                        previo.setBorder(new LineBorder(Color.black));
+                        mapita = new MiniMapa();
+                        mapita.seteoFalsoInterruptores(planetas, neutrales);
+                        matrizPrevia[i][j] = previo;
+                        matrizPrevia[i][j].addMouseListener(new MouseAdapter() {
+                            @Override
+                            public void mouseClicked(MouseEvent event) {
+                                for (int k = 0; k < i; k++) {
+                                    for (int l = 0; l < j; l++) {
+                                        if (previo == matrizPrevia[k][l]) {
+                                            if (Color.white.equals(previo.getBackground())) {
+                                                UbicacionPlanetas ubicacion = new UbicacionPlanetas(null, true, planetas, neutrales, k, l, previo, matrizPrevia);
+                                                ubicacion.setVisible(true);
+                                            } else {
+                                                datosPlanetas(k, l);
+                                            }
                                         }
                                     }
                                 }
-                            }
 
+                            }
+                        });
+
+                    } else {
+                        previo.setBackground(Color.white);
+                        mapita = new MiniMapa();
+                        mapita.seteoFalsoInterruptores(planetas, neutrales);
+                        for (int k = 0; k < neutrales.size(); k++) {
+                            if (j == Integer.parseInt(neutrales.get(k).getPosicionX()) && i == Integer.parseInt(neutrales.get(k).getPosicionY())) {
+                                if (neutrales.get(k).isInterruptor() == false) {
+                                    previo.setBackground(new Color(128, 128, 128));
+                                    neutrales.get(k).setInterruptor(true);
+                                }
+                            }
                         }
-                    });
+                        for (int k = 0; k < planetas.size(); k++) {
+                            if (j == Integer.parseInt(planetas.get(k).getPosicionX()) && i == Integer.parseInt(planetas.get(k).getPosicionY())) {
+                                if (planetas.get(k).isInterruptor() == false) {
+                                    String[] valores = planetas.get(k).getColor().split(",");
+                                    int[] convertido = new int[valores.length];
+                                    for (int i = 0; i < valores.length; i++) {
+                                        convertido[i] = Integer.parseInt(valores[i]);
+                                    }
+                                    previo.setBackground(new Color(convertido[0], convertido[1], convertido[2]));
+                                    planetas.get(k).setInterruptor(true);
+                                }
+                            }
+                        }
+
+                        previo.setBorder(new LineBorder(Color.black));
+                        matrizPrevia[i][j] = previo;
+                        matrizPrevia[i][j].addMouseListener(new MouseAdapter() {
+                            @Override
+                            public void mouseClicked(MouseEvent event) {
+                                for (int k = 0; k < i; k++) {
+                                    for (int l = 0; l < j; l++) {
+                                        if (previo == matrizPrevia[k][l]) {
+                                            if (!Color.white.equals(previo.getBackground())) {
+                                                datosPlanetas(k, l);
+                                            }
+                                        }
+                                    }
+                                }
+
+                            }
+                        });
+
+                    }
+
                     panelPrevio.add(matrizPrevia[i][j]);
                     panelPrevio.validate();
                     panelPrevio.repaint();
@@ -606,7 +669,7 @@ public class VentanaNuevoJuego extends javax.swing.JDialog {
         for (int k = 0; k < planetas.size(); k++) {
             int x = Integer.parseInt(planetas.get(k).getPosicionX());
             int y = Integer.parseInt(planetas.get(k).getPosicionY());
-            if (posX == x && posY == y) {
+            if (posY == x && posX == y) {
                 nodo = k;
                 interruptor = true;
                 break;
@@ -616,7 +679,7 @@ public class VentanaNuevoJuego extends javax.swing.JDialog {
             for (int k = 0; k < neutrales.size(); k++) {
                 int x = Integer.parseInt(neutrales.get(k).getPosicionX());
                 int y = Integer.parseInt(neutrales.get(k).getPosicionY());
-                if (posX == x && posY == y) {
+                if (posY == x && posX == y) {
                     nodo = k;
                     interruptor2 = true;
                     break;
@@ -646,16 +709,35 @@ public class VentanaNuevoJuego extends javax.swing.JDialog {
 
     private void btnNuevoNeutralActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoNeutralActionPerformed
         neutrales.clear();
+        creacion = new CreacionJSON(panelMensajes, mapa, contador, txtNaves);
         if (!checkAzar.isSelected()) {
-            int filas = dtmModelNeutral.getRowCount();
-            for (int a = 0; a < filas; a++) {
+            int filasTabla2 = dtmModelNeutral.getRowCount();
+            for (int a = 0; a < filasTabla2; a++) {
                 PlanetasNeutrales planeta = new PlanetasNeutrales();
                 planeta.setNombre(dtmModelNeutral.getValueAt(a, 0).toString());
                 planeta.setInterruptor(false);
                 neutrales.add(planeta);
             }
         } else {
-
+            int filasTabla = dtmModelNeutral.getRowCount() - 1;
+            for (int k = filasTabla; k >= 0; k--) {
+                dtmModelNeutral.removeRow(k);
+            }
+            if (txtFilas.getText().equals("") || txtColumnas.getText().equals("")) {
+                JOptionPane.showMessageDialog(null, "Debes llenar los parametros filas y columnas");
+            } else {
+                int filasTotales = Integer.parseInt(txtFilas.getText());
+                int columnasTotales = Integer.parseInt(txtColumnas.getText());
+                creacion.caracteristicasAlAzar(planetas, filasTotales, columnasTotales, neutrales, spinProduccion.getValue().toString());
+                Object[] filas = new Object[dtmModelNeutral.getColumnCount()];
+                for (int k = 0; k < neutrales.size(); k++) {
+                    filas[0] = neutrales.get(k).getNombre();
+                    dtmModelNeutral.addRow(filas);
+                }
+                for (int k = 0; k < neutrales.size(); k++) {
+                    System.out.println(neutrales.get(k).getNombre());
+                }
+            }
         }
     }//GEN-LAST:event_btnNuevoNeutralActionPerformed
 

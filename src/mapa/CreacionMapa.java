@@ -1,9 +1,11 @@
 package mapa;
 
+import Pollitos.Juego;
 import Pollitos.Jugadores;
 import Pollitos.Mapa;
 import Pollitos.Planetas;
 import Pollitos.PlanetasNeutrales;
+import interfaz.VentanaPrincipal;
 import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.Image;
@@ -13,7 +15,9 @@ import java.util.ArrayList;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
 
 /**
@@ -24,25 +28,50 @@ public class CreacionMapa {
 
     public JPanel panelFondo;
     public JLabel[][] matrizJuego;
-
+    private Jugabilidad jugabilidad = new Jugabilidad();
+    public static int contClicks = 0;
+    public int nodoJalar = 0;
+    
     public CreacionMapa(JPanel panelFondo, JLabel[][] matrizJuego) {
         this.panelFondo = panelFondo;
         this.matrizJuego = matrizJuego;
     }
 
-    public void creacionCuadricula(int filas, int columnas, ArrayList<Jugadores> listJugadores, ArrayList<PlanetasNeutrales> listNeutrales) {
+    public void creacionCuadricula(Juego misDatos, JTextField txtNaves, int contador) {
+        int filas = Integer.parseInt(misDatos.getMapa().getSize_filas());
+        int columnas = Integer.parseInt(misDatos.getMapa().getSize_columnas());
         matrizJuego = new JLabel[filas][columnas];
         panelFondo.setLayout(new GridLayout(filas, columnas));
         for (int i = 0; i < filas; i++) {
             for (int j = 0; j < columnas; j++) {
+                int posX = j;
+                int posY = i;
                 JLabel matriz = new JLabel();
-                posicionPlanetas(listJugadores, i, j, matriz, filas, columnas, listNeutrales);
+                posicionPlanetas(misDatos.getJugadores(), i, j, matriz, filas, columnas, misDatos.getpNeutrales());
                 matrizJuego[i][j].addMouseListener(new MouseAdapter() {
-                    @Override
-                    public void mouseClicked(MouseEvent event) {
-                        //  JOptionPane.showMessageDialog(null, "hostia me has pulsao");
+                   @Override
+                   public void mouseClicked(MouseEvent event) {
+                        contClicks++;
+                        if(contClicks % 2 != 0){
+                            if(VentanaPrincipal.contador == misDatos.getJugadores().size()){
+                                VentanaPrincipal.contador = 0;
+                            }
+                            nodoJalar = jugabilidad.accionesPrimerClick(misDatos, posX, posY);
+                        } else {
+                            jugabilidad.accionesSegundoClick(misDatos, posX, posY, txtNaves, nodoJalar);
+                        }
+                        
+                        
+                       // jugabilidad.seleccionarPlanetaOrigen(posX, posY, misDatos, txtNaves);
                     }
-                }
+                    
+                    
+                    
+                /*    @Override
+                    public void mouseEntered(MouseEvent event){
+                        JOptionPane.showMessageDialog(null, "click:3");
+                    }*/
+                } 
                 );
                 panelFondo.add(matrizJuego[i][j]);
                 panelFondo.validate();
@@ -87,7 +116,7 @@ public class CreacionMapa {
             for (int j = 0; j < listJugadores.get(i).getMisPlanetas().size(); j++) {
                 int posX = Integer.parseInt(listJugadores.get(i).getMisPlanetas().get(j).getPosicionX());
                 int posY = Integer.parseInt(listJugadores.get(i).getMisPlanetas().get(j).getPosicionY());
-                if (posX >= filas || posY >= columnas) {
+                if (posX >= columnas || posY >= filas) {
                     interruptor = false;
                     break;
                 }
@@ -105,7 +134,7 @@ public class CreacionMapa {
         for (int i = 0; i < listNeutrales.size(); i++) {
             int posX = Integer.parseInt(listNeutrales.get(i).getPosicionX());
             int posY = Integer.parseInt(listNeutrales.get(i).getPosicionY());
-            if(posX >=filas || posY >= columnas){
+            if(posX >=columnas || posY >= filas){
                 interruptor = false;
                 break;
             }
@@ -193,10 +222,10 @@ public class CreacionMapa {
             for (int j = 0; j < listJugadores.get(i).getMisPlanetas().size(); j++) {
                 int posX = Integer.parseInt(listJugadores.get(i).getMisPlanetas().get(j).getPosicionX());
                 int posY = Integer.parseInt(listJugadores.get(i).getMisPlanetas().get(j).getPosicionY());
-                if (posX == x && posY == y) {
+                if (posX == y && posY == x) {
                     concordancia = true;
-                    concordanciaX = posX;
-                    concordanciaY = posY;
+                    concordanciaX = posY;
+                    concordanciaY = posX;
                     color = listJugadores.get(i).getColor();
                     break;
                 }
@@ -209,10 +238,10 @@ public class CreacionMapa {
         for (int i = 0; i < listNeutrales.size(); i++) {
             int posX = Integer.parseInt(listNeutrales.get(i).getPosicionX());
             int posY = Integer.parseInt(listNeutrales.get(i).getPosicionY());
-            if(posX == x && posY == y){
+            if(posX == y && posY == x){
                 concordanciaNeutral = true;
-                concordanciaX = posX;
-                concordanciaY = posY;
+                concordanciaX = posY;
+                concordanciaY = posX;
                 break;
             }
         }

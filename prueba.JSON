@@ -16,7 +16,7 @@
 	},
 	finalizacion: 50
  },
-  PLANETAS: [			
+  PLANETAS: [				
 	{
        	  nombre: "B",
   	  naves: 15,
