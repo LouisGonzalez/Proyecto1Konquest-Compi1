@@ -2,6 +2,7 @@ package interfaz;
 
 import Pollitos.ArchivoConfiguracion;
 import Pollitos.Juego;
+import Pollitos.NavesCamino;
 import gramaticas.AnalizadorLexico;
 import gramaticas.SintaxCreacionMapa;
 import java.awt.Color;
@@ -32,7 +33,9 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     public JLabel[][] tablero;
     private Juego juego = null;
     public static int contador = 0;
+    public static int contadorTurnos = 0;
     private ArrayList<Juego> datosJuego = new ArrayList<>();
+    private ArrayList<NavesCamino> listNaves = new ArrayList<>();
     private Jugabilidad jugabilidad;
     
     public VentanaPrincipal() {
@@ -41,6 +44,9 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         panelJuego.setBackground(new Color(255,255,255,100));
         mapa = new CreacionMapa(this.panelJuego, tablero);
         setLocationRelativeTo(null);
+        lblTurno.setText("Turno: "+contadorTurnos);
+        btnTurno.setEnabled(false);
+        jugabilidad = new Jugabilidad();
     }
 
     @SuppressWarnings("unchecked")
@@ -57,6 +63,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         lblJugador = new javax.swing.JLabel();
         lblMensaje = new javax.swing.JLabel();
         txtNaves = new javax.swing.JTextField();
+        btnFlotas = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         itemNuevo = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -93,8 +100,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         lblTurno.setBackground(new java.awt.Color(255, 255, 255));
         lblTurno.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
         lblTurno.setForeground(new java.awt.Color(255, 255, 255));
-        lblTurno.setText("Turno:");
-        getContentPane().add(lblTurno, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 680, 130, -1));
+        getContentPane().add(lblTurno, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 60, 160, 20));
 
         panelFondo.setIcon(new javax.swing.ImageIcon("/home/luisitopapurey/Escritorio/Compiladores 1/Proyecto1.Konquest/fondo.jpg")); // NOI18N
         getContentPane().add(panelFondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 60, 840, 650));
@@ -114,35 +120,48 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             }
         });
 
+        btnFlotas.setText("Vista flotas");
+        btnFlotas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFlotasActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout panelOpcionesLayout = new javax.swing.GroupLayout(panelOpciones);
         panelOpciones.setLayout(panelOpcionesLayout);
         panelOpcionesLayout.setHorizontalGroup(
             panelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelOpcionesLayout.createSequentialGroup()
-                .addGap(35, 35, 35)
-                .addComponent(lblJugador, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(lblMensaje, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(37, 37, 37)
+            .addGroup(panelOpcionesLayout.createSequentialGroup()
+                .addGap(10, 10, 10)
+                .addGroup(panelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelOpcionesLayout.createSequentialGroup()
+                        .addComponent(lblJugador, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(154, 154, 154)
+                        .addComponent(btnFlotas, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lblMensaje, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(63, 63, 63)
                 .addComponent(txtNaves, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 41, Short.MAX_VALUE)
-                .addComponent(btnTurno, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(22, 22, 22))
+                .addGap(18, 18, 18)
+                .addComponent(btnTurno, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         panelOpcionesLayout.setVerticalGroup(
             panelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelOpcionesLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(panelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+            .addGroup(panelOpcionesLayout.createSequentialGroup()
+                .addGap(5, 5, 5)
+                .addGroup(panelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblJugador)
+                    .addComponent(btnFlotas))
+                .addGroup(panelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelOpcionesLayout.createSequentialGroup()
+                        .addGap(1, 1, 1)
                         .addGroup(panelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblJugador, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(lblMensaje, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(12, 12, 12))
-                    .addGroup(panelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(btnTurno, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(txtNaves, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
+                            .addComponent(btnTurno)
+                            .addComponent(txtNaves, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelOpcionesLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblMensaje, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap())))
         );
 
         getContentPane().add(panelOpciones, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 840, 60));
@@ -177,7 +196,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         juego = new Juego();
-        VentanaNuevoJuego nuevo = new VentanaNuevoJuego(this, true, mapa, panelMensajes, contador, txtNaves, datosJuego);
+        VentanaNuevoJuego nuevo = new VentanaNuevoJuego(this, true, mapa, panelMensajes, contador, txtNaves, datosJuego, btnTurno, listNaves);
         nuevo.setVisible(true);
         juego = datosJuego.get(0);
         datosJuego.clear();
@@ -186,6 +205,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
     private void itemLecturaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemLecturaActionPerformed
         juego = new Juego();
+         datosJuego.clear();
         JFileChooser chooser = new JFileChooser();
         panelMensajes.setText("");
         SintaxCreacionMapa.totalErrores = "";
@@ -219,9 +239,8 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 }
                 AnalizadorLexico lexico = new AnalizadorLexico(new StringReader(texto));
                 try {
-                    new SintaxCreacionMapa(lexico, mapa, panelMensajes, contador, txtNaves, datosJuego).parse();
+                    new SintaxCreacionMapa(lexico, mapa, panelMensajes, contador, txtNaves, datosJuego, btnTurno, listNaves).parse();
                     juego = datosJuego.get(0);
-                    datosJuego.clear();
                     
                     
                 } catch (Exception ex) {
@@ -251,14 +270,26 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             contador++;
             
         }
-        System.out.println(contador);
+        if(contador == juego.getJugadores().size()){
+            contadorTurnos++;
+            contador = 0;
+            jugabilidad.verificacionNavesLlegada(listNaves, juego);
+        }
+        lblTurno.setText("Turno: "+contadorTurnos);
         txtNaves.setText("");
         txtNaves.setEditable(false);
+        btnTurno.setEnabled(false);
         
     }//GEN-LAST:event_btnTurnoActionPerformed
 
+    private void btnFlotasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFlotasActionPerformed
+        FlotasEnviadas flotas = new FlotasEnviadas(null, true, listNaves);
+        flotas.setVisible(true);
+    }//GEN-LAST:event_btnFlotasActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnFlotas;
     private javax.swing.JButton btnTurno;
     private javax.swing.JMenuItem itemLectura;
     private javax.swing.JMenu itemNuevo;

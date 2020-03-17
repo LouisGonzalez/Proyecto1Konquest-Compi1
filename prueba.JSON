@@ -27,7 +27,7 @@
 	},
 	{
        	  nombre: "C",
-  	  naves: 15,
+  	  naves: 10,
   	  produccion: 9,
   	  porcentajeMuertes: 0.40,
 	  posicionX: 3,
@@ -35,7 +35,7 @@
 	},
 	{
   	  nombre: "A",
-  	  naves: 15,
+  	  naves: 10,
   	  produccion: 9,
   	  porcentajeMuertes: 0.40,
 	  posicionX: 1,

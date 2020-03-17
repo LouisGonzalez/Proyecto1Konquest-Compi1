@@ -8,11 +8,12 @@ import Pollitos.PlanetasNeutrales;
 import Pollitos.Jugadores;
 import Pollitos.MapaPNeutrales;
 import Pollitos.Juego;
+import Pollitos.NavesCamino;
 import mapa.CreacionMapa;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.JTextArea;
-
+import javax.swing.JButton;
 
 parser code {:
 
@@ -29,8 +30,10 @@ parser code {:
     private int contador;
     private JTextField txtNaves;
     public ArrayList<Juego> datosJuego;
+    public ArrayList<NavesCamino> navesCamino;
+    public JButton btnTurno;
 
-    public SintaxCreacionMapa(AnalizadorLexico lex, CreacionMapa tablero, JTextArea panelMensajes, int contador, JTextField txtNaves, ArrayList<Juego> datosJuego){
+    public SintaxCreacionMapa(AnalizadorLexico lex, CreacionMapa tablero, JTextArea panelMensajes, int contador, JTextField txtNaves, ArrayList<Juego> datosJuego, JButton btnTurno, ArrayList<NavesCamino> listNaves){
         super(lex);
         this.tablero = tablero;
         this.matrizJuego = matrizJuego;
@@ -38,6 +41,8 @@ parser code {:
         this.contador = contador;
         this.txtNaves = txtNaves;
         this.datosJuego = datosJuego;
+        this.btnTurno = btnTurno;
+        this.navesCamino = listNaves;
     }
 
     public void setAccion(String tipo, String mensaje, String accion){
@@ -50,7 +55,7 @@ parser code {:
     }
 
     public void crearCuadriculaJuego(Juego misDatos){
-        tablero.creacionCuadricula(misDatos, txtNaves, contador);
+        tablero.creacionCuadricula(misDatos, txtNaves, contador, navesCamino, btnTurno);
     }
 
     public boolean verificadorNombresJugadores(ArrayList<Jugadores> listJugadores, boolean verificador){
@@ -226,7 +231,7 @@ parser code {:
 
     start with a;
     
-    a ::= LLAVE_A juego:a LLAVE_B {: if(a.getMapa()==null || a.getJugadores()==null || a.getpNeutrales()==null || a.getPlanetas()==null){ System.out.println("Falta un archivo principal"); } else { boolean interruptor = true;  interruptor = parser.verificadorNombresJugadores(a.getJugadores(), interruptor);  interruptor = parser.verificadorNombresPlanetas(interruptor, a.getPlanetas());  interruptor = parser.verificadorNombresPlanetasNeutrales(interruptor, a.getpNeutrales());  parser.misDatos = a;  parser.datosJuego.add(a);    parser.creacionMapa(parser.misDatos, interruptor, parser.panelMensajes, parser.totalErrores);               } :} 
+    a ::= LLAVE_A juego:a LLAVE_B {: if(a.getMapa()==null || a.getJugadores()==null || a.getpNeutrales()==null || a.getPlanetas()==null){ System.out.println("Falta un archivo principal"); } else { boolean interruptor = true;  interruptor = parser.verificadorNombresJugadores(a.getJugadores(), interruptor);  interruptor = parser.verificadorNombresPlanetas(interruptor, a.getPlanetas());  interruptor = parser.verificadorNombresPlanetasNeutrales(interruptor, a.getpNeutrales());  parser.misDatos = a;  parser.datosJuego.add(a);    parser.creacionMapa(parser.datosJuego.get(0), interruptor, parser.panelMensajes, parser.totalErrores);               } :} 
 ;
     juego ::= b:a juego:e {: if(e!=null){ if(e.getMapa()==null){ e.setMapa(a); } else { System.out.println("errorzzzzzzz"); } } RESULT=e; :}
     | p:a juego:e {: if(e!=null){ if(e.getPlanetas()==null){ e.setPlanetas(a); System.out.println("agrego"); } else { System.out.println("erroasdfr"); } } RESULT=e; :}

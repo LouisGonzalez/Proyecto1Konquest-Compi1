@@ -3,6 +3,7 @@ package interfaz;
 import Pollitos.Juego;
 import Pollitos.Jugadores;
 import Pollitos.Mapa;
+import Pollitos.NavesCamino;
 import Pollitos.Planetas;
 import Pollitos.PlanetasNeutrales;
 import java.awt.Color;
@@ -11,6 +12,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.util.ArrayList;
+import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -41,6 +43,8 @@ public class VentanaNuevoJuego extends javax.swing.JDialog {
     private int contador;
     private JTextField txtNaves;
     private ArrayList<Juego> datosJuego;
+    private JButton btnTurno;
+    private ArrayList<NavesCamino> listNaves;
     //private JLabel[][] matrizPrevia;
 
     /**
@@ -51,12 +55,14 @@ public class VentanaNuevoJuego extends javax.swing.JDialog {
      * @param mapa
      * @param panelMensajes
      */
-    public VentanaNuevoJuego(java.awt.Frame parent, boolean modal, CreacionMapa mapa, JTextArea panelMensajes, int contador, JTextField txtNaves, ArrayList<Juego> datosJuego) {
+    public VentanaNuevoJuego(java.awt.Frame parent, boolean modal, CreacionMapa mapa, JTextArea panelMensajes, int contador, JTextField txtNaves, ArrayList<Juego> datosJuego, JButton btnTurno, ArrayList<NavesCamino> listNaves) {
         super(parent, modal);
         initComponents();
         setLocationRelativeTo(null);
         this.mapa = mapa;
         this.contador = contador;
+        this.btnTurno = btnTurno;
+        this.listNaves = listNaves;
         this.panelMensajes = panelMensajes;
         this.txtNaves = txtNaves;
         this.datosJuego = datosJuego;
@@ -538,7 +544,7 @@ public class VentanaNuevoJuego extends javax.swing.JDialog {
             if (txtDirectorio.getText().equals("")) {
                 JOptionPane.showMessageDialog(null, "Aun no decides donde guardar tu partida");
             } else {
-                verificador = creacion.crearArchivoJSON(mapita, misJugadores, planetas, neutrales, txtDirectorio.getText(), datosJuego);
+                verificador = creacion.crearArchivoJSON(mapita, misJugadores, planetas, neutrales, txtDirectorio.getText(), datosJuego, btnTurno, listNaves);
                 if (verificador == true) {
                     this.dispose();
                 }

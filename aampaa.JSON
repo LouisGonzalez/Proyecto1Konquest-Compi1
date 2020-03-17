@@ -1,0 +1,96 @@
+{
+   MAPA: {
+	id: "aampaa",
+	size: {
+	   filas: 4,
+	   columnas: 5
+	},
+	alAzar: false,
+	planetasNeutrales: 3,
+	mapaCiego: false,
+	acumular: false,
+	NEUTRALES: {
+	   mostrarNaves: false,
+	   mostrarEstadisticas: false,
+	   produccion: 0
+	},
+	finalizacion: 0
+},
+   PLANETAS: [
+	{
+	  nombre: "P1",
+	  naves: 4,
+	  produccion: 4,
+	  porcentajeMuertes: 0.4,
+	  posicionX: 1,
+	  posicionY: 1
+	},
+	{
+	  nombre: "P2",
+	  naves: 5,
+	  produccion: 5,
+	  porcentajeMuertes: 0.5,
+	  posicionX: 4,
+	  posicionY: 1
+	},
+	{
+	  nombre: "P3",
+	  naves: 6,
+	  produccion: 6,
+	  porcentajeMuertes: 0.6,
+	  posicionX: 1,
+	  posicionY: 3
+	}
+   ],
+   PLANETAS_NEUTRALES: [
+	{
+	  nombre: "nq",
+	  naves: 1,
+	  produccion: 1,
+	  porcentajeMuertes: 0.1,
+	  posicionX: 2,
+	  posicionY: 1
+	},
+	{
+	  nombre: "n2",
+	  naves: 2,
+	  produccion: 2,
+	  porcentajeMuertes: 0.2,
+	  posicionX: 3,
+	  posicionY: 2
+	},
+	{
+	  nombre: "n3",
+	  naves: 3,
+	  produccion: 3,
+	  porcentajeMuertes: 0.3,
+	  posicionX: 3,
+	  posicionY: 0
+	}
+   ],
+   JUGADORES: [
+	{
+	  nombre: "j1",
+	  color:  "255,0,255,75",
+	  planetas: [
+	     "P1"
+	  ],
+	  tipo: FACIL
+	},
+	{
+	  nombre: "j2",
+	  color:  "204,204,0,75",
+	  planetas: [
+	     "P2"
+	  ],
+	  tipo: FACIL
+	},
+	{
+	  nombre: "j3",
+	  color:  "153,0,153,75",
+	  planetas: [
+	     "P3"
+	  ],
+	  tipo: FACIL
+	}
+   ]}
