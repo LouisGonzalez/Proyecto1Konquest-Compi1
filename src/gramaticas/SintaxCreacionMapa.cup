@@ -14,6 +14,7 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.JTextArea;
 import javax.swing.JButton;
+import javax.swing.JPanel;
 
 parser code {:
 
@@ -32,8 +33,9 @@ parser code {:
     public ArrayList<Juego> datosJuego;
     public ArrayList<NavesCamino> navesCamino;
     public JButton btnTurno;
+    public JPanel panelJuego;
 
-    public SintaxCreacionMapa(AnalizadorLexico lex, CreacionMapa tablero, JTextArea panelMensajes, int contador, JTextField txtNaves, ArrayList<Juego> datosJuego, JButton btnTurno, ArrayList<NavesCamino> listNaves){
+    public SintaxCreacionMapa(AnalizadorLexico lex, CreacionMapa tablero, JTextArea panelMensajes, int contador, JTextField txtNaves, ArrayList<Juego> datosJuego, JButton btnTurno, ArrayList<NavesCamino> listNaves, JPanel panelJuego){
         super(lex);
         this.tablero = tablero;
         this.matrizJuego = matrizJuego;
@@ -43,6 +45,7 @@ parser code {:
         this.datosJuego = datosJuego;
         this.btnTurno = btnTurno;
         this.navesCamino = listNaves;
+        this.panelJuego = panelJuego;
     }
 
     public void setAccion(String tipo, String mensaje, String accion){
@@ -231,7 +234,7 @@ parser code {:
 
     start with a;
     
-    a ::= LLAVE_A juego:a LLAVE_B {: if(a.getMapa()==null || a.getJugadores()==null || a.getpNeutrales()==null || a.getPlanetas()==null){ System.out.println("Falta un archivo principal"); } else { boolean interruptor = true;  interruptor = parser.verificadorNombresJugadores(a.getJugadores(), interruptor);  interruptor = parser.verificadorNombresPlanetas(interruptor, a.getPlanetas());  interruptor = parser.verificadorNombresPlanetasNeutrales(interruptor, a.getpNeutrales());  parser.misDatos = a;  parser.datosJuego.add(a);    parser.creacionMapa(parser.datosJuego.get(0), interruptor, parser.panelMensajes, parser.totalErrores);               } :} 
+    a ::= LLAVE_A juego:a LLAVE_B {: if(a.getMapa()==null || a.getJugadores()==null || a.getpNeutrales()==null || a.getPlanetas()==null){ System.out.println("Falta un archivo principal"); } else { boolean interruptor = true;  interruptor = parser.verificadorNombresJugadores(a.getJugadores(), interruptor);  interruptor = parser.verificadorNombresPlanetas(interruptor, a.getPlanetas());  interruptor = parser.verificadorNombresPlanetasNeutrales(interruptor, a.getpNeutrales());  parser.misDatos = a;  parser.datosJuego.add(a);   parser.panelJuego.setVisible(true);   parser.creacionMapa(parser.datosJuego.get(0), interruptor, parser.panelMensajes, parser.totalErrores);               } :} 
 ;
     juego ::= b:a juego:e {: if(e!=null){ if(e.getMapa()==null){ e.setMapa(a); } else { System.out.println("errorzzzzzzz"); } } RESULT=e; :}
     | p:a juego:e {: if(e!=null){ if(e.getPlanetas()==null){ e.setPlanetas(a); System.out.println("agrego"); } else { System.out.println("erroasdfr"); } } RESULT=e; :}
@@ -375,13 +378,13 @@ parser code {:
 ;
     an ::= posY DOS_PUNTOS ENTERO:a {: PlanetasNeutrales neutral = new PlanetasNeutrales(); neutral.setPosicionY(a.toString()); RESULT=neutral; :}
 ;
-    jug ::= JUGADORES DOS_PUNTOS AGRUPACION_A ad:a AGRUPACION_B {:  RESULT=a; :} 
+    jug  ::= JUGADORES DOS_PUNTOS AGRUPACION_A ad:a AGRUPACION_B {:  RESULT=a; :} 
     | JUGADORES DOS_PUNTOS AGRUPACION_A AGRUPACION_B 
 ;
-    ad ::= LLAVE_A ae:a LLAVE_B COMA ad:e {: if(a.getNombre()==null || a.getPlanetas()==null || a.getColor()==null || a.getTipo()==null ){ System.out.println("ERROR, Falta de un archivo"); } else { a.setMisPlanetas(new ArrayList<>());  e.add(a); RESULT=e; } :}
-    | LLAVE_A ae:a LLAVE_B {: if(a.getNombre()==null || a.getPlanetas()==null || a.getColor()==null || a.getTipo()==null ){ System.out.println("ERROR, Falta de un archivo"); } else { ArrayList<Jugadores> misJugadores = new ArrayList<>();  a.setMisPlanetas(new ArrayList<>()); misJugadores.add(a); RESULT=misJugadores; } :}
+    ad ::= LLAVE_A ae:a LLAVE_B COMA ad:e {: if(a.getNombre()==null || a.getPlanetas()==null || a.getColor()==null || a.getTipo()==null ){ System.out.println("ERROR, Falta de un archivo"); } else { a.setEnJuego("true");  a.setMisPlanetas(new ArrayList<>());  e.add(a); RESULT=e; } :}
+    | LLAVE_A ae:a LLAVE_B {: if(a.getNombre()==null || a.getPlanetas()==null || a.getColor()==null || a.getTipo()==null ){ System.out.println("ERROR, Falta de un archivo"); } else { ArrayList<Jugadores> misJugadores = new ArrayList<>(); a.setEnJuego("true");  a.setMisPlanetas(new ArrayList<>()); misJugadores.add(a); RESULT=misJugadores; } :}
 ;
-    ae ::= af:a ae:e {: if(e!=null){ if(e.getNombre()==null){ e.setNombre(a.getNombre()); } else { System.out.println("error"); } } RESULT=e; :}
+    ae ::= af:a ae:e {: if(e!=null){ if(e.getNombre()==null){ e.setNombre(a.getNombre());  } else { System.out.println("error"); } } RESULT=e; :}
     | ag:a ae:e {: if(e!=null){ if(e.getPlanetas()==null){ e.setPlanetas(a.getPlanetas()); } else { System.out.println("error"); } } RESULT=e; :}
     | ah:a ae:e {: if(e!=null){ if(e.getTipo()==null){ e.setTipo(a.getTipo()); } else { System.out.println("error"); } } RESULT=e; :}
     | al:a ae:e {: if(e!=null){ if(e.getColor()==null){ e.setColor(a.getColor()); } else { System.out.println("error"); } } RESULT=e; :}

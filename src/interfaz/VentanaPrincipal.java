@@ -1,8 +1,10 @@
 package interfaz;
 
+import AccionesComputadora.InteligenciaArtificial;
 import Pollitos.ArchivoConfiguracion;
 import Pollitos.Juego;
 import Pollitos.NavesCamino;
+import Pollitos.Resultados;
 import gramaticas.AnalizadorLexico;
 import gramaticas.SintaxCreacionMapa;
 import java.awt.Color;
@@ -18,6 +20,7 @@ import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import mapa.CondicionesIniciales;
 import mapa.CreacionMapa;
 import mapa.Jugabilidad;
 
@@ -28,25 +31,30 @@ import mapa.Jugabilidad;
 public class VentanaPrincipal extends javax.swing.JFrame {
 
     private File proyecto;
-    String archivo; 
+    String archivo;
     public CreacionMapa mapa;
-    public JLabel[][] tablero;
+    public static JLabel[][] tablero;
     private Juego juego = null;
     public static int contador = 0;
     public static int contadorTurnos = 0;
     private ArrayList<Juego> datosJuego = new ArrayList<>();
     private ArrayList<NavesCamino> listNaves = new ArrayList<>();
+    private ArrayList<Resultados> finales = new ArrayList<>();
     private Jugabilidad jugabilidad;
-    
+    private CondicionesIniciales cambioDatos;
+    private InteligenciaArtificial computadora;
+
     public VentanaPrincipal() {
         initComponents();
         txtNaves.setEditable(false);
-        panelJuego.setBackground(new Color(255,255,255,100));
-        mapa = new CreacionMapa(this.panelJuego, tablero);
-        setLocationRelativeTo(null);
-        lblTurno.setText("Turno: "+contadorTurnos);
-        btnTurno.setEnabled(false);
+        panelJuego.setBackground(new Color(255, 255, 255, 100));
         jugabilidad = new Jugabilidad();
+        computadora = new InteligenciaArtificial();
+        cambioDatos = new CondicionesIniciales();
+        mapa = new CreacionMapa(this.panelJuego, jugabilidad);
+        setLocationRelativeTo(null);
+        lblTurno.setText("Turno: " + contadorTurnos);
+        btnTurno.setEnabled(false);
     }
 
     @SuppressWarnings("unchecked")
@@ -196,16 +204,16 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         juego = new Juego();
-        VentanaNuevoJuego nuevo = new VentanaNuevoJuego(this, true, mapa, panelMensajes, contador, txtNaves, datosJuego, btnTurno, listNaves);
+        VentanaNuevoJuego nuevo = new VentanaNuevoJuego(this, true, mapa, panelMensajes, contador, txtNaves, datosJuego, btnTurno, listNaves, panelJuego);
         nuevo.setVisible(true);
         juego = datosJuego.get(0);
         datosJuego.clear();
-        
+
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void itemLecturaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemLecturaActionPerformed
         juego = new Juego();
-         datosJuego.clear();
+        datosJuego.clear();
         JFileChooser chooser = new JFileChooser();
         panelMensajes.setText("");
         SintaxCreacionMapa.totalErrores = "";
@@ -222,14 +230,14 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             proyecto = new File(chooser.getSelectedFile().getAbsolutePath());
             path = chooser.getSelectedFile().toString();
             archivo = proyecto.toString();
-            if(archivo.endsWith(".JSON")){
+            if (archivo.endsWith(".JSON")) {
                 FileReader fr;
                 BufferedReader entrada;
                 String texto = "";
                 try {
                     fr = new FileReader(proyecto);
                     entrada = new BufferedReader(fr);
-                    while(entrada.ready()){
+                    while (entrada.ready()) {
                         texto += entrada.readLine() + "\n";
                     }
                 } catch (FileNotFoundException ex) {
@@ -239,10 +247,11 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 }
                 AnalizadorLexico lexico = new AnalizadorLexico(new StringReader(texto));
                 try {
-                    new SintaxCreacionMapa(lexico, mapa, panelMensajes, contador, txtNaves, datosJuego, btnTurno, listNaves).parse();
+                    new SintaxCreacionMapa(lexico, mapa, panelMensajes, contador, txtNaves, datosJuego, btnTurno, listNaves, panelJuego).parse();
                     juego = datosJuego.get(0);
-                    
-                    
+                    //System.out.println(juego.getJugadores().get(0).getEnJuego()+" ASFSDFSDFSDFSDDDDDDDDDDDDDDDDDDDDDD--------------------------");
+                    computadora.verificadorTipoInteligencia(juego, listNaves);
+
                 } catch (Exception ex) {
                     Logger.getLogger(VentanaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
                     JOptionPane.showMessageDialog(null, "ERROR");
@@ -258,29 +267,80 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
     private void txtNavesKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNavesKeyTyped
         char a = evt.getKeyChar();
-        if(!Character.isDigit(a)){
+        if (!Character.isDigit(a)) {
             evt.consume();
         }
     }//GEN-LAST:event_txtNavesKeyTyped
 
     private void btnTurnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTurnoActionPerformed
-        if(txtNaves.isEditable() == false){
-            
+        if (txtNaves.isEditable() == false) {
+
         } else {
-            contador++;
+            System.out.println(contador + " YO SOY EL CONTADOR PERROS");
+            /*  if (contador > 0) {
+                if (!juego.getJugadores().get(contador-1).getTipo().equals("HUMANO") || juego.getJugadores().get(contador-1).getEnJuego().equals("false")) {
+                    
+                } else {
+                    contador++;
+                }
+            } else {
+                contador++;
+            }
+                computadora.verificadorTipoInteligencia(juego, listNaves);*/
+
             
+            //MANANA VALIDAR LO DE SI UN JUGADOR ESTAN EN MODO FALSO
+            
+            
+            if (contador == 0) {
+                if (juego.getJugadores().get(contador).getTipo().equals("HUMANO")) {
+                    contador++;
+                    computadora.verificadorTipoInteligencia(juego, listNaves);
+                    recursividadComputadora();
+                }
+            } else if (contador > 0) {
+                System.out.println(contador + "  soy el contador");
+                if (juego.getJugadores().get(contador).getTipo().equals("HUMANO")) {
+                    computadora.verificadorTipoInteligencia(juego, listNaves);
+                    recursividadComputadora();
+                    contador++;
+                }
+            }
+
         }
-        if(contador == juego.getJugadores().size()){
+        if (contador == juego.getJugadores().size()) {
             contadorTurnos++;
             contador = 0;
+            if (juego.getMapa().getAcumular().equals("false")) {
+
+                cambioDatos.aumentoProduccion(juego);
+            } else {
+                cambioDatos.aumentoProduccionEn1(juego);
+            }
+            computadora.verificadorTipoInteligencia(juego, listNaves);
             jugabilidad.verificacionNavesLlegada(listNaves, juego);
+            cambioDatos.verificarGanador(juego, panelJuego, finales);
+            /*   if(juego.getJugadores().get(contador).getEnJuego().equals("true")){
+            } else {
+                contador++;
+            }*/
+
         }
-        lblTurno.setText("Turno: "+contadorTurnos);
+        lblTurno.setText("Turno: " + contadorTurnos);
         txtNaves.setText("");
         txtNaves.setEditable(false);
         btnTurno.setEnabled(false);
-        
+
     }//GEN-LAST:event_btnTurnoActionPerformed
+
+    public void recursividadComputadora() {
+        if (contador < juego.getJugadores().size()) {
+            if (!juego.getJugadores().get(contador).getTipo().equals("HUMANO")) {
+                computadora.verificadorTipoInteligencia(juego, listNaves);
+                recursividadComputadora();
+            }
+        }
+    }
 
     private void btnFlotasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFlotasActionPerformed
         FlotasEnviadas flotas = new FlotasEnviadas(null, true, listNaves);

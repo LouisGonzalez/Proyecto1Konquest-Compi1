@@ -22,6 +22,7 @@ import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -208,7 +209,7 @@ public class CreacionJSON {
         return mapita;
     }
 
-    public boolean crearArchivoJSON(Mapa mapita, ArrayList<Jugadores> listJugadores, ArrayList<Planetas> listPlanetas, ArrayList<PlanetasNeutrales> listNeutrales, String path, ArrayList<Juego> datosJuego, JButton btnTurno, ArrayList<NavesCamino> listNaves)  {
+    public boolean crearArchivoJSON(Mapa mapita, ArrayList<Jugadores> listJugadores, ArrayList<Planetas> listPlanetas, ArrayList<PlanetasNeutrales> listNeutrales, String path, ArrayList<Juego> datosJuego, JButton btnTurno, ArrayList<NavesCamino> listNaves, JPanel panelJuego)  {
         boolean comprobante = true;
         File json = new File(path + "/" + mapita.getId() + ".JSON");
         BufferedWriter buffer;
@@ -331,7 +332,7 @@ public class CreacionJSON {
                     }
                     AnalizadorLexico lexico = new AnalizadorLexico(new StringReader(texto));
                     try {
-                        new SintaxCreacionMapa(lexico, mapa, panelMensajes, contador, txtNaves, datosJuego, btnTurno, listNaves).parse();
+                        new SintaxCreacionMapa(lexico, mapa, panelMensajes, contador, txtNaves, datosJuego, btnTurno, listNaves, panelJuego).parse();
                     } catch (Exception ex) {
                         Logger.getLogger(CreacionJSON.class.getName()).log(Level.SEVERE, null, ex);
                     }

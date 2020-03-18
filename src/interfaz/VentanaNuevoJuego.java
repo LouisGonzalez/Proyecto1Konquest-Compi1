@@ -16,6 +16,7 @@ import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
@@ -45,6 +46,7 @@ public class VentanaNuevoJuego extends javax.swing.JDialog {
     private ArrayList<Juego> datosJuego;
     private JButton btnTurno;
     private ArrayList<NavesCamino> listNaves;
+    private JPanel panelJuego2;
     //private JLabel[][] matrizPrevia;
 
     /**
@@ -55,7 +57,7 @@ public class VentanaNuevoJuego extends javax.swing.JDialog {
      * @param mapa
      * @param panelMensajes
      */
-    public VentanaNuevoJuego(java.awt.Frame parent, boolean modal, CreacionMapa mapa, JTextArea panelMensajes, int contador, JTextField txtNaves, ArrayList<Juego> datosJuego, JButton btnTurno, ArrayList<NavesCamino> listNaves) {
+    public VentanaNuevoJuego(java.awt.Frame parent, boolean modal, CreacionMapa mapa, JTextArea panelMensajes, int contador, JTextField txtNaves, ArrayList<Juego> datosJuego, JButton btnTurno, ArrayList<NavesCamino> listNaves, JPanel panelJuego2) {
         super(parent, modal);
         initComponents();
         setLocationRelativeTo(null);
@@ -66,6 +68,7 @@ public class VentanaNuevoJuego extends javax.swing.JDialog {
         this.panelMensajes = panelMensajes;
         this.txtNaves = txtNaves;
         this.datosJuego = datosJuego;
+        this.panelJuego2 = panelJuego2;
         dtmModelNeutral = (DefaultTableModel) tablaNeutrales.getModel();
     }
 
@@ -544,7 +547,7 @@ public class VentanaNuevoJuego extends javax.swing.JDialog {
             if (txtDirectorio.getText().equals("")) {
                 JOptionPane.showMessageDialog(null, "Aun no decides donde guardar tu partida");
             } else {
-                verificador = creacion.crearArchivoJSON(mapita, misJugadores, planetas, neutrales, txtDirectorio.getText(), datosJuego, btnTurno, listNaves);
+                verificador = creacion.crearArchivoJSON(mapita, misJugadores, planetas, neutrales, txtDirectorio.getText(), datosJuego, btnTurno, listNaves, panelJuego2);
                 if (verificador == true) {
                     this.dispose();
                 }

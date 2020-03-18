@@ -6,6 +6,7 @@ import Pollitos.Mapa;
 import Pollitos.NavesCamino;
 import Pollitos.Planetas;
 import interfaz.VentanaPrincipal;
+import java.awt.Color;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
@@ -45,6 +46,7 @@ public class Jugabilidad {
         Planetas aux = new Planetas();
         int nodo = 0;
         int contador = VentanaPrincipal.contador;
+        
         for (int i = 0; i < juego.getJugadores().get(contador).getMisPlanetas().size(); i++) {
             int posX = Integer.parseInt(juego.getJugadores().get(contador).getMisPlanetas().get(i).getPosicionX());
             int posY = Integer.parseInt(juego.getJugadores().get(contador).getMisPlanetas().get(i).getPosicionY());
@@ -105,6 +107,7 @@ public class Jugabilidad {
                         boolean funciona = false;
                         if (!txtNaves.getText().equals("")) {
                             funciona = envioNaves(txtNaves, nodoJalar, juego, navesCamino, interruptor, jugadorPlaneta, noPlaneta, btnTurno);
+                            CreacionMapa.contClicks = 0;
                         } else {
                             JOptionPane.showMessageDialog(null, "Te falta enviar naves al destino");
                         }
@@ -154,8 +157,8 @@ public class Jugabilidad {
             }
             funciona = true;
             txtNaves.setEnabled(false);
+            txtNaves.setText("");
             btnTurno.setEnabled(true);
-
         }
         return funciona;
     }
@@ -264,12 +267,37 @@ public class Jugabilidad {
                     if (eficacia <= porMuerteAtacado) {
 
                         if (navesPlanetaAtacado < navesConvertido) {
-                            Planetas aux = new Planetas();
-                            aux = misDatos.getJugadores().get(jugadorAtaque).getMisPlanetas().get(noPlaneta);
+                            Planetas aux = misDatos.getJugadores().get(jugadorAtaque).getMisPlanetas().get(noPlaneta);
+
                             aux.setColor(misDatos.getJugadores().get(jugadorEnvio).getColor());
+                            String[] color = aux.getColor().split(",");
+                            int[] colores = new int[color.length];
+                            for (int j = 0; j < colores.length; j++) {
+                                colores[j] = Integer.parseInt(color[j]);
+                            }
+                            System.out.println(aux.getPosicionX() + "holita");
+                            System.out.println(aux.getPosicionY() + "holitax2");
+                            VentanaPrincipal.tablero[Integer.parseInt(aux.getPosicionY())][Integer.parseInt(aux.getPosicionX())].setBackground(new Color(255, 255, 255, 100));
+                            VentanaPrincipal.tablero[Integer.parseInt(aux.getPosicionY())][Integer.parseInt(aux.getPosicionX())].setBackground(new Color(colores[0], colores[1], colores[2], colores[3]));
                             removerPlaneta(misDatos, jugadorAtaque, planetaAtaque);
                             misDatos.getJugadores().get(jugadorEnvio).getMisPlanetas().add(aux);
+
+                            if (misDatos.getJugadores().get(jugadorEnvio).getPlanetasConquistados() == 0) {
+                                misDatos.getJugadores().get(jugadorEnvio).setPlanetasConquistados(1);
+                            } else {
+                                int planetasConquistados = misDatos.getJugadores().get(jugadorEnvio).getPlanetasConquistados();
+                                int nuevoValor = planetasConquistados + 1;
+                                misDatos.getJugadores().get(jugadorEnvio).setPlanetasConquistados(nuevoValor);
+                            }
+
                             JOptionPane.showMessageDialog(null, "Planeta: " + planetaAtaque + " ha sido conquistado por " + misDatos.getJugadores().get(jugadorEnvio).getNombre());
+                       
+                        
+                        
+                        //Verifica si existen planetas aun dentro del jugador que fue atacado    
+                        verificadorExistenciaPlanetas(misDatos, jugadorAtaque);
+                        
+                        
                         } else {
                             int totalNaves = navesPlanetaAtacado - navesConvertido;
                             misDatos.getJugadores().get(jugadorAtaque).getMisPlanetas().get(noPlaneta).setNaves(Integer.toString(totalNaves));
@@ -337,6 +365,27 @@ public class Jugabilidad {
                     planetas.setProduccion(misDatos.getpNeutrales().get(planetaNeutral).getProduccion());
                     misDatos.getJugadores().get(jugadorEnvio).getMisPlanetas().add(planetas);
                     misDatos.getpNeutrales().remove(planetaNeutral);
+                    String[] color = planetas.getColor().split(",");
+                    int[] colores = new int[color.length];
+                    for (int j = 0; j < colores.length; j++) {
+                        colores[i] = Integer.parseInt(color[i]);
+                    }
+                    if (misDatos.getJugadores().get(jugadorEnvio).getPlanetasConquistados() == 0) {
+                        misDatos.getJugadores().get(jugadorEnvio).setPlanetasConquistados(1);
+                    } else {
+                        int planetasConquistados = misDatos.getJugadores().get(jugadorEnvio).getPlanetasConquistados();
+                        int nuevoValor = planetasConquistados + 1;
+                        misDatos.getJugadores().get(jugadorEnvio).setPlanetasConquistados(nuevoValor);
+                    }
+                    VentanaPrincipal.tablero[Integer.parseInt(planetas.getPosicionY())][Integer.parseInt(planetas.getPosicionX())].setBackground(new Color(255, 255, 255, 100));
+                    VentanaPrincipal.tablero[Integer.parseInt(planetas.getPosicionY())][Integer.parseInt(planetas.getPosicionX())].setBackground(new Color(colores[0], colores[1], colores[2], colores[3]));
+               
+                    
+                    
+                    
+                    
+                    
+                    
                     JOptionPane.showMessageDialog(null, "Planeta Neutral: " + planetaAtaque + " ha sido conquistado por " + misDatos.getJugadores().get(jugadorEnvio).getNombre());
                 } else {
                     int totalNaves = navesNeutral - navesConvertido;
@@ -348,6 +397,15 @@ public class Jugabilidad {
             }
             listNaves.get(i).setVerificador(true);
 
+        }
+        
+    }
+    
+    public void verificadorExistenciaPlanetas(Juego misDatos, int noJugador){
+        int totalPlanetas = misDatos.getJugadores().get(noJugador).getMisPlanetas().size();
+        if(totalPlanetas == 0){
+            JOptionPane.showMessageDialog(null, "Este planeta ha sido eliminado");
+            misDatos.getJugadores().get(noJugador).setEnJuego("false");
         }
     }
 

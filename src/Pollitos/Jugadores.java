@@ -13,6 +13,24 @@ public class Jugadores {
     private ArrayList<Planetas> misPlanetas;
     private String tipo;
     private String color;
+    private int planetasConquistados;
+    private String enJuego;
+
+    public String getEnJuego() {
+        return enJuego;
+    }
+
+    public void setEnJuego(String enJuego) {
+        this.enJuego = enJuego;
+    }
+
+    public int getPlanetasConquistados() {
+        return planetasConquistados;
+    }
+
+    public void setPlanetasConquistados(int planetasConquistados) {
+        this.planetasConquistados = planetasConquistados;
+    }
 
     public String getColor() {
         return color;

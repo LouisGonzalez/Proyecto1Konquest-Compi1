@@ -53,7 +53,8 @@ public class MensajesEmergentes {
                     + "Porc. Muertes: " + aux.getPorcentajeMuertes() + "<br>"
                     + "Posicion X: " + aux.getPosicionX() + "<br>"
                     + "Posicion Y: " + aux.getPosicionY() + "<br>"
-                    + "Poseedor: " + misDatos.getJugadores().get(noJugador).getNombre() + ""
+                    + "Poseedor: " + misDatos.getJugadores().get(noJugador).getNombre() + "<br>"
+                    + "Tipo: " + misDatos.getJugadores().get(noJugador).getTipo() + ""
                     + "</div>"
                     + "</body>"
                     + "</html>";

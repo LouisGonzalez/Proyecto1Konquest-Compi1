@@ -33,22 +33,21 @@ import javax.swing.border.LineBorder;
 public class CreacionMapa {
 
     public JPanel panelFondo;
-    public JLabel[][] matrizJuego;
-    private Jugabilidad jugabilidad = new Jugabilidad();
     private MensajesEmergentes mensaje = new MensajesEmergentes();
     public static int contClicks = 0;
     public int nodoJalar = 0;
     InformacionPlaneta info = new InformacionPlaneta(null, true);
+    private Jugabilidad jugabilidad;
 
-    public CreacionMapa(JPanel panelFondo, JLabel[][] matrizJuego) {
+    public CreacionMapa(JPanel panelFondo, Jugabilidad jugabilidad) {
         this.panelFondo = panelFondo;
-        this.matrizJuego = matrizJuego;
+        this.jugabilidad = jugabilidad;
     }
 
     public void creacionCuadricula(Juego misDatos, JTextField txtNaves, int contador, ArrayList<NavesCamino> navesCamino, JButton btnTurno) {
         int filas = Integer.parseInt(misDatos.getMapa().getSize_filas());
         int columnas = Integer.parseInt(misDatos.getMapa().getSize_columnas());
-        matrizJuego = new JLabel[filas][columnas];
+        VentanaPrincipal.tablero = new JLabel[filas][columnas];
         panelFondo.setLayout(new GridLayout(filas, columnas));
         for (int i = 0; i < filas; i++) {
             for (int j = 0; j < columnas; j++) {
@@ -56,10 +55,12 @@ public class CreacionMapa {
                 int posY = i;
                 JLabel matriz = new JLabel();
                 posicionPlanetas(misDatos.getJugadores(), i, j, matriz, filas, columnas, misDatos.getpNeutrales());
-                matrizJuego[i][j].addMouseListener(new MouseAdapter() {
+                VentanaPrincipal.tablero[i][j].addMouseListener(new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent event) {
                         contClicks++;
+                        
+                        
                         if (contClicks % 2 != 0) {
                             nodoJalar = jugabilidad.accionesPrimerClick(misDatos, posX, posY);
                         } else {
@@ -71,13 +72,13 @@ public class CreacionMapa {
 
                     @Override
                     public void mouseEntered(MouseEvent event) {
-                        matrizJuego[posY][posX].setToolTipText("            ");
-                        mensaje.datosPlanetas(matrizJuego, posX, posY, misDatos);
+                        VentanaPrincipal.tablero[posY][posX].setToolTipText("            ");
+                        mensaje.datosPlanetas(VentanaPrincipal.tablero, posX, posY, misDatos);
 
                     }
                 }
                 );
-                panelFondo.add(matrizJuego[i][j]);
+                panelFondo.add(VentanaPrincipal.tablero[i][j]);
 
                 panelFondo.validate();
                 panelFondo.repaint();
@@ -100,6 +101,7 @@ public class CreacionMapa {
                         nodo.setMisPlanetas(jugador.get(i).getMisPlanetas());
                         nodo.getMisPlanetas().add(planetas.get(j));
                         nodo.setTipo(jugador.get(i).getTipo());
+                        nodo.setEnJuego("true");
                         jugador.set(i, nodo);
                         planetas.remove(j);
                         j--;
@@ -264,18 +266,18 @@ public class CreacionMapa {
             ImageIcon imagen = new ImageIcon("/home/luisitopapurey/Escritorio/Compiladores 1/Proyecto1.Konquest/circle-cropped.png");
             Icon icono = new ImageIcon(imagen.getImage().getScaledInstance(panelFondo.getWidth() / columnas, panelFondo.getHeight() / filas, Image.SCALE_DEFAULT));
             matriz.setIcon(icono);
-            matrizJuego[concordanciaX][concordanciaY] = matriz;
+            VentanaPrincipal.tablero[concordanciaX][concordanciaY] = matriz;
         } else if (concordanciaNeutral == true) {
             matriz.setOpaque(true);
             matriz.setBorder(new LineBorder(Color.black));
             ImageIcon imagen = new ImageIcon("/home/luisitopapurey/Escritorio/Compiladores 1/Proyecto1.Konquest/circle.png");
             Icon icono = new ImageIcon(imagen.getImage().getScaledInstance(panelFondo.getWidth() / columnas, panelFondo.getHeight() / filas, Image.SCALE_DEFAULT));
             matriz.setIcon(icono);
-            matrizJuego[concordanciaX][concordanciaY] = matriz;
+            VentanaPrincipal.tablero[concordanciaX][concordanciaY] = matriz;
         } else {
             matriz.setOpaque(false);
             matriz.setBorder(new LineBorder(Color.black));
-            matrizJuego[x][y] = matriz;
+            VentanaPrincipal.tablero[x][y] = matriz;
 
         }
 

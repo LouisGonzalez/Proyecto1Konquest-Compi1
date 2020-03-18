@@ -14,20 +14,20 @@
   	  mostrarEstadisticas: true,
 	  produccion: 12
 	},
-	finalizacion: 50
+	finalizacion: 0
  },
   PLANETAS: [				
 	{
        	  nombre: "B",
-  	  naves: 15,
-  	  produccion: 9,
+  	  naves: 4,
+  	  produccion: 2,
   	  porcentajeMuertes: 0.40,
 	  posicionX: 2,
 	  posicionY: 3
 	},
 	{
        	  nombre: "C",
-  	  naves: 10,
+  	  naves: 20,
   	  produccion: 9,
   	  porcentajeMuertes: 0.40,
 	  posicionX: 3,
@@ -35,7 +35,7 @@
 	},
 	{
   	  nombre: "A",
-  	  naves: 10,
+  	  naves: 20,
   	  produccion: 9,
   	  porcentajeMuertes: 0.40,
 	  posicionX: 1,
