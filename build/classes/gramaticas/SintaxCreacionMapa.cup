@@ -254,7 +254,7 @@ parser code {:
     |   g:a c:e {: if(e!=null){ if(e.getPlanetasNeutrales()==null){ e.setPlanetasNeutrales(a.getPlanetasNeutrales()); } else { System.out.println("error"); }  } RESULT=e; :}
     |   e:a c:e1 {: if(e1!=null){ if(e1.getSize_filas()==null && e1.getSize_columnas()==null) { e1.setSize_filas(a.getSize_filas()); e1.setSize_columnas(a.getSize_columnas()); } else { System.out.println("error"); } } RESULT=e1; :}
     |   f:a c:e {: if(e!=null){ if(e.getAlAzar()==null) { e.setAlAzar(a.getAlAzar()); } else { System.out.println("error"); } } RESULT=e; :}
-    |   h:a c:e {: if(e!=null){ if(e.getMapaCiego()==null) { e.setMapaCiego(a.getAlAzar()); } else { System.out.println("error"); } } RESULT=e; :}
+    |   h:a c:e {: if(e!=null){ if(e.getMapaCiego()==null) { e.setMapaCiego(a.getMapaCiego()); } else { System.out.println("error"); } } RESULT=e; :}
     |   i:a c:e {: if(e!=null){ if(e.getAcumular()==null) { e.setAcumular(a.getAcumular()); } else { System.out.println("error"); } } RESULT=e; :}
     |   j2:a c:e {: if(e!=null){ if(e.getMapaPNeutral()==null && a!=null) { e.setMapaPNeutral(a.getMapaPNeutral()); } else { System.out.println("error"); } } RESULT=e; :}
     |   k:a c:e {: if(e!=null){ if(e.getFinalizacion()==null){ e.setFinalizacion(a.getFinalizacion()); } else { System.out.println("error"); } } RESULT=e; :}
@@ -265,7 +265,7 @@ parser code {:
     |     g:a c:e {: if(e!=null){ if(e.getPlanetasNeutrales()==null) { e.setPlanetasNeutrales(a.getPlanetasNeutrales());  } else { System.out.println("error"); }   } RESULT=e;  :} 
     |   e:a c:e1 {: if(e1!=null){ if(e1.getSize_filas()==null && e1.getSize_columnas()==null) { e1.setSize_filas(a.getSize_filas()); e1.setSize_columnas(a.getSize_columnas()); } else { System.out.println("error"); } } RESULT=e1; :}
     |   f:a c:e {: if(e!=null){ if(e.getAlAzar()==null) { e.setAlAzar(a.getAlAzar()); } else { System.out.println("error"); } } RESULT=e; :}
-    |   h:a c:e {: if(e!=null){ if(e.getMapaCiego()==null) { e.setMapaCiego(a.getAlAzar()); } else { System.out.println("error"); } } RESULT=e; :}
+    |   h:a c:e {: if(e!=null){ if(e.getMapaCiego()==null) { e.setMapaCiego(a.getMapaCiego()); } else { System.out.println("error"); } } RESULT=e; :}
     |   i:a c:e {: if(e!=null){ if(e.getAcumular()==null) { e.setAcumular(a.getAcumular()); } else { System.out.println("error"); } } RESULT=e; :}
     |   j2:a c:e {: if(e!=null){ if(e.getMapaPNeutral()==null && a!=null) { e.setMapaPNeutral(a.getMapaPNeutral()); } else { System.out.println("error"); } } RESULT=e; :}
     |   k:a c:e {: if(e!=null){ if(e.getFinalizacion()==null){ e.setFinalizacion(a.getFinalizacion()); } else { System.out.println("error"); } } RESULT=e; :}
@@ -381,8 +381,8 @@ parser code {:
     jug  ::= JUGADORES DOS_PUNTOS AGRUPACION_A ad:a AGRUPACION_B {:  RESULT=a; :} 
     | JUGADORES DOS_PUNTOS AGRUPACION_A AGRUPACION_B 
 ;
-    ad ::= LLAVE_A ae:a LLAVE_B COMA ad:e {: if(a.getNombre()==null || a.getPlanetas()==null || a.getColor()==null || a.getTipo()==null ){ System.out.println("ERROR, Falta de un archivo"); } else { a.setEnJuego("true");  a.setMisPlanetas(new ArrayList<>());  e.add(a); RESULT=e; } :}
-    | LLAVE_A ae:a LLAVE_B {: if(a.getNombre()==null || a.getPlanetas()==null || a.getColor()==null || a.getTipo()==null ){ System.out.println("ERROR, Falta de un archivo"); } else { ArrayList<Jugadores> misJugadores = new ArrayList<>(); a.setEnJuego("true");  a.setMisPlanetas(new ArrayList<>()); misJugadores.add(a); RESULT=misJugadores; } :}
+    ad ::= LLAVE_A ae:a LLAVE_B COMA ad:e {: if(a.getNombre()==null || a.getPlanetas()==null || a.getColor()==null || a.getTipo()==null ){ System.out.println("ERROR, Falta de un archivo"); } else { a.setEnJuego("true"); a.setPlanetasConquistados(0);  a.setMisPlanetas(new ArrayList<>());  e.add(a); RESULT=e; } :}
+    | LLAVE_A ae:a LLAVE_B {: if(a.getNombre()==null || a.getPlanetas()==null || a.getColor()==null || a.getTipo()==null ){ System.out.println("ERROR, Falta de un archivo"); } else { ArrayList<Jugadores> misJugadores = new ArrayList<>(); a.setEnJuego("true"); a.setPlanetasConquistados(0);  a.setMisPlanetas(new ArrayList<>()); misJugadores.add(a); RESULT=misJugadores; } :}
 ;
     ae ::= af:a ae:e {: if(e!=null){ if(e.getNombre()==null){ e.setNombre(a.getNombre());  } else { System.out.println("error"); } } RESULT=e; :}
     | ag:a ae:e {: if(e!=null){ if(e.getPlanetas()==null){ e.setPlanetas(a.getPlanetas()); } else { System.out.println("error"); } } RESULT=e; :}

@@ -7,6 +7,8 @@ import Pollitos.NavesCamino;
 import Pollitos.Resultados;
 import gramaticas.AnalizadorLexico;
 import gramaticas.SintaxCreacionMapa;
+import gramaticas2.AnalizadorLexico2;
+import gramaticas2.SintaxGuardarPartida;
 import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.File;
@@ -22,6 +24,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import mapa.CondicionesIniciales;
 import mapa.CreacionMapa;
+import mapa.GuardarPartida;
 import mapa.Jugabilidad;
 
 /**
@@ -31,19 +34,21 @@ import mapa.Jugabilidad;
 public class VentanaPrincipal extends javax.swing.JFrame {
 
     private File proyecto;
-    String archivo;
+    private String archivo;
     public CreacionMapa mapa;
     public static JLabel[][] tablero;
     private Juego juego = null;
     public static int contador = 0;
     public static int contadorTurnos = 0;
+    public static int clicksDistancia = 0;
     private ArrayList<Juego> datosJuego = new ArrayList<>();
     private ArrayList<NavesCamino> listNaves = new ArrayList<>();
     private ArrayList<Resultados> finales = new ArrayList<>();
     private Jugabilidad jugabilidad;
     private CondicionesIniciales cambioDatos;
     private InteligenciaArtificial computadora;
-
+    private GuardarPartida guardar;
+    
     public VentanaPrincipal() {
         initComponents();
         txtNaves.setEditable(false);
@@ -51,10 +56,12 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         jugabilidad = new Jugabilidad();
         computadora = new InteligenciaArtificial();
         cambioDatos = new CondicionesIniciales();
+        guardar = new GuardarPartida();
         mapa = new CreacionMapa(this.panelJuego, jugabilidad);
         setLocationRelativeTo(null);
         lblTurno.setText("Turno: " + contadorTurnos);
         btnTurno.setEnabled(false);
+        btnDistancia.setToolTipText("Clickea de un planeta a otro para saber la distancia que tienen en años luz");
     }
 
     @SuppressWarnings("unchecked")
@@ -72,10 +79,15 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         lblMensaje = new javax.swing.JLabel();
         txtNaves = new javax.swing.JTextField();
         btnFlotas = new javax.swing.JButton();
+        btnDistancia = new javax.swing.JButton();
+        lblDistancia = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         itemNuevo = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
         itemLectura = new javax.swing.JMenuItem();
+        opcionesGuardar = new javax.swing.JMenu();
+        guardar1 = new javax.swing.JMenuItem();
+        guardar2 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -135,6 +147,8 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             }
         });
 
+        btnDistancia.setText("Calcular distancia");
+
         javax.swing.GroupLayout panelOpcionesLayout = new javax.swing.GroupLayout(panelOpciones);
         panelOpciones.setLayout(panelOpcionesLayout);
         panelOpcionesLayout.setHorizontalGroup(
@@ -142,11 +156,14 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             .addGroup(panelOpcionesLayout.createSequentialGroup()
                 .addGap(10, 10, 10)
                 .addGroup(panelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelOpcionesLayout.createSequentialGroup()
-                        .addComponent(lblJugador, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(154, 154, 154)
-                        .addComponent(btnFlotas, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(lblMensaje, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lblMensaje, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblJugador, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(25, 25, 25)
+                .addComponent(lblDistancia, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(40, 40, 40)
+                .addGroup(panelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnFlotas, javax.swing.GroupLayout.DEFAULT_SIZE, 165, Short.MAX_VALUE)
+                    .addComponent(btnDistancia, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(63, 63, 63)
                 .addComponent(txtNaves, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
@@ -164,12 +181,17 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                         .addGap(1, 1, 1)
                         .addGroup(panelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btnTurno)
-                            .addComponent(txtNaves, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(txtNaves, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnDistancia))
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelOpcionesLayout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(lblMensaje, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addContainerGap())))
+            .addGroup(panelOpcionesLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(lblDistancia, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         getContentPane().add(panelOpciones, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 840, 60));
@@ -191,6 +213,26 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             }
         });
         itemNuevo.add(itemLectura);
+
+        opcionesGuardar.setText("Guardar juego");
+
+        guardar1.setText("Guardar como...");
+        guardar1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                guardar1ActionPerformed(evt);
+            }
+        });
+        opcionesGuardar.add(guardar1);
+
+        guardar2.setText("Guardar");
+        guardar2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                guardar2ActionPerformed(evt);
+            }
+        });
+        opcionesGuardar.add(guardar2);
+
+        itemNuevo.add(opcionesGuardar);
 
         jMenuBar1.add(itemNuevo);
 
@@ -216,8 +258,8 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         datosJuego.clear();
         JFileChooser chooser = new JFileChooser();
         panelMensajes.setText("");
-        SintaxCreacionMapa.totalErrores = "";
         String path = "";
+        SintaxCreacionMapa.totalErrores = "";
         String seleccion = "Seleccione el JSON para abrir el juego";
         chooser.setCurrentDirectory(new File("."));
         chooser.setDialogTitle(seleccion);
@@ -246,12 +288,29 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                     Logger.getLogger(VentanaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 AnalizadorLexico lexico = new AnalizadorLexico(new StringReader(texto));
+                AnalizadorLexico2 lexico2 = new AnalizadorLexico2(new StringReader(texto));
                 try {
-                    new SintaxCreacionMapa(lexico, mapa, panelMensajes, contador, txtNaves, datosJuego, btnTurno, listNaves, panelJuego).parse();
+                 /*  new SintaxCreacionMapa(lexico, mapa, panelMensajes, contador, txtNaves, datosJuego, btnTurno, listNaves, panelJuego).parse();
                     juego = datosJuego.get(0);
                     //System.out.println(juego.getJugadores().get(0).getEnJuego()+" ASFSDFSDFSDFSDDDDDDDDDDDDDDDDDDDDDD--------------------------");
                     computadora.verificadorTipoInteligencia(juego, listNaves);
 
+                    
+                */ 
+                    
+                    
+                    
+                    
+                   new SintaxGuardarPartida(lexico2, mapa, panelMensajes, contador, txtNaves, datosJuego, btnTurno, listNaves, panelJuego).parse();
+                    
+                   juego = datosJuego.get(0);
+                   
+                   computadora.verificadorTipoInteligencia(juego, listNaves);
+                    lblTurno.setText("Turno: "+contadorTurnos);
+                    
+                    
+                    
+                    
                 } catch (Exception ex) {
                     Logger.getLogger(VentanaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
                     JOptionPane.showMessageDialog(null, "ERROR");
@@ -277,33 +336,19 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
         } else {
             System.out.println(contador + " YO SOY EL CONTADOR PERROS");
-            /*  if (contador > 0) {
-                if (!juego.getJugadores().get(contador-1).getTipo().equals("HUMANO") || juego.getJugadores().get(contador-1).getEnJuego().equals("false")) {
-                    
-                } else {
-                    contador++;
-                }
-            } else {
-                contador++;
-            }
-                computadora.verificadorTipoInteligencia(juego, listNaves);*/
-
-            
             //MANANA VALIDAR LO DE SI UN JUGADOR ESTAN EN MODO FALSO
-            
-            
             if (contador == 0) {
-                if (juego.getJugadores().get(contador).getTipo().equals("HUMANO")) {
+                if (juego.getJugadores().get(contador).getTipo().equals("HUMANO") && juego.getJugadores().get(contador).getEnJuego().equals("true")) {
                     contador++;
-                    computadora.verificadorTipoInteligencia(juego, listNaves);
+                    verificadorPlanetasJugador();
                     recursividadComputadora();
                 }
             } else if (contador > 0) {
                 System.out.println(contador + "  soy el contador");
-                if (juego.getJugadores().get(contador).getTipo().equals("HUMANO")) {
-                    computadora.verificadorTipoInteligencia(juego, listNaves);
-                    recursividadComputadora();
+                if (juego.getJugadores().get(contador).getTipo().equals("HUMANO") && juego.getJugadores().get(contador).getEnJuego().equals("true")) {
                     contador++;
+                    recursividadComputadora();
+                    verificadorPlanetasJugador();
                 }
             }
 
@@ -312,15 +357,18 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             contadorTurnos++;
             contador = 0;
             if (juego.getMapa().getAcumular().equals("false")) {
-
                 cambioDatos.aumentoProduccion(juego);
             } else {
                 cambioDatos.aumentoProduccionEn1(juego);
             }
-            computadora.verificadorTipoInteligencia(juego, listNaves);
-            jugabilidad.verificacionNavesLlegada(listNaves, juego);
+            String texto = panelMensajes.getText();
+            String mensaje = texto + "Turno: " + contadorTurnos + "\n";
+            panelMensajes.setText(mensaje);
+            jugabilidad.verificacionNavesLlegada(listNaves, juego, panelMensajes);
             cambioDatos.verificarGanador(juego, panelJuego, finales);
-            /*   if(juego.getJugadores().get(contador).getEnJuego().equals("true")){
+            verificadorPlanetasJugador();
+            recursividadComputadora();
+            /*  if(juego.getJugadores().get(contador).getEnJuego().equals("true")){
             } else {
                 contador++;
             }*/
@@ -342,24 +390,50 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         }
     }
 
+    public void verificadorPlanetasJugador() {
+        if (contador < juego.getJugadores().size()) {
+            if (juego.getJugadores().get(contador).getEnJuego().equals("false") && juego.getJugadores().get(contador).getTipo().equals("HUMANO")) {
+                contador++;
+                verificadorPlanetasJugador();
+            }
+        }
+    }
+
     private void btnFlotasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFlotasActionPerformed
         FlotasEnviadas flotas = new FlotasEnviadas(null, true, listNaves);
         flotas.setVisible(true);
     }//GEN-LAST:event_btnFlotasActionPerformed
 
+    private void guardar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_guardar1ActionPerformed
+        
+    }//GEN-LAST:event_guardar1ActionPerformed
+
+    private void guardar2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_guardar2ActionPerformed
+        guardar.repartirPlanetas(juego);
+        guardar.crearJSON(juego, listNaves, archivo);
+        JOptionPane.showMessageDialog(null, "El archivo de entrada ha sido modificado con exito");
+        panelJuego.removeAll();
+        panelJuego.setVisible(false);
+    }//GEN-LAST:event_guardar2ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnDistancia;
     private javax.swing.JButton btnFlotas;
     private javax.swing.JButton btnTurno;
+    private javax.swing.JMenuItem guardar1;
+    private javax.swing.JMenuItem guardar2;
     private javax.swing.JMenuItem itemLectura;
     private javax.swing.JMenu itemNuevo;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lblDistancia;
     private javax.swing.JLabel lblJugador;
     private javax.swing.JLabel lblMensaje;
     private javax.swing.JLabel lblTurno;
+    private javax.swing.JMenu opcionesGuardar;
     private javax.swing.JLabel panelFondo;
     private javax.swing.JPanel panelJuego;
     private javax.swing.JTextArea panelMensajes;

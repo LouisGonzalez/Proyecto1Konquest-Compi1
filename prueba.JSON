@@ -1,90 +1,121 @@
 {
-  MAPA: {
+   MAPA: {
 	id: "_mapa1_",
 	size: {
-  	  filas: 10,
-  	  columnas: 10
+	   filas: 10,
+	   columnas: 10
 	},
 	alAzar: false,
 	planetasNeutrales: 20,
 	mapaCiego: false,
 	acumular: false,
 	NEUTRALES: {
-  	  mostrarNaves: true,
-  	  mostrarEstadisticas: true,
-	  produccion: 12
+	   mostrarNaves: true,
+	   mostrarEstadisticas: true,
+	   produccion: 12
 	},
 	finalizacion: 0
- },
-  PLANETAS: [				
+},
+   PLANETAS: [
 	{
-       	  nombre: "B",
-  	  naves: 4,
-  	  produccion: 2,
-  	  porcentajeMuertes: 0.40,
-	  posicionX: 2,
-	  posicionY: 3
+	  nombre: "A",
+	  naves: 38,
+	  produccion: 9,
+	  porcentajeMuertes: 0.4,
+	  posicionX: 1,
+	  posicionY: 9
 	},
 	{
-       	  nombre: "C",
-  	  naves: 20,
-  	  produccion: 9,
-  	  porcentajeMuertes: 0.40,
+	  nombre: "C",
+	  naves: 22,
+	  produccion: 9,
+	  porcentajeMuertes: 0.4,
 	  posicionX: 3,
 	  posicionY: 3
 	},
 	{
-  	  nombre: "A",
-  	  naves: 20,
-  	  produccion: 9,
-  	  porcentajeMuertes: 0.40,
-	  posicionX: 1,
-	  posicionY: 9	
+	  nombre: "B",
+	  naves: 0,
+	  produccion: 9,
+	  porcentajeMuertes: 0.4,
+	  posicionX: 2,
+	  posicionY: 3
 	}
-  ],
-PLANETAS_NEUTRALES: [
+   ],
+   PLANETAS_NEUTRALES: [
 	{
-  	  nombre: "D",
-  	  naves: 15,
-  	  produccion: 12,
-  	  porcentajeMuertes: 0.8,
+	  nombre: "D",
+	  naves: 39,
+	  produccion: 12,
+	  porcentajeMuertes: 0.8,
 	  posicionX: 3,
 	  posicionY: 1
 	},
 	{
-  	  nombre: "E",
-  	  naves: 11,
-  	  produccion: 9,
-  	  porcentajeMuertes: 0.998501
+	  nombre: "E",
+	  naves: 29,
+	  produccion: 9,
+	  porcentajeMuertes: 0.998501,
 	  posicionX: 2,
 	  posicionY: 9
 	},
 	{
-  	  nombre: "F",
-  	  naves: 20,
-  	  produccion: 25,
-  	  porcentajeMuertes: 0.21502
+	  nombre: "F",
+	  naves: 70,
+	  produccion: 25,
+	  porcentajeMuertes: 0.21502,
 	  posicionX: 5,
 	  posicionY: 8
 	}
-  ],
-  JUGADORES: [
+   ],
+   JUGADORES: [
 	{
- 	  nombre: "Jode",
+	  nombre: "Jode",
 	  color: "0,255,255,75",
-  	  planetas: [
-    	    "A",
-    	    "C"
-  	  ],
-  	  tipo: HUMANO
+	 planetas: [
+	     "C"
+	     "A",
+	  ],
+	  tipo: HUMANO,
+	  enJuego: true,
+	  planetasConquistados: 0
 	},
 	{
-  	  nombre: "Jodde",
+	  nombre: "Jodde",
 	  color: "0,255,0,75",
-  	  planetas: [
-    	    "B"
-  	  ],
-  	  tipo: DIFICIL
+	 planetas: [
+	     "B"
+	  ],
+	  tipo: DIFICIL,
+	  enJuego: true,
+	  planetasConquistados: 0
 	}
-  ]
+   ]
 }
+CAMBIOS: [
+	turno: 2,
+	turnoJugador: 1,
+	NAVES_CAMINO [		{
+	  noFlota: 1,
+	  planetaOrigen: B,
+	  planetaDestino: A,
+	  noNaves: 3,
+	  porcentajeMuertes: 0.4,
+	  llegada: 6,
+	  jugadorEnvio: 0,
+	  jugadorAtaque: 1,
+	  verificador: false
+	},
+	{
+	  noFlota: 2,
+	  planetaOrigen: B,
+	  planetaDestino: C,
+	  noNaves: 6,
+	  porcentajeMuertes: 0.4,
+	  llegada: 3,
+	  jugadorEnvio: 0,
+	  jugadorAtaque: 1,
+	  verificador: false
+	}
+	]
+]

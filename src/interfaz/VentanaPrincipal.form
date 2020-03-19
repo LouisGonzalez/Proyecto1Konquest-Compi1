@@ -25,6 +25,29 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="itemLecturaActionPerformed"/>
               </Events>
             </MenuItem>
+            <Menu class="javax.swing.JMenu" name="opcionesGuardar">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Guardar juego"/>
+              </Properties>
+              <SubComponents>
+                <MenuItem class="javax.swing.JMenuItem" name="guardar1">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Guardar como..."/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="guardar1ActionPerformed"/>
+                  </Events>
+                </MenuItem>
+                <MenuItem class="javax.swing.JMenuItem" name="guardar2">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Guardar"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="guardar2ActionPerformed"/>
+                  </Events>
+                </MenuItem>
+              </SubComponents>
+            </Menu>
           </SubComponents>
         </Menu>
         <Menu class="javax.swing.JMenu" name="jMenu2">
@@ -157,12 +180,15 @@
               <Group type="102" attributes="0">
                   <EmptySpace min="10" pref="10" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" alignment="0" attributes="0">
-                          <Component id="lblJugador" min="-2" pref="110" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="154" max="-2" attributes="0"/>
-                          <Component id="btnFlotas" min="-2" pref="165" max="-2" attributes="0"/>
-                      </Group>
-                      <Component id="lblMensaje" min="-2" pref="150" max="-2" attributes="0"/>
+                      <Component id="lblMensaje" alignment="0" min="-2" pref="119" max="-2" attributes="0"/>
+                      <Component id="lblJugador" alignment="0" min="-2" pref="110" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
+                  <Component id="lblDistancia" min="-2" pref="80" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                      <Component id="btnFlotas" pref="165" max="32767" attributes="0"/>
+                      <Component id="btnDistancia" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" pref="63" max="-2" attributes="0"/>
                   <Component id="txtNaves" min="-2" pref="147" max="-2" attributes="0"/>
@@ -185,6 +211,7 @@
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="btnTurno" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="txtNaves" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="btnDistancia" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace min="9" max="32767" attributes="0"/>
                       </Group>
@@ -194,6 +221,11 @@
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>
                   </Group>
+              </Group>
+              <Group type="102" alignment="0" attributes="0">
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="lblDistancia" min="-2" pref="34" max="-2" attributes="0"/>
+                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -226,6 +258,13 @@
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnFlotasActionPerformed"/>
           </Events>
+        </Component>
+        <Component class="javax.swing.JButton" name="btnDistancia">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Calcular distancia"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="lblDistancia">
         </Component>
       </SubComponents>
     </Container>

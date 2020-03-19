@@ -79,7 +79,6 @@ public class CreacionMapa {
                 }
                 );
                 panelFondo.add(VentanaPrincipal.tablero[i][j]);
-
                 panelFondo.validate();
                 panelFondo.repaint();
             }
@@ -101,6 +100,7 @@ public class CreacionMapa {
                         nodo.setMisPlanetas(jugador.get(i).getMisPlanetas());
                         nodo.getMisPlanetas().add(planetas.get(j));
                         nodo.setTipo(jugador.get(i).getTipo());
+                        nodo.setPlanetasConquistados(jugador.get(i).getPlanetasConquistados());
                         nodo.setEnJuego("true");
                         jugador.set(i, nodo);
                         planetas.remove(j);

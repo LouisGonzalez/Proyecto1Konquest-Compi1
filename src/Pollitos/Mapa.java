@@ -13,9 +13,6 @@ public class Mapa {
     private String size_columnas;
     private String alAzar;
     private String planetasNeutrales;
-    private String mostrarNaves;
-    private String mostrarEstadisticas;
-    private String produccion;
     private String mapaCiego;
     private String acumular;
     private String finalizacion;
@@ -37,29 +34,6 @@ public class Mapa {
         this.finalizacion = finalizacion;
     }
 
-    public String getMostrarNaves() {
-        return mostrarNaves;
-    }
-
-    public void setMostrarNaves(String mostrarNaves) {
-        this.mostrarNaves = mostrarNaves;
-    }
-
-    public String getMostrarEstadisticas() {
-        return mostrarEstadisticas;
-    }
-
-    public void setMostrarEstadisticas(String mostrarEstadisticas) {
-        this.mostrarEstadisticas = mostrarEstadisticas;
-    }
-
-    public String getProduccion() {
-        return produccion;
-    }
-
-    public void setProduccion(String produccion) {
-        this.produccion = produccion;
-    }
 
     public String getId() {
         return id;

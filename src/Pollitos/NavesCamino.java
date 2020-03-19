@@ -6,45 +6,21 @@ package Pollitos;
  */
 public class NavesCamino {
     
-    private int noFlota;
+    private Integer noFlota;
     private String planetaOrigen;
     private String planetaDestino;
-    private int noNaves;
-    private int noJugadorEnvio;
+    private Integer noNaves;
+    private Integer noJugadorEnvio;
     private Integer noJugadorAtaque;
-    private float porcentajeMuertes;
-    private int turnoLlegada;
-    private boolean verificador;
+    private Float porcentajeMuertes;
+    private Integer turnoLlegada;
+    private Boolean verificador;
 
-    public boolean isVerificador() {
-        return verificador;
-    }
-
-    public void setVerificador(boolean verificador) {
-        this.verificador = verificador;
-    }
-
-    public int getNoJugadorEnvio() {
-        return noJugadorEnvio;
-    }
-
-    public void setNoJugadorEnvio(int noJugadorEnvio) {
-        this.noJugadorEnvio = noJugadorEnvio;
-    }
-
-    public Integer getNoJugadorAtaque() {
-        return noJugadorAtaque;
-    }
-
-    public void setNoJugadorAtaque(Integer noJugadorAtaque) {
-        this.noJugadorAtaque = noJugadorAtaque;
-    }
-
-    public int getNoFlota() {
+    public Integer getNoFlota() {
         return noFlota;
     }
 
-    public void setNoFlota(int noFlota) {
+    public void setNoFlota(Integer noFlota) {
         this.noFlota = noFlota;
     }
 
@@ -64,29 +40,53 @@ public class NavesCamino {
         this.planetaDestino = planetaDestino;
     }
 
-    public int getNoNaves() {
+    public Integer getNoNaves() {
         return noNaves;
     }
 
-    public void setNoNaves(int noNaves) {
+    public void setNoNaves(Integer noNaves) {
         this.noNaves = noNaves;
     }
 
-    public float getPorcentajeMuertes() {
+    public Integer getNoJugadorEnvio() {
+        return noJugadorEnvio;
+    }
+
+    public void setNoJugadorEnvio(Integer noJugadorEnvio) {
+        this.noJugadorEnvio = noJugadorEnvio;
+    }
+
+    public Integer getNoJugadorAtaque() {
+        return noJugadorAtaque;
+    }
+
+    public void setNoJugadorAtaque(Integer noJugadorAtaque) {
+        this.noJugadorAtaque = noJugadorAtaque;
+    }
+
+    public Float getPorcentajeMuertes() {
         return porcentajeMuertes;
     }
 
-    public void setPorcentajeMuertes(float porcentajeMuertes) {
+    public void setPorcentajeMuertes(Float porcentajeMuertes) {
         this.porcentajeMuertes = porcentajeMuertes;
     }
 
-    public int getTurnoLlegada() {
+    public Integer getTurnoLlegada() {
         return turnoLlegada;
     }
 
-    public void setTurnoLlegada(int turnoLlegada) {
+    public void setTurnoLlegada(Integer turnoLlegada) {
         this.turnoLlegada = turnoLlegada;
     }
-    
-    
+
+    public Boolean getVerificador() {
+        return verificador;
+    }
+
+    public void setVerificador(Boolean verificador) {
+        this.verificador = verificador;
+    }
+
+     
 }

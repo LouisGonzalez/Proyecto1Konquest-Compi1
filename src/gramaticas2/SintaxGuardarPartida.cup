@@ -1,4 +1,4 @@
-package gramaticas;
+package gramaticas2;
 import java_cup.runtime.Symbol;
 import java.util.ArrayList;
 import Pollitos.ArchivoConfiguracion;
@@ -8,6 +8,7 @@ import Pollitos.PlanetasNeutrales;
 import Pollitos.Jugadores;
 import Pollitos.MapaPNeutrales;
 import Pollitos.Juego;
+import Pollitos.DatosGuardados;
 import Pollitos.NavesCamino;
 import mapa.CreacionMapa;
 import javax.swing.JLabel;
@@ -15,6 +16,7 @@ import javax.swing.JTextField;
 import javax.swing.JTextArea;
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import interfaz.VentanaPrincipal;
 
 parser code {:
 
@@ -35,7 +37,7 @@ parser code {:
     public JButton btnTurno;
     public JPanel panelJuego;
 
-    public SintaxCreacionMapa(AnalizadorLexico lex, CreacionMapa tablero, JTextArea panelMensajes, int contador, JTextField txtNaves, ArrayList<Juego> datosJuego, JButton btnTurno, ArrayList<NavesCamino> listNaves, JPanel panelJuego){
+    public SintaxGuardarPartida(AnalizadorLexico2 lex, CreacionMapa tablero, JTextArea panelMensajes, int contador, JTextField txtNaves, ArrayList<Juego> datosJuego, JButton btnTurno, ArrayList<NavesCamino> listNaves, JPanel panelJuego){
         super(lex);
         this.tablero = tablero;
         this.matrizJuego = matrizJuego;
@@ -202,15 +204,24 @@ parser code {:
         }
         
     }
+
+    public void traspasoDatosFlotas(ArrayList<NavesCamino> listNaves, ArrayList<NavesCamino> listTemporal){
+        for(int i = 0; i < listTemporal.size(); i++){
+            listNaves.add(listTemporal.get(i));
+        }
+
+    }
   
 :}
 
     terminal VERDADERO, FALSO, LLAVE_A, LLAVE_B, AGRUPACION_A, AGRUPACION_B, DOS_PUNTOS, COMA, PUNTO, COMILLAS,
              MAPA, id, size, alAzar, pNeutrales, mapaCiego, acumular, NEUTRALES, mostrarNaves, mostrarEstadisticas,
              produccion, finalizacion, PLANETAS, nombre, naves, porcMuertes, PLANETAS_NEUTRALES, JUGADORES, planetas,
-             tipo, HUMANO, DIFICIL, FACIL, ENTERO, DECIMAL, ID, filas, columnas, color, posX, posY, COLOR;
-             
-    non terminal a, a1;
+             tipo, HUMANO, DIFICIL, FACIL, ENTERO, DECIMAL, ID, filas, columnas, color, posX, posY, COLOR, CAMBIOS, turno,
+             NAVES_CAMINO, noFlota, planetaOrigen, planetaDestino, planetasConquistados, turnoJugador,
+             noNaves, llegada, jugadorEnvio, jugadorAtaque, verificador, nombrePlaneta, enJuego;
+     
+    non terminal inicio, a, a1, a2;
 
     non terminal Juego juego, q2;
     
@@ -222,7 +233,7 @@ parser code {:
 
     non terminal MapaPNeutrales m, n, o, l, q8;
 
-    non terminal Jugadores ae, q7, af, ag, al, ah;
+    non terminal Jugadores ae, q7, af, ag, al, ah, ba, bp;
 
     non terminal ArrayList<String> ai;
 
@@ -232,9 +243,19 @@ parser code {:
 
     non terminal ArrayList<Jugadores> jug, ad;
 
-    start with a;
+    non terminal NavesCamino bf, bg, bh, bi, bj, bk, bl, bm, bn, be, rep2;
+
+    non terminal DatosGuardados bb, rep1, bo, bq;
+
+    non terminal ArrayList<NavesCamino> bd, bc; 
+
+
+    start with inicio;
+
+    inicio ::= a a2
+;
     
-    a ::= LLAVE_A juego:a LLAVE_B {: if(a.getMapa()==null || a.getJugadores()==null || a.getpNeutrales()==null || a.getPlanetas()==null){ System.out.println("Falta un archivo principal"); } else { boolean interruptor = true;  interruptor = parser.verificadorNombresJugadores(a.getJugadores(), interruptor);  interruptor = parser.verificadorNombresPlanetas(interruptor, a.getPlanetas());  interruptor = parser.verificadorNombresPlanetasNeutrales(interruptor, a.getpNeutrales());  parser.misDatos = a;  parser.datosJuego.add(a);   parser.panelJuego.setVisible(true);   parser.creacionMapa(parser.datosJuego.get(0), interruptor, parser.panelMensajes, parser.totalErrores);               } :} 
+    a ::= LLAVE_A juego:a LLAVE_B {: if(a.getMapa()==null || a.getJugadores()==null || a.getpNeutrales()==null || a.getPlanetas()==null){ System.out.println("Falta un archivo principal"); } else {  boolean interruptor = true;  interruptor = parser.verificadorNombresJugadores(a.getJugadores(), interruptor);  interruptor = parser.verificadorNombresPlanetas(interruptor, a.getPlanetas());  interruptor = parser.verificadorNombresPlanetasNeutrales(interruptor, a.getpNeutrales());  parser.misDatos = a;  parser.datosJuego.add(a);   parser.panelJuego.setVisible(true);   parser.creacionMapa(parser.datosJuego.get(0), interruptor, parser.panelMensajes, parser.totalErrores);               } :} 
 ;
     juego ::= b:a juego:e {: if(e!=null){ if(e.getMapa()==null){ e.setMapa(a); } else { System.out.println("errorzzzzzzz"); } } RESULT=e; :}
     | p:a juego:e {: if(e!=null){ if(e.getPlanetas()==null){ e.setPlanetas(a); System.out.println("agrego"); } else { System.out.println("erroasdfr"); } } RESULT=e; :}
@@ -381,13 +402,15 @@ parser code {:
     jug  ::= JUGADORES DOS_PUNTOS AGRUPACION_A ad:a AGRUPACION_B {:  RESULT=a; :} 
     | JUGADORES DOS_PUNTOS AGRUPACION_A AGRUPACION_B 
 ;
-    ad ::= LLAVE_A ae:a LLAVE_B COMA ad:e {: if(a.getNombre()==null || a.getPlanetas()==null || a.getColor()==null || a.getTipo()==null ){ System.out.println("ERROR, Falta de un archivo"); } else { a.setEnJuego("true"); a.setPlanetasConquistados(0);  a.setMisPlanetas(new ArrayList<>());  e.add(a); RESULT=e; } :}
-    | LLAVE_A ae:a LLAVE_B {: if(a.getNombre()==null || a.getPlanetas()==null || a.getColor()==null || a.getTipo()==null ){ System.out.println("ERROR, Falta de un archivo"); } else { ArrayList<Jugadores> misJugadores = new ArrayList<>(); a.setEnJuego("true"); a.setPlanetasConquistados(0);  a.setMisPlanetas(new ArrayList<>()); misJugadores.add(a); RESULT=misJugadores; } :}
+    ad ::= LLAVE_A ae:a LLAVE_B COMA ad:e {: if(a.getEnJuego()==null || a.getNombre()==null || a.getPlanetas()==null || a.getColor()==null || a.getTipo()==null ){ System.out.println("ERROR, Falta de un archivo"); } else {  a.setMisPlanetas(new ArrayList<>());  e.add(a); RESULT=e; } :}
+    | LLAVE_A ae:a LLAVE_B {: if(a.getEnJuego()==null || a.getNombre()==null || a.getPlanetas()==null || a.getColor()==null || a.getTipo()==null ){ System.out.println("ERROR, Falta de un archivo"); } else { ArrayList<Jugadores> misJugadores = new ArrayList<>();  a.setMisPlanetas(new ArrayList<>()); misJugadores.add(a); RESULT=misJugadores; } :}
 ;
     ae ::= af:a ae:e {: if(e!=null){ if(e.getNombre()==null){ e.setNombre(a.getNombre());  } else { System.out.println("error"); } } RESULT=e; :}
     | ag:a ae:e {: if(e!=null){ if(e.getPlanetas()==null){ e.setPlanetas(a.getPlanetas()); } else { System.out.println("error"); } } RESULT=e; :}
     | ah:a ae:e {: if(e!=null){ if(e.getTipo()==null){ e.setTipo(a.getTipo()); } else { System.out.println("error"); } } RESULT=e; :}
     | al:a ae:e {: if(e!=null){ if(e.getColor()==null){ e.setColor(a.getColor()); } else { System.out.println("error"); } } RESULT=e; :}
+    | ba:a ae:e {: if(e!=null){  if(e.getEnJuego()==null){ e.setEnJuego(a.getEnJuego()); } else { System.out.println("error"); }  } RESULT=e; :}
+    | bp:a ae:e {: if(e!=null){ if(e.getPlanetasConquistados()==null){ e.setPlanetasConquistados(a.getPlanetasConquistados()); } else { System.out.println("error"); } } RESULT=e; :}
     | COMA q7:a {: RESULT=a; :}
     | {: RESULT=new Jugadores(); :}
 ;
@@ -395,6 +418,8 @@ parser code {:
     | ag:a ae:e {: if(e!=null){ if(e.getPlanetas()==null){ e.setPlanetas(a.getPlanetas()); } else { System.out.println("error"); } } RESULT=e; :}
     | ah:a ae:e {: if(e!=null){ if(e.getTipo()==null){ e.setTipo(a.getTipo()); } else { System.out.println("error"); } } RESULT=e; :}
     | al:a ae:e {: if(e!=null){ if(e.getColor()==null){ e.setColor(a.getColor()); } else { System.out.println("error"); } } RESULT=e; :}
+    | ba:a ae:e {: if(e!=null){  if(e.getEnJuego()==null){ e.setEnJuego(a.getEnJuego()); } else { System.out.println("error"); }  } RESULT=e; :}
+    | bp:a ae:e {: if(e!=null){ if(e.getPlanetasConquistados()==null){ e.setPlanetasConquistados(a.getPlanetasConquistados()); } else { System.out.println("error"); } } RESULT=e; :}
 ;
     af ::= nombre DOS_PUNTOS COMILLAS ID:a COMILLAS {: Jugadores jugador = new Jugadores();  jugador.setNombre(a.toString()); RESULT=jugador; :}
 ;
@@ -409,4 +434,72 @@ parser code {:
     ah ::= tipo DOS_PUNTOS FACIL:a {: Jugadores jugador = new Jugadores(); jugador.setTipo(a.toString()); RESULT=jugador; :}
     | tipo DOS_PUNTOS DIFICIL:a {: Jugadores jugador = new Jugadores(); jugador.setTipo(a.toString()); RESULT=jugador; :}
     | tipo DOS_PUNTOS HUMANO:a {: Jugadores jugador = new Jugadores(); jugador.setTipo(a.toString()); RESULT=jugador; :}
+;
+    ba ::= enJuego DOS_PUNTOS VERDADERO:a {: Jugadores jugador = new Jugadores(); jugador.setEnJuego(a.toString()); RESULT=jugador; :}
+    | enJuego DOS_PUNTOS FALSO:a {: Jugadores jugador = new Jugadores(); jugador.setEnJuego(a.toString()); RESULT=jugador; :}
+;
+    bp ::= planetasConquistados DOS_PUNTOS ENTERO:a {: Jugadores jugador = new Jugadores(); jugador.setPlanetasConquistados((Integer) a); RESULT= jugador; :}
+;
+    a2 ::= CAMBIOS DOS_PUNTOS AGRUPACION_A bo:a AGRUPACION_B {: VentanaPrincipal.contador=a.getTurnoJugador();  VentanaPrincipal.contadorTurnos=a.getContador();  parser.traspasoDatosFlotas(parser.navesCamino, a.getListNaves()); :}
+;
+    bo ::= bb:a bo:e {: if(e!=null){if(e.getContador()==null){ e.setContador(a.getContador()); } else { System.out.println("error"); }  } RESULT=e; :}
+    | bq:a bo:e {: if(e!=null){if(e.getTurnoJugador()==null){ e.setTurnoJugador(a.getTurnoJugador()); } else { System.out.println("error"); } } RESULT=e; :}
+    | bc:a bo:e {: if(e!=null){if(e.getListNaves()==null){ e.setListNaves(a); } else { System.out.println("error"); }  } RESULT=e; :}
+    | COMA rep1:a {: RESULT=a; :}
+    | {: RESULT=new DatosGuardados(); :}
+;
+    rep1 ::=  bb:a bo:e {: if(e!=null){if(e.getContador()==null){ e.setContador(a.getContador()); } else { System.out.println("error"); }  } RESULT=e; :}
+    | bq:a bo:e {: if(e!=null){if(e.getTurnoJugador()==null){ e.setTurnoJugador(a.getTurnoJugador()); } else { System.out.println("error"); } } RESULT=e; :}
+    | bc:a bo:e {: if(e!=null){if(e.getListNaves()==null){ e.setListNaves(a); } else { System.out.println("error"); }  } RESULT=e; :}
+;
+    bb ::= turno DOS_PUNTOS ENTERO:a {: DatosGuardados dato = new DatosGuardados(); dato.setContador((Integer) a); RESULT=dato; :}
+;
+    bq ::= turnoJugador DOS_PUNTOS ENTERO:a {: DatosGuardados dato = new DatosGuardados(); dato.setTurnoJugador((Integer) a); RESULT=dato; :} 
+;
+    bc ::= NAVES_CAMINO AGRUPACION_A bd:a AGRUPACION_B {: RESULT=a; :}
+    | NAVES_CAMINO AGRUPACION_A AGRUPACION_B
+;
+    bd ::= LLAVE_A be:a LLAVE_B COMA bd:e {: if(a.getNoFlota()==null || a.getPlanetaOrigen()==null || a.getPlanetaDestino()==null || a.getNoNaves()==null || a.getPorcentajeMuertes()==null || a.getTurnoLlegada()==null || a.getNoJugadorEnvio()==null || a.getNoJugadorAtaque()==null || a.getVerificador()==null){ System.out.println("ERROR, Falta de un atributo"); } else { e.add(a); RESULT=e; } :}
+    | LLAVE_A be:a  LLAVE_B {: if(a.getNoFlota()==null || a.getPlanetaOrigen()==null || a.getPlanetaDestino()==null || a.getNoNaves()==null || a.getPorcentajeMuertes()==null || a.getTurnoLlegada()==null || a.getNoJugadorEnvio()==null || a.getNoJugadorAtaque()==null || a.getVerificador()==null){ System.out.println("ERROR, Falta de un atributo"); } else { ArrayList<NavesCamino> listNaves = new ArrayList<>();  listNaves.add(a); RESULT=listNaves; }  :}
+;
+    be ::= bf:a be:e {: if(e!=null){ if(e.getNoFlota()==null){ e.setNoFlota(a.getNoFlota()); } else { System.out.println("error"); }  } RESULT=e; :}
+    | bg:a be:e {: if(e!=null){ if(e.getPlanetaOrigen()==null){ e.setPlanetaOrigen(a.getPlanetaOrigen()); } else { System.out.println("error"); } } RESULT=e; :}
+    | bh:a be:e {: if(e!=null){ if(e.getPlanetaDestino()==null){ e.setPlanetaDestino(a.getPlanetaDestino()); } else { System.out.println("error"); } } RESULT=e; :}
+    | bi:a be:e {: if(e!=null){ if(e.getNoNaves()==null){ e.setNoNaves(a.getNoNaves()); } else { System.out.println("error"); } } RESULT=e; :}
+    | bj:a be:e {: if(e!=null){ if(e.getPorcentajeMuertes()==null){ e.setPorcentajeMuertes(a.getPorcentajeMuertes()); } else { System.out.println("error"); } } RESULT=e; :}
+    | bk:a be:e {: if(e!=null){ if(e.getTurnoLlegada()==null){ e.setTurnoLlegada(a.getTurnoLlegada()); } else { System.out.println("error"); } } RESULT=e; :}
+    | bl:a be:e {: if(e!=null){ if(e.getNoJugadorEnvio()==null){ e.setNoJugadorEnvio(a.getNoJugadorEnvio()); } else { System.out.println("error"); } } RESULT=e; :}
+    | bm:a be:e {: if(e!=null){ if(e.getNoJugadorAtaque()==null){ e.setNoJugadorAtaque(a.getNoJugadorAtaque()); } else { System.out.println("error"); } } RESULT=e; :}
+    | bn:a be:e {: if(e!=null){ if(e.getVerificador()==null){ e.setVerificador(a.getVerificador()); } else { System.out.println("error"); } } RESULT=e; :}
+    | COMA rep2:e {: RESULT=e; :}
+    | {: RESULT=new NavesCamino(); :}
+;
+    rep2 ::= bf:a be:e {: if(e!=null){ if(e.getNoFlota()==null){ e.setNoFlota(a.getNoFlota()); } else { System.out.println("error"); }  } RESULT=e; :}
+    | bg:a be:e {: if(e!=null){ if(e.getPlanetaOrigen()==null){ e.setPlanetaOrigen(a.getPlanetaOrigen()); } else { System.out.println("error"); } } RESULT=e; :}
+    | bh:a be:e {: if(e!=null){ if(e.getPlanetaDestino()==null){ e.setPlanetaDestino(a.getPlanetaDestino()); } else { System.out.println("error"); } } RESULT=e; :}
+    | bi:a be:e {: if(e!=null){ if(e.getNoNaves()==null){ e.setNoNaves(a.getNoNaves()); } else { System.out.println("error"); } } RESULT=e; :}
+    | bj:a be:e {: if(e!=null){ if(e.getPorcentajeMuertes()==null){ e.setPorcentajeMuertes(a.getPorcentajeMuertes()); } else { System.out.println("error"); } } RESULT=e; :}
+    | bk:a be:e {: if(e!=null){ if(e.getTurnoLlegada()==null){ e.setTurnoLlegada(a.getTurnoLlegada()); } else { System.out.println("error"); } } RESULT=e; :}
+    | bl:a be:e {: if(e!=null){ if(e.getNoJugadorEnvio()==null){ e.setNoJugadorEnvio(a.getNoJugadorEnvio()); } else { System.out.println("error"); } } RESULT=e; :}
+    | bm:a be:e {: if(e!=null){ if(e.getNoJugadorAtaque()==null){ e.setNoJugadorAtaque(a.getNoJugadorAtaque()); } else { System.out.println("error"); } } RESULT=e; :}
+    | bn:a be:e {: if(e!=null){ if(e.getVerificador()==null){ e.setVerificador(a.getVerificador()); } else { System.out.println("error"); } } RESULT=e; :}
+;
+    bf ::= noFlota DOS_PUNTOS ENTERO:a {: NavesCamino naves = new NavesCamino(); naves.setNoFlota((Integer) a); RESULT=naves; :}
+;
+    bg ::= planetaOrigen DOS_PUNTOS ID:a {: NavesCamino naves = new NavesCamino(); naves.setPlanetaOrigen(a.toString()); RESULT=naves; :}
+;
+    bh ::= planetaDestino DOS_PUNTOS ID:a {: NavesCamino naves = new NavesCamino(); naves.setPlanetaDestino(a.toString()); RESULT=naves; :}
+;
+    bi ::= noNaves DOS_PUNTOS ENTERO:a {: NavesCamino naves = new NavesCamino(); naves.setNoNaves((Integer) a); RESULT=naves; :}
+;
+    bj ::= porcMuertes DOS_PUNTOS DECIMAL:a {: NavesCamino naves = new NavesCamino(); naves.setPorcentajeMuertes(Float.parseFloat(a.toString()));  RESULT=naves; :}
+;
+    bk ::= llegada DOS_PUNTOS ENTERO:a {: NavesCamino naves = new NavesCamino(); naves.setTurnoLlegada((Integer) a); RESULT=naves; :}
+;
+    bl ::= jugadorEnvio DOS_PUNTOS ENTERO:a {: NavesCamino naves = new NavesCamino(); naves.setNoJugadorEnvio((Integer) a); RESULT=naves; :}
+;
+    bm ::= jugadorAtaque DOS_PUNTOS ENTERO:a {: NavesCamino naves = new NavesCamino(); naves.setNoJugadorAtaque((Integer) a); RESULT=naves; :}
+;
+    bn ::= verificador DOS_PUNTOS VERDADERO:a {: NavesCamino naves = new NavesCamino(); naves.setVerificador(Boolean.valueOf(a.toString())); RESULT=naves; :}
+    | verificador DOS_PUNTOS FALSO:a {: NavesCamino naves = new NavesCamino(); naves.setVerificador(Boolean.valueOf(a.toString())); RESULT=naves; :}
 ;

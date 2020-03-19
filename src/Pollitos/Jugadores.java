@@ -13,7 +13,7 @@ public class Jugadores {
     private ArrayList<Planetas> misPlanetas;
     private String tipo;
     private String color;
-    private int planetasConquistados;
+    private Integer planetasConquistados;
     private String enJuego;
 
     public String getEnJuego() {
@@ -24,11 +24,11 @@ public class Jugadores {
         this.enJuego = enJuego;
     }
 
-    public int getPlanetasConquistados() {
+    public Integer getPlanetasConquistados() {
         return planetasConquistados;
     }
 
-    public void setPlanetasConquistados(int planetasConquistados) {
+    public void setPlanetasConquistados(Integer planetasConquistados) {
         this.planetasConquistados = planetasConquistados;
     }
 

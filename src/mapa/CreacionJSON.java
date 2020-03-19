@@ -195,16 +195,16 @@ public class CreacionJSON {
             mapita.setAcumular("true");
         }
         if (!checkNaves.isSelected()) {
-            mapita.setMostrarNaves("false");
+            mapita.getMapaPNeutral().setMostrarNaves("false");
         } else {
-            mapita.setMostrarNaves("true");
+            mapita.getMapaPNeutral().setMostrarNaves("true");
         }
         if (!checkStats.isSelected()) {
-            mapita.setMostrarEstadisticas("false");
+            mapita.getMapaPNeutral().setMostrarEstadisticas("false");
         } else {
-            mapita.setMostrarEstadisticas("true");
+            mapita.getMapaPNeutral().setMostrarEstadisticas("true");
         }
-        mapita.setProduccion(spinProduccion.getValue().toString());
+        mapita.getMapaPNeutral().setProduccion(spinProduccion.getValue().toString());
         mapita.setFinalizacion(spinFinalizacion.getValue().toString());
         return mapita;
     }
@@ -230,9 +230,9 @@ public class CreacionJSON {
                 buffer.write("\tmapaCiego: " + mapita.getMapaCiego() + ",\n");
                 buffer.write("\tacumular: " + mapita.getAcumular() + ",\n");
                 buffer.write("\tNEUTRALES: {\n");
-                buffer.write("\t   mostrarNaves: " + mapita.getMostrarNaves() + ",\n");
-                buffer.write("\t   mostrarEstadisticas: " + mapita.getMostrarEstadisticas() + ",\n");
-                buffer.write("\t   produccion: " + mapita.getProduccion() + "\n");
+                buffer.write("\t   mostrarNaves: " + mapita.getMapaPNeutral().getMostrarNaves() + ",\n");
+                buffer.write("\t   mostrarEstadisticas: " + mapita.getMapaPNeutral().getMostrarEstadisticas() + ",\n");
+                buffer.write("\t   produccion: " + mapita.getMapaPNeutral().getProduccion() + "\n");
                 buffer.write("\t},\n");
                 buffer.write("\tfinalizacion: " + mapita.getFinalizacion() + "\n");
                 buffer.write("},\n");
@@ -272,7 +272,7 @@ public class CreacionJSON {
                             buffer.write("\t  nombre: \"" + listNeutrales.get(i).getNombre() + "\",\n");
                             buffer.write("\t  naves: " + listNeutrales.get(i).getNaves() + ",\n");
                             if (listNeutrales.get(i).getProduccion() == null) {
-                                buffer.write("\t  produccion: " + mapita.getProduccion() + ",\n");
+                                buffer.write("\t  produccion: " + mapita.getMapaPNeutral().getProduccion() + ",\n");
                             } else {
                                 buffer.write("\t  produccion: " + listNeutrales.get(i).getProduccion() + ",\n");
                             }
@@ -317,7 +317,7 @@ public class CreacionJSON {
                             }
                         }
                     }
-                    buffer.write("   ]");
+                    buffer.write("   ]\n");
                     buffer.write("}");
 
                 }
