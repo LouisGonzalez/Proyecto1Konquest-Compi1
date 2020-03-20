@@ -20,11 +20,10 @@
 	{
        	  nombre: "B",
   	  naves: 4,
-  	  produccion:: 9,
+  	  produccion: 9,
   	  porcentajeMuertes: 0.40,
 	  posicionX: 2,
-	  posicionY: 3,
-	produccion: 9 
+	  posicionY: 3
 	},
 	{
        	  nombre: "C",

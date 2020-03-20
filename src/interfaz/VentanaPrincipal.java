@@ -148,6 +148,11 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         });
 
         btnDistancia.setText("Calcular distancia");
+        btnDistancia.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDistanciaActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout panelOpcionesLayout = new javax.swing.GroupLayout(panelOpciones);
         panelOpciones.setLayout(panelOpcionesLayout);
@@ -246,7 +251,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         juego = new Juego();
-        VentanaNuevoJuego nuevo = new VentanaNuevoJuego(this, true, mapa, panelMensajes, contador, txtNaves, datosJuego, btnTurno, listNaves, panelJuego);
+        VentanaNuevoJuego nuevo = new VentanaNuevoJuego(this, true, mapa, panelMensajes, contador, txtNaves, datosJuego, btnTurno, listNaves, panelJuego, btnDistancia, btnFlotas);
         nuevo.setVisible(true);
         juego = datosJuego.get(0);
         datosJuego.clear();
@@ -290,24 +295,24 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 AnalizadorLexico lexico = new AnalizadorLexico(new StringReader(texto));
                 AnalizadorLexico2 lexico2 = new AnalizadorLexico2(new StringReader(texto));
                 try {
-                 /*  new SintaxCreacionMapa(lexico, mapa, panelMensajes, contador, txtNaves, datosJuego, btnTurno, listNaves, panelJuego).parse();
+                  new SintaxCreacionMapa(lexico, mapa, panelMensajes, contador, txtNaves, datosJuego, btnTurno, listNaves, panelJuego, btnDistancia, btnFlotas).parse();
                     juego = datosJuego.get(0);
                     //System.out.println(juego.getJugadores().get(0).getEnJuego()+" ASFSDFSDFSDFSDDDDDDDDDDDDDDDDDDDDDD--------------------------");
                     computadora.verificadorTipoInteligencia(juego, listNaves);
 
                     
-                */ 
+                
                     
                     
                     
                     
-                   new SintaxGuardarPartida(lexico2, mapa, panelMensajes, contador, txtNaves, datosJuego, btnTurno, listNaves, panelJuego).parse();
+               /*    new SintaxGuardarPartida(lexico2, mapa, panelMensajes, contador, txtNaves, datosJuego, btnTurno, listNaves, panelJuego, btnDistancia, btnFlotas).parse();
                     
                    juego = datosJuego.get(0);
                    
                    computadora.verificadorTipoInteligencia(juego, listNaves);
                     lblTurno.setText("Turno: "+contadorTurnos);
-                    
+                    */
                     
                     
                     
@@ -415,6 +420,13 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         panelJuego.removeAll();
         panelJuego.setVisible(false);
     }//GEN-LAST:event_guardar2ActionPerformed
+
+    private void btnDistanciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDistanciaActionPerformed
+        clicksDistancia++;
+        btnDistancia.setEnabled(false);
+        btnTurno.setEnabled(false);
+        btnFlotas.setEnabled(false);
+    }//GEN-LAST:event_btnDistanciaActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

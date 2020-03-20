@@ -209,7 +209,7 @@ public class CreacionJSON {
         return mapita;
     }
 
-    public boolean crearArchivoJSON(Mapa mapita, ArrayList<Jugadores> listJugadores, ArrayList<Planetas> listPlanetas, ArrayList<PlanetasNeutrales> listNeutrales, String path, ArrayList<Juego> datosJuego, JButton btnTurno, ArrayList<NavesCamino> listNaves, JPanel panelJuego)  {
+    public boolean crearArchivoJSON(Mapa mapita, ArrayList<Jugadores> listJugadores, ArrayList<Planetas> listPlanetas, ArrayList<PlanetasNeutrales> listNeutrales, String path, ArrayList<Juego> datosJuego, JButton btnTurno, ArrayList<NavesCamino> listNaves, JPanel panelJuego, JButton btnDistancia, JButton btnFlotas)  {
         boolean comprobante = true;
         File json = new File(path + "/" + mapita.getId() + ".JSON");
         BufferedWriter buffer;
@@ -332,7 +332,7 @@ public class CreacionJSON {
                     }
                     AnalizadorLexico lexico = new AnalizadorLexico(new StringReader(texto));
                     try {
-                        new SintaxCreacionMapa(lexico, mapa, panelMensajes, contador, txtNaves, datosJuego, btnTurno, listNaves, panelJuego).parse();
+                        new SintaxCreacionMapa(lexico, mapa, panelMensajes, contador, txtNaves, datosJuego, btnTurno, listNaves, panelJuego, btnDistancia, btnFlotas).parse();
                     } catch (Exception ex) {
                         Logger.getLogger(CreacionJSON.class.getName()).log(Level.SEVERE, null, ex);
                     }

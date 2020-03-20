@@ -101,7 +101,7 @@ CAMBIOS: [
 	  porcentajeMuertes: 0.5,
 	  llegada: 4,
 	  jugadorEnvio: 0,
-	  jugadorAtaque: 1,
+	  jugadorAtaque: 1	,
 	  verificador: false
 	}
 	]

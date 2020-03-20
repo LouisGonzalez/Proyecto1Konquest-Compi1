@@ -36,10 +36,13 @@ parser code {:
     public ArrayList<NavesCamino> navesCamino;
     public JButton btnTurno;
     public JPanel panelJuego;
+    public JButton btnDistancia;
+    public JButton btnFlotas;
 
-    public SintaxGuardarPartida(AnalizadorLexico2 lex, CreacionMapa tablero, JTextArea panelMensajes, int contador, JTextField txtNaves, ArrayList<Juego> datosJuego, JButton btnTurno, ArrayList<NavesCamino> listNaves, JPanel panelJuego){
+    public SintaxGuardarPartida(AnalizadorLexico2 lex, CreacionMapa tablero, JTextArea panelMensajes, int contador, JTextField txtNaves, ArrayList<Juego> datosJuego, JButton btnTurno, ArrayList<NavesCamino> listNaves, JPanel panelJuego, JButton btnDistancia, JButton btnFlotas){
         super(lex);
         this.tablero = tablero;
+        this.btnDistancia = btnDistancia;
         this.matrizJuego = matrizJuego;
         this.panelMensajes = panelMensajes;
         this.contador = contador;
@@ -48,6 +51,7 @@ parser code {:
         this.btnTurno = btnTurno;
         this.navesCamino = listNaves;
         this.panelJuego = panelJuego;
+        this.btnFlotas = btnFlotas;
     }
 
     public void setAccion(String tipo, String mensaje, String accion){
@@ -60,7 +64,7 @@ parser code {:
     }
 
     public void crearCuadriculaJuego(Juego misDatos){
-        tablero.creacionCuadricula(misDatos, txtNaves, contador, navesCamino, btnTurno);
+        tablero.creacionCuadricula(misDatos, txtNaves, contador, navesCamino, btnTurno, btnDistancia, btnFlotas);
     }
 
     public boolean verificadorNombresJugadores(ArrayList<Jugadores> listJugadores, boolean verificador){

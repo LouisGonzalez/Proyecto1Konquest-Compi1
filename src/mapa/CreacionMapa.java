@@ -34,17 +34,19 @@ public class CreacionMapa {
 
     public JPanel panelFondo;
     private MensajesEmergentes mensaje = new MensajesEmergentes();
+    private MedicionDistancias distancias = new MedicionDistancias();
     public static int contClicks = 0;
     public int nodoJalar = 0;
     InformacionPlaneta info = new InformacionPlaneta(null, true);
     private Jugabilidad jugabilidad;
+    private Integer[] nodosJalar = new Integer[3];
 
     public CreacionMapa(JPanel panelFondo, Jugabilidad jugabilidad) {
         this.panelFondo = panelFondo;
         this.jugabilidad = jugabilidad;
     }
 
-    public void creacionCuadricula(Juego misDatos, JTextField txtNaves, int contador, ArrayList<NavesCamino> navesCamino, JButton btnTurno) {
+    public void creacionCuadricula(Juego misDatos, JTextField txtNaves, int contador, ArrayList<NavesCamino> navesCamino, JButton btnTurno, JButton btnDistancia, JButton btnFlotas) {
         int filas = Integer.parseInt(misDatos.getMapa().getSize_filas());
         int columnas = Integer.parseInt(misDatos.getMapa().getSize_columnas());
         VentanaPrincipal.tablero = new JLabel[filas][columnas];
@@ -59,14 +61,20 @@ public class CreacionMapa {
                     @Override
                     public void mouseClicked(MouseEvent event) {
                         contClicks++;
-                        
-                        
-                        if (contClicks % 2 != 0) {
-                            nodoJalar = jugabilidad.accionesPrimerClick(misDatos, posX, posY);
+                        if (btnDistancia.isEnabled() == false) {
+                            if ((VentanaPrincipal.clicksDistancia % 2 != 0)) {
+                                nodosJalar = distancias.verificarExistenciaPlaneta(misDatos, posX, posY);
+                            } else {
+                                distancias.verificarExistenciaPlaneta2(misDatos, posX, posY, nodosJalar, btnDistancia, btnFlotas);
+                            }
                         } else {
-                            jugabilidad.accionesSegundoClick(misDatos, posX, posY, txtNaves, nodoJalar, navesCamino, btnTurno);
-                        }
 
+                            if (contClicks % 2 != 0) {
+                                nodoJalar = jugabilidad.accionesPrimerClick(misDatos, posX, posY);
+                            } else {
+                                jugabilidad.accionesSegundoClick(misDatos, posX, posY, txtNaves, nodoJalar, navesCamino, btnTurno);
+                            }
+                        }
                         // jugabilidad.seleccionarPlanetaOrigen(posX, posY, misDatos, txtNaves);
                     }
 
@@ -138,12 +146,14 @@ public class CreacionMapa {
     public boolean comparacionFilasColumnasPosNeutrales(Mapa mapita, ArrayList<PlanetasNeutrales> listNeutrales, boolean interruptor) {
         int filas = Integer.parseInt(mapita.getSize_filas());
         int columnas = Integer.parseInt(mapita.getSize_columnas());
-        for (int i = 0; i < listNeutrales.size(); i++) {
-            int posX = Integer.parseInt(listNeutrales.get(i).getPosicionX());
-            int posY = Integer.parseInt(listNeutrales.get(i).getPosicionY());
-            if (posX >= columnas || posY >= filas) {
-                interruptor = false;
-                break;
+        if (listNeutrales != null) {
+            for (int i = 0; i < listNeutrales.size(); i++) {
+                int posX = Integer.parseInt(listNeutrales.get(i).getPosicionX());
+                int posY = Integer.parseInt(listNeutrales.get(i).getPosicionY());
+                if (posX >= columnas || posY >= filas) {
+                    interruptor = false;
+                    break;
+                }
             }
         }
         return interruptor;
