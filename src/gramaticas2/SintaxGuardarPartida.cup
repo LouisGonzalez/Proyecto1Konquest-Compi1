@@ -253,7 +253,6 @@ parser code {:
 
     non terminal ArrayList<NavesCamino> bd, bc; 
 
-
     start with inicio;
 
     inicio ::= a a2
@@ -507,3 +506,6 @@ parser code {:
     bn ::= verificador DOS_PUNTOS VERDADERO:a {: NavesCamino naves = new NavesCamino(); naves.setVerificador(Boolean.valueOf(a.toString())); RESULT=naves; :}
     | verificador DOS_PUNTOS FALSO:a {: NavesCamino naves = new NavesCamino(); naves.setVerificador(Boolean.valueOf(a.toString())); RESULT=naves; :}
 ;
+
+
+    

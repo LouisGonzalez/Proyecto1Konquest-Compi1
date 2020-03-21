@@ -13,6 +13,7 @@ import java_cup.runtime.Symbol;
 Letra = [a-zA-Z]
 Numero = [0123456789]
 Numero2 = [123456789]
+Turno = [TURNO]
 Caracteres1 = [$_]
 Caracteres2 = [-]
 Coma = [,]
@@ -21,11 +22,11 @@ Salto = \r|\n|\r\n
 Espacio = {Salto} | [ \t\f]
 
 %{
-    private Symbol(int tipo){
+    private Symbol symbol(int tipo){
         return new Symbol(tipo, yyline+1, yycolumn+1);
     }
 
-    private Symbol symbol(){
+    private Symbol symbol(int tipo, Object value){
         return new Symbol(tipo, yyline+1, yycolumn+1, value);
     }
 %}
@@ -70,9 +71,25 @@ Espacio = {Salto} | [ \t\f]
 
 
          "SECUENCIAS"                                                       {return symbol(sym.SECUENCIAS);}
+
+
          
-
-
+         "TURNO"                                                            {return symbol(sym.TURNO);}
+         "ACCIONES"                                                         {return symbol(sym.ACCIONES);}
+         "Flota"                                                            {return symbol(sym.Flota);}
+         "planetaOrigen"                                                    {return symbol(sym.planetaOrigen);}
+         "planetaDestino"                                                   {return symbol(sym.planetaDestino);}
+         "noNaves"                                                          {return symbol(sym.noNaves);} 
+         "noJugadorEnvio"                                                   {return symbol(sym.noJugadorEnvio);}
+         "noJugadorAtaque"                                                  {return symbol(sym.noJugadorAtaque);}
+         "turnoLlegada"                                                     {return symbol(sym.turnoLlegada);}
+         "verificador"                                                      {return symbol(sym.verificador);}
+         "IMPACTOS"                                                         {return symbol(sym.IMPACTOS);}
+         "navesRestantes"                                                   {return symbol(sym.navesRestantes);}
+         "estado"                                                           {return symbol(sym.estado);}
+         "mensaje"                                                          {return symbol(sym.mensaje);}
+         "estadoJugador"                                                    {return symbol(sym.estadoJugador);}
+         "noFlota"                                                          {return symbol(sym.noFlota);}
 
 
 

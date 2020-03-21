@@ -81,6 +81,8 @@ Espacio = {Salto} | [ \t\f]
          "jugadorAtaque"                                                    {return symbol(sym.jugadorAtaque);}
          "verificador"                                                      {return symbol(sym.verificador);}        
          "enJuego"                                                          {return symbol(sym.enJuego);} 
+         "VIVO"                                                             {return symbol(sym.VIVO);}
+         "CONQUISTADO"                                                      {return symbol(sym.CONQUISTADO);}
          "planetasConquistados"                                             {return symbol(sym.planetasConquistados);}
          "turnoJugador"                                                     {return symbol(sym.turnoJugador);}
          {Numero}*{Coma}{Numero}*{Coma}{Numero}*{Coma}{Numero}*                      {return symbol(sym.COLOR, new String(yytext()));}

@@ -429,3 +429,8 @@ parser code {:
     | tipo DOS_PUNTOS DIFICIL:a {: Jugadores jugador = new Jugadores(); jugador.setTipo(a.toString()); RESULT=jugador; :}
     | tipo DOS_PUNTOS HUMANO:a {: Jugadores jugador = new Jugadores(); jugador.setTipo(a.toString()); RESULT=jugador; :}
 ;
+
+
+
+
+

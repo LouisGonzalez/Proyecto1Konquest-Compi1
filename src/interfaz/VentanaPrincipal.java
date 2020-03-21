@@ -9,6 +9,8 @@ import gramaticas.AnalizadorLexico;
 import gramaticas.SintaxCreacionMapa;
 import gramaticas2.AnalizadorLexico2;
 import gramaticas2.SintaxGuardarPartida;
+import gramaticas3.AnalizadorLexico3;
+import gramaticas3.SintaxReplay;
 import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.File;
@@ -88,6 +90,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         opcionesGuardar = new javax.swing.JMenu();
         guardar1 = new javax.swing.JMenuItem();
         guardar2 = new javax.swing.JMenuItem();
+        replay = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -238,6 +241,14 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         opcionesGuardar.add(guardar2);
 
         itemNuevo.add(opcionesGuardar);
+
+        replay.setText("Replay de una partida");
+        replay.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                replayActionPerformed(evt);
+            }
+        });
+        itemNuevo.add(replay);
 
         jMenuBar1.add(itemNuevo);
 
@@ -428,6 +439,60 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         btnFlotas.setEnabled(false);
     }//GEN-LAST:event_btnDistanciaActionPerformed
 
+    private void replayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_replayActionPerformed
+        JFileChooser chooser = new JFileChooser();
+        panelMensajes.setText("");
+        String path = "";
+        SintaxCreacionMapa.totalErrores = "";
+        String seleccion = "Seleccione el JSON para abrir el juego";
+        chooser.setCurrentDirectory(new File("."));
+        chooser.setDialogTitle(seleccion);
+        chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        chooser.setAcceptAllFileFilterUsed(false);
+        if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+            System.out.println("getCurrentDirectory(): " + chooser.getCurrentDirectory());
+            System.out.println("getSelectedFile(): " + chooser.getSelectedFile());
+            // archivoPrincipal = chooser.getSelectedFile().toString();
+            proyecto = new File(chooser.getSelectedFile().getAbsolutePath());
+            path = chooser.getSelectedFile().toString();
+            archivo = proyecto.toString();
+            if (archivo.endsWith(".JSON")) {
+                FileReader fr;
+                BufferedReader entrada;
+                String texto = "";
+                try {
+                    fr = new FileReader(proyecto);
+                    entrada = new BufferedReader(fr);
+                    while (entrada.ready()) {
+                        texto += entrada.readLine() + "\n";
+                    }
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(VentanaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IOException ex) {
+                    Logger.getLogger(VentanaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                AnalizadorLexico3 lexico = new AnalizadorLexico3(new StringReader(texto));
+                try {
+                  
+                    new SintaxReplay(lexico, mapa, panelMensajes, contador, txtNaves, datosJuego, btnTurno, listNaves, panelJuego, btnDistancia, btnFlotas).parse();
+                       
+                    
+                    
+                    
+                } catch (Exception ex) {
+                    Logger.getLogger(VentanaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+                    JOptionPane.showMessageDialog(null, "ERROR");
+                    panelMensajes.setText(SintaxCreacionMapa.totalErrores);
+                }
+            }
+        }
+        
+        
+        
+        
+
+    }//GEN-LAST:event_replayActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDistancia;
@@ -450,6 +515,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private javax.swing.JPanel panelJuego;
     private javax.swing.JTextArea panelMensajes;
     private javax.swing.JPanel panelOpciones;
+    private javax.swing.JMenuItem replay;
     private javax.swing.JTextField txtNaves;
     // End of variables declaration//GEN-END:variables
 }

@@ -103,7 +103,34 @@ SECUENCIAS [
 	      verificador: false 		
   	    ]
 	  },
-	 IMPACTOS {
+         ACCIONES dd {
+	    Flota [
+	      noFlota: 1,
+	      planetaOrigen: ad,
+	      planetaDestino: sd,
+	      noNaves: 3,
+	      noJugadorEnvio: 3,
+	      noJugadorAtaque: 3,
+	      porcentajeMuertes: 0.5,
+	      turnoLlegada: 3,
+	      verificador: false 		
+  	    ]
+	  },
+	  ACCIONES dd {
+	    Flota [
+	      noFlota: 1,
+	      planetaOrigen: ad,
+	      planetaDestino: sd,
+	      noNaves: 3,
+	      noJugadorEnvio: 3,
+	      noJugadorAtaque: 3,
+	      porcentajeMuertes: 0.5,
+	      turnoLlegada: 3,
+	      verificador: false 		
+  	    ],
+
+	  },
+		  IMPACTOS {
 	    dd {
 	      cc [
 		navesRestantes: 3,

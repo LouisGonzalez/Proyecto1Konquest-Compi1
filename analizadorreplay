@@ -1,0 +1,95 @@
+  a2 ::= SECUENCIAS LLAVE_A ba LLAVE_B
+    | SECUENCIAS LLAVE_A LLAVE_B
+;
+    ba ::= TURNO ENTERO AGRUPACION_A bb AGRUPACION_B COMA ba
+    | TURNO ENTERO AGRUPACION_A bb AGRUPACION_B 
+;
+    bb ::= bc bb
+    | bf bb
+    | COMA p2
+    | 
+;
+    p2 ::= bc bb
+    | bf bb
+;
+    bc ::= ACCIONES ID LLAVE_A bd LLAVE_B COMA bc
+    | ACCIONES ID LLAVE_A LLAVE_B
+;
+    bd ::= Flota AGRUPACION_A be AGRUPACION_B COMA bd
+    | Flota AGRUPACION_A be AGRUPACION_B 
+;
+    be ::= bg be
+    | bh be
+    | bi be
+    | bj be
+    | bk be
+    | bl be
+    | bm be
+    | bn be
+    | bo be
+    | COMA p5
+    |
+;
+    p5 ::= bg be
+    | bh be
+    | bi be
+    | bj be
+    | bk be
+    | bl be
+    | bm be
+    | bn be
+    | bo be
+;
+    bg ::= noFlota DOS_PUNTOS ENTERO
+;
+    bh ::= planetaOrigen DOS_PUNTOS ID
+;
+    bi ::= planetaDestino DOS_PUNTOS ID
+;
+    bj ::= noNaves DOS_PUNTOS ENTERO
+;
+    bk ::= noJugadorEnvio DOS_PUNTOS ENTERO
+;
+    bl ::= noJugadorAtaque DOS_PUNTOS ENTERO
+;
+    bm ::= porcMuertes DOS_PUNTOS DECIMAL
+;
+    bn ::= turnoLlegada DOS_PUNTOS ENTERO
+;
+    bo ::= verificador DOS_PUNTOS VERDADERO
+    | verificador DOS_PUNTOS FALSO
+;
+    bf ::= IMPACTOS AGRUPACION_A bp AGRUPACION_B
+    | IMPACTOS AGRUPACION_A AGRUPACION_B
+;
+    bp ::= ID LLAVE_A bq LLAVE_B COMA bp
+    | ID LLAVE_A bq LLAVE_B
+;
+    bq ::= br bq
+    | bs bq
+    | bt bq
+    | bu bq
+    | COMA p7
+    |
+;
+    p7 ::= br bq
+    | bs bq
+    | bt bq
+    | bu bq
+;
+    br ::= navesRestantes DOS_PUNTOS ENTERO
+;
+    bs ::= estado DOS_PUNTOS ID
+;
+    bt ::= mensaje DOS_PUNTOS ID
+;
+    bu ::= noFlota DOS_PUNTOS ENTERO
+;
+
+    
+
+
+
+
+
+
