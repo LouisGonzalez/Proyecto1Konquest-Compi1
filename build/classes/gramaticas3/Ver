@@ -90,7 +90,8 @@ PLANETAS_NEUTRALES: [
 }
 SECUENCIAS [
 	TURNO 1 {
-	  ACCIONES dd {
+	  ACCIONES {
+		dd: [
 	    Flota [
 	      noFlota: 1,
 	      planetaOrigen: ad,
@@ -102,45 +103,58 @@ SECUENCIAS [
 	      turnoLlegada: 3,
 	      verificador: false 		
   	    ]
-	  },
-         ACCIONES dd {
-	    Flota [
-	      noFlota: 1,
-	      planetaOrigen: ad,
-	      planetaDestino: sd,
-	      noNaves: 3,
-	      noJugadorEnvio: 3,
-	      noJugadorAtaque: 3,
-	      porcentajeMuertes: 0.5,
-	      turnoLlegada: 3,
-	      verificador: false 		
-  	    ]
-	  },
-	  ACCIONES dd {
-	    Flota [
-	      noFlota: 1,
-	      planetaOrigen: ad,
-	      planetaDestino: sd,
-	      noNaves: 3,
-	      noJugadorEnvio: 3,
-	      noJugadorAtaque: 3,
-	      porcentajeMuertes: 0.5,
-	      turnoLlegada: 3,
-	      verificador: false 		
-  	    ],
-
-	  },
-		  IMPACTOS {
+	  ]
+	},
+	 IMPACTOS {
 	    dd {
 	      cc [
 		navesRestantes: 3,
-	        estado: dd,
+	        estado: VIVO,
 	 	mensaje: dd,
 	  	noFlota: 4
 	      ]	
 	    }	
-	  }		
+	  },
+	 RESUMEN {
+	   estado dd:true,
+	   estado dc: false,
+	   estado qq: true
+	 }		
+	},
+	TURNO 2 {
+	  ACCIONES {
+		QQQ: [
+	    Flota [
+	      noFlota: 1,
+	      planetaOrigen: ad,
+	      planetaDestino: sd,
+	      noNaves: 3,
+	      noJugadorEnvio: 3,
+	      noJugadorAtaque: 3,
+	      porcentajeMuertes: 0.5,
+	      turnoLlegada: 3,
+	      verificador: false 		
+  	    ]
+	  ]
+	},
+	 IMPACTOS {
+	    QQQ {
+	      cc [
+		navesRestantes: 3,
+	        estado: VIVO,
+	 	mensaje: dd,
+	  	noFlota: 4
+	      ]	
+	    }	
+	  },
+	 RESUMEN {
+	   estado aa:true,
+	   estado bb: false,
+	   estado ss: false
+	 }		
+		
 	}
+
 	
 	
 ]

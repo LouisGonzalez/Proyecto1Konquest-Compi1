@@ -11,7 +11,16 @@ public class Replay {
     private Integer noTurno;
     private ArrayList<DatosAcciones> listAcciones;
     private ArrayList<DatosImpacto> listImpactos;
+    private ArrayList<ResumenTurno> listResumen;
 
+    public ArrayList<ResumenTurno> getListResumen() {
+        return listResumen;
+    }
+
+    public void setListResumen(ArrayList<ResumenTurno> listResumen) {
+        this.listResumen = listResumen;
+    }
+    
     public Integer getNoTurno() {
         return noTurno;
     }

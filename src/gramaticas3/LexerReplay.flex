@@ -90,11 +90,11 @@ Espacio = {Salto} | [ \t\f]
          "mensaje"                                                          {return symbol(sym.mensaje);}
          "estadoJugador"                                                    {return symbol(sym.estadoJugador);}
          "noFlota"                                                          {return symbol(sym.noFlota);}
-
-
-
-
-
+         "jugadorAtacante"                                                  {return symbol(sym.jugadorAtacante);}
+         "planetaAtacante"                                                  {return symbol(sym.planetaAtacante);}        
+         "RESUMEN"                                                          {return symbol(sym.RESUMEN);}
+         "VIVO"                                                             {return symbol(sym.VIVO);}
+         "CONQUISTADO"                                                      {return symbol(sym.CONQUISTADO);}
 
          "HUMANO"                                                           {return symbol(sym.HUMANO, new String(yytext()));}
          "DIFICIL"                                                                   {return symbol(sym.DIFICIL, new String(yytext()));}

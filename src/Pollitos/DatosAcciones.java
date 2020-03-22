@@ -1,14 +1,30 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Pollitos;
+
+import java.util.ArrayList;
 
 /**
  *
- * @author luisitopapurey
+ * @author luisGonzalez
  */
 public class DatosAcciones {
+    
+    private String nombreJugador;
+    private ArrayList<NavesCamino> listNaves;
+
+    public String getNombreJugador() {
+        return nombreJugador;
+    }
+
+    public void setNombreJugador(String nombreJugador) {
+        this.nombreJugador = nombreJugador;
+    }
+
+    public ArrayList<NavesCamino> getListNaves() {
+        return listNaves;
+    }
+
+    public void setListNaves(ArrayList<NavesCamino> listNaves) {
+        this.listNaves = listNaves;
+    }
     
 }

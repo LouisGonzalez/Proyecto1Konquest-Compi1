@@ -4,6 +4,7 @@ import AccionesComputadora.InteligenciaArtificial;
 import Pollitos.ArchivoConfiguracion;
 import Pollitos.Juego;
 import Pollitos.NavesCamino;
+import Pollitos.Replay;
 import Pollitos.Resultados;
 import gramaticas.AnalizadorLexico;
 import gramaticas.SintaxCreacionMapa;
@@ -28,6 +29,9 @@ import mapa.CondicionesIniciales;
 import mapa.CreacionMapa;
 import mapa.GuardarPartida;
 import mapa.Jugabilidad;
+import replay.AccionesImpacto;
+import replay.AccionesTurno;
+import replay.CreacionArchivoREPLAY;
 
 /**
  *
@@ -43,22 +47,32 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     public static int contador = 0;
     public static int contadorTurnos = 0;
     public static int clicksDistancia = 0;
+    public static String textoReplay = "";
+    public static String aux = "";
+    public static String aux2 = "";
+    public static String aux3 = "";
+    public String pathReplay = "";
     private ArrayList<Juego> datosJuego = new ArrayList<>();
     private ArrayList<NavesCamino> listNaves = new ArrayList<>();
     private ArrayList<Resultados> finales = new ArrayList<>();
+    private ArrayList<Replay> listReplay = new ArrayList<>();
     private Jugabilidad jugabilidad;
     private CondicionesIniciales cambioDatos;
     private InteligenciaArtificial computadora;
     private GuardarPartida guardar;
-    
+    private CreacionArchivoREPLAY archivoReplay;
+    private AccionesTurno acciones;
+
     public VentanaPrincipal() {
         initComponents();
         txtNaves.setEditable(false);
         panelJuego.setBackground(new Color(255, 255, 255, 100));
         jugabilidad = new Jugabilidad();
         computadora = new InteligenciaArtificial();
+        acciones = new AccionesTurno();
         cambioDatos = new CondicionesIniciales();
         guardar = new GuardarPartida();
+        archivoReplay = new CreacionArchivoREPLAY();
         mapa = new CreacionMapa(this.panelJuego, jugabilidad);
         setLocationRelativeTo(null);
         lblTurno.setText("Turno: " + contadorTurnos);
@@ -306,27 +320,25 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 AnalizadorLexico lexico = new AnalizadorLexico(new StringReader(texto));
                 AnalizadorLexico2 lexico2 = new AnalizadorLexico2(new StringReader(texto));
                 try {
-                  new SintaxCreacionMapa(lexico, mapa, panelMensajes, contador, txtNaves, datosJuego, btnTurno, listNaves, panelJuego, btnDistancia, btnFlotas).parse();
+                    new SintaxCreacionMapa(lexico, mapa, panelMensajes, contador, txtNaves, datosJuego, btnTurno, listNaves, panelJuego, btnDistancia, btnFlotas).parse();
+                    //pathReplay = archivoReplay.creacionJSON(chooser.getCurrentDirectory().toString());
+                    textoReplay += "SECUENCIAS [\n";
+                    System.out.println(textoReplay);
                     juego = datosJuego.get(0);
                     //System.out.println(juego.getJugadores().get(0).getEnJuego()+" ASFSDFSDFSDFSDDDDDDDDDDDDDDDDDDDDDD--------------------------");
-                    computadora.verificadorTipoInteligencia(juego, listNaves);
+                    boolean esInteligencia = computadora.verificadorTipoInteligencia(juego, listNaves);
 
+                    if (esInteligencia == false) {
+                        textoReplay += "\t     " + juego.getJugadores().get(contador).getNombre() + ": [\n";
+                    }
+
+                    /*    new SintaxGuardarPartida(lexico2, mapa, panelMensajes, contador, txtNaves, datosJuego, btnTurno, listNaves, panelJuego, btnDistancia, btnFlotas).parse();
                     
-                
-                    
-                    
-                    
-                    
-               /*    new SintaxGuardarPartida(lexico2, mapa, panelMensajes, contador, txtNaves, datosJuego, btnTurno, listNaves, panelJuego, btnDistancia, btnFlotas).parse();
-                    
-                   juego = datosJuego.get(0);
+                                juego = datosJuego.get(0);
                    
-                   computadora.verificadorTipoInteligencia(juego, listNaves);
+                    computadora.verificadorTipoInteligencia(juego, listNaves);
                     lblTurno.setText("Turno: "+contadorTurnos);
-                    */
-                    
-                    
-                    
+                     */
                 } catch (Exception ex) {
                     Logger.getLogger(VentanaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
                     JOptionPane.showMessageDialog(null, "ERROR");
@@ -351,26 +363,50 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         if (txtNaves.isEditable() == false) {
 
         } else {
-            System.out.println(contador + " YO SOY EL CONTADOR PERROS");
-            //MANANA VALIDAR LO DE SI UN JUGADOR ESTAN EN MODO FALSO
             if (contador == 0) {
                 if (juego.getJugadores().get(contador).getTipo().equals("HUMANO") && juego.getJugadores().get(contador).getEnJuego().equals("true")) {
+                    if (contador == juego.getJugadores().size() - 1) {
+                        //      textoReplay += "\t     ]\n";
+                    } else {
+                        //    textoReplay += "\t     ],\n";
+                        textoReplay += "\t     " + juego.getJugadores().get(contador).getNombre() + "\n";
+                    }
                     contador++;
                     verificadorPlanetasJugador();
                     recursividadComputadora();
                 }
             } else if (contador > 0) {
-                System.out.println(contador + "  soy el contador");
                 if (juego.getJugadores().get(contador).getTipo().equals("HUMANO") && juego.getJugadores().get(contador).getEnJuego().equals("true")) {
+                    if (contador == juego.getJugadores().size() - 1) {
+                        //        textoReplay += "\t     ]\n";
+                    } else {
+                        //      textoReplay += "\t     ],\n";
+                        textoReplay += "\t     " + juego.getJugadores().get(contador).getNombre() + "\n";
+                    }
                     contador++;
                     recursividadComputadora();
                     verificadorPlanetasJugador();
                 }
             }
-
         }
         if (contador == juego.getJugadores().size()) {
+            archivoReplay.textoNeutral(juego);
+            textoReplay += "\t},\n";
+            textoReplay += "\tTURNO " + contadorTurnos + ": {\n";
+            textoReplay += "\t   ACCIONES: {\n";
+            textoReplay += aux;
+            aux = "";
+            textoReplay += "\t   }\n";
+            textoReplay += "\t   IMPACTOS {\n";
+            textoReplay += aux2;
+            aux2 = "";
+            textoReplay += "\t   }\n";
+            textoReplay += "\t   RESUMEN {\n";
+            textoReplay += aux3;
+            aux3 = "";
+            textoReplay += "\t   }\n";
             contadorTurnos++;
+
             contador = 0;
             if (juego.getMapa().getAcumular().equals("false")) {
                 cambioDatos.aumentoProduccion(juego);
@@ -394,8 +430,12 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         txtNaves.setText("");
         txtNaves.setEditable(false);
         btnTurno.setEnabled(false);
-
+        System.out.println(textoReplay);
     }//GEN-LAST:event_btnTurnoActionPerformed
+
+    public void escribirImpactos() {
+        //   textoReplay +=
+    }
 
     public void recursividadComputadora() {
         if (contador < juego.getJugadores().size()) {
@@ -421,7 +461,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnFlotasActionPerformed
 
     private void guardar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_guardar1ActionPerformed
-        
+
     }//GEN-LAST:event_guardar1ActionPerformed
 
     private void guardar2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_guardar2ActionPerformed
@@ -473,23 +513,23 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 }
                 AnalizadorLexico3 lexico = new AnalizadorLexico3(new StringReader(texto));
                 try {
-                  
-                    new SintaxReplay(lexico, mapa, panelMensajes, contador, txtNaves, datosJuego, btnTurno, listNaves, panelJuego, btnDistancia, btnFlotas).parse();
-                       
-                    
-                    
-                    
+
+                    listNaves.clear();
+
+                    new SintaxReplay(lexico, mapa, panelMensajes, contador, txtNaves, datosJuego, btnTurno, listNaves, panelJuego, btnDistancia, btnFlotas, listReplay).parse();
+
+                    JOptionPane.showMessageDialog(null, "listo");
+                    acciones.lanzamientoFlotas(lblTurno, listReplay, juego, listNaves);
+
                 } catch (Exception ex) {
                     Logger.getLogger(VentanaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
                     JOptionPane.showMessageDialog(null, "ERROR");
                     panelMensajes.setText(SintaxCreacionMapa.totalErrores);
                 }
+
             }
         }
-        
-        
-        
-        
+
 
     }//GEN-LAST:event_replayActionPerformed
 

@@ -130,15 +130,19 @@ public class InteligenciaArtificial {
     }
 
     
-    public void verificadorTipoInteligencia(Juego misDatos, ArrayList<NavesCamino> listNaves) {
+    public boolean verificadorTipoInteligencia(Juego misDatos, ArrayList<NavesCamino> listNaves) {
+        boolean esInteligencia = false;
         int contador = VentanaPrincipal.contador;
         if (misDatos.getJugadores().get(contador).getTipo().equals("DIFICIL")) {
             accionesModoDificil(misDatos, listNaves);
             VentanaPrincipal.contador++;
+            esInteligencia = true;
         } else if (misDatos.getJugadores().get(contador).getTipo().equals("FACIL")) {
             accionesModoFacil(misDatos, listNaves);
             VentanaPrincipal.contador++;
+            esInteligencia = true;
         }
+        return esInteligencia;
     }
 
 }

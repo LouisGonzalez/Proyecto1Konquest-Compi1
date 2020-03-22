@@ -13,6 +13,24 @@ public class Impactos {
     private String mensaje;
     private Integer noFlota;
     private Integer noTurno;
+    private Integer jugadorAtacante;
+    private String planetaAtacante;
+
+    public Integer getJugadorAtacante() {
+        return jugadorAtacante;
+    }
+
+    public void setJugadorAtacante(Integer jugadorAtacante) {
+        this.jugadorAtacante = jugadorAtacante;
+    }
+
+    public String getPlanetaAtacante() {
+        return planetaAtacante;
+    }
+
+    public void setPlanetaAtacante(String planetaAtacante) {
+        this.planetaAtacante = planetaAtacante;
+    }
 
     public Integer getNoTurno() {
         return noTurno;

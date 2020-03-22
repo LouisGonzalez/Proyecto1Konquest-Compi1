@@ -442,8 +442,8 @@ parser code {:
     | enJuego DOS_PUNTOS FALSO:a {: Jugadores jugador = new Jugadores(); jugador.setEnJuego(a.toString()); RESULT=jugador; :}
 ;
     bp ::= planetasConquistados DOS_PUNTOS ENTERO:a {: Jugadores jugador = new Jugadores(); jugador.setPlanetasConquistados((Integer) a); RESULT= jugador; :}
-;
-    a2 ::= CAMBIOS DOS_PUNTOS AGRUPACION_A bo:a AGRUPACION_B {: VentanaPrincipal.contador=a.getTurnoJugador();  VentanaPrincipal.contadorTurnos=a.getContador();  parser.traspasoDatosFlotas(parser.navesCamino, a.getListNaves()); :}
+;   
+    a2 ::= CAMBIOS DOS_PUNTOS AGRUPACION_A bo:a AGRUPACION_B {: VentanaPrincipal.contador=a.getTurnoJugador();  VentanaPrincipal.contadorTurnos=a.getContador();  parser.navesCamino.clear();  parser.traspasoDatosFlotas(parser.navesCamino, a.getListNaves()); :}
 ;
     bo ::= bb:a bo:e {: if(e!=null){if(e.getContador()==null){ e.setContador(a.getContador()); } else { System.out.println("error"); }  } RESULT=e; :}
     | bq:a bo:e {: if(e!=null){if(e.getTurnoJugador()==null){ e.setTurnoJugador(a.getTurnoJugador()); } else { System.out.println("error"); } } RESULT=e; :}

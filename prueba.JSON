@@ -20,10 +20,10 @@
 	{
        	  nombre: "B",
   	  naves: 4,
-  	 porcentajeMuertes: 0.40,
+  	  produccion: 9,
+  	  porcentajeMuertes: 0.40,
 	  posicionX: 2,
-	  posicionY: 3,
-	produccion: 9 
+	  posicionY: 3
 	},
 	{
        	  nombre: "C",
@@ -88,32 +88,3 @@ PLANETAS_NEUTRALES: [
 	}
   ]
 }
-SECUENCIAS [
-	TURNO 1 {
-	  ACCIONES dd {
-	    Flota [
-	      noFlota: 1,
-	      planetaOrigen: ad,
-	      planetaDestino: sd,
-	      noNaves: 3,
-	      noJugadorEnvio: 3,
-	      noJugadorAtaque: 3,
-	      porcentajeMuertes: 0.5,
-	      turnoLlegada: 3,
-	      verificador: false 		
-  	    ]
-	  },
-	 IMPACTOS {
-	    dd {
-	      cc [
-		navesRestantes: 3,
-	        estado: dd,
-	 	mensaje: dd,
-	  	noFlota: 4
-	      ]	
-	    }	
-	  }		
-	}
-	
-	
-]

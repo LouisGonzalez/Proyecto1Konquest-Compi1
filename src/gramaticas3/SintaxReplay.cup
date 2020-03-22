@@ -12,6 +12,7 @@ import Pollitos.Impactos;
 import Pollitos.DatosImpacto;
 import Pollitos.NavesCamino;
 import Pollitos.Replay;
+import Pollitos.ResumenTurno;
 import Pollitos.DatosAcciones;
 import mapa.CreacionMapa;
 import javax.swing.JLabel;
@@ -41,10 +42,10 @@ parser code {:
     public JButton btnDistancia;
     public JButton btnFlotas;
     public String nombreJugador = "";
-    public ArrayList<Impactos> listImpactos = new ArrayList<>();
     public Integer noTurno = 0;
+    public ArrayList<Replay> listReplay;
 
-    public SintaxReplay(AnalizadorLexico3 lex, CreacionMapa tablero, JTextArea panelMensajes, int contador, JTextField txtNaves, ArrayList<Juego> datosJuego, JButton btnTurno, ArrayList<NavesCamino> listNaves, JPanel panelJuego, JButton btnDistancia, JButton btnFlotas){
+    public SintaxReplay(AnalizadorLexico3 lex, CreacionMapa tablero, JTextArea panelMensajes, int contador, JTextField txtNaves, ArrayList<Juego> datosJuego, JButton btnTurno, ArrayList<NavesCamino> listNaves, JPanel panelJuego, JButton btnDistancia, JButton btnFlotas, ArrayList<Replay> listReplay){
         super(lex);
         this.tablero = tablero;
         this.matrizJuego = matrizJuego;
@@ -57,6 +58,7 @@ parser code {:
         this.panelJuego = panelJuego;
         this.btnDistancia = btnDistancia;
         this.btnFlotas = btnFlotas;
+        this.listReplay = listReplay;
     }
 
     public void setAccion(String tipo, String mensaje, String accion){
@@ -69,153 +71,14 @@ parser code {:
         panelMensajes.setText(totalErrores);
     }
 
-    public void crearCuadriculaJuego(Juego misDatos){
-        tablero.creacionCuadricula(misDatos, txtNaves, contador, navesCamino, btnTurno, btnDistancia, btnFlotas);
-    }
 
-    public boolean verificadorNombresJugadores(ArrayList<Jugadores> listJugadores, boolean verificador){
-        if(verificador == true){
-            for(int i = 0; i < listJugadores.size(); i++){
-                String jugador1 = listJugadores.get(i).getNombre();
-                    if(jugador1.length() > 10){
-                        System.out.println("exceso de letras");
-                        verificador = false;
-                        break;
-                    }
-                
-                for(int j = i+1; j < listJugadores.size()+1; j++){
-                        if(j!=listJugadores.size()){
-                        String jugador2 = listJugadores.get(j).getNombre();
-                        if(jugador1.equals(jugador2)){
-                            System.out.println("Dos nombres son iguales");
-                            verificador = false;
-                            break;
-                        }
-                    }
-                }
-                if(verificador == false){
-                    break;
-                }
-            }
-        } 
-        return verificador;
-    }
-
-
-    public boolean verificadorNombresPlanetas(boolean verificador, ArrayList<Planetas> listPlanetas){
-        if(verificador == true){
-            for(int i = 0; i < listPlanetas.size(); i++){
-                String nombrePlaneta = listPlanetas.get(i).getNombre();
-                if(nombrePlaneta.length() > 3){
-                    System.out.println("exceso de letras");
-                    verificador = false;
-                    break;
-                } else {
-                    for(int j = i+1; j < listPlanetas.size()+1; j++){
-                        if(j!=listPlanetas.size()){
-                            String nombrePlaneta2 = listPlanetas.get(j).getNombre();
-                            if(nombrePlaneta.equals(nombrePlaneta2)){
-                                System.out.println("Dos nombres son iguales");
-                                verificador = false;
-                                break;
-                            }
-                        }
-                    }
-                }
-                if(verificador == false){
-                    break;
-                }
-            }
+        public void traspasoDatosFlotas(ArrayList<Replay> listReplay, ArrayList<Replay> listTemporal){
+        for(int i = 0; i < listTemporal.size(); i++){
+            listReplay.add(listTemporal.get(i));
         }
-        return verificador;
+
     }
 
-    public boolean verificadorNombresPlanetasNeutrales(boolean verificador, ArrayList<PlanetasNeutrales> listNeutrales){
-        if(verificador == true){
-        if(listNeutrales != null){
-            for(int i = 0; i < listNeutrales.size(); i ++){
-                String neutral1 = listNeutrales.get(i).getNombre();
-                if(neutral1.length() > 3 ){
-                    System.out.println("exceso de letras"); 
-                    verificador = false;
-                    break;
-                }   
-                for(int j = i+1; j < listNeutrales.size()+1; j++){
-                    if(j!=listNeutrales.size()){
-                        String neutral2 = listNeutrales.get(j).getNombre();
-                        if(neutral1.equals(neutral2)){
-                            System.out.println("Dos nombres son iguales");
-                            verificador = false;
-                            break;
-                        }
-                    }
-                }
-                if(verificador == false){
-                    break;
-                }
-            }
-        }
-        }
-        return verificador;
-    }
-
-    public void creacionMapa(Juego misDatos, boolean verificador, JTextArea panelMensajes, String totalErroress){
-        if(verificador == true){
-            tablero.agregarPlanetasTablero(Integer.parseInt(misDatos.getMapa().getSize_filas()), Integer.parseInt(misDatos.getMapa().getSize_columnas()), misDatos.getJugadores(), misDatos.getPlanetas());
-            if(!misDatos.getPlanetas().isEmpty()){
-                verificador = false;
-                totalErroress += "Hay mas planetas de los sentenciados para los jugadores\n";
-                panelMensajes.setText(totalErroress);
-            }
-            for(int i = 0; i < misDatos.getJugadores().size(); i++){
-                if(!misDatos.getJugadores().get(i).getPlanetas().isEmpty()){
-                    verificador = false;
-                    totalErroress += "Hay mas planetas de los sentenciados para los jugadores\n";
-                    panelMensajes.setText(totalErroress);
-                    break;
-                }
-            }
-            if(verificador == true){
-                verificador = tablero.comparacionFilasColumnasPosPlanetas(misDatos.getMapa(), misDatos.getJugadores(), verificador);
-                if(verificador == false){
-                    totalErroress += "Algun planeta esta situado en una posicion que no existe dentro del mapa\n";
-                }
-            }
-            if(verificador == true){
-                verificador = tablero.comparacionFilasColumnasPosNeutrales(misDatos.getMapa(), misDatos.getpNeutrales(), verificador);
-                if(verificador == false){
-                    totalErrores += "Algun planeta neutral esta situado en una posicion que no existe dentro del mapa\n";
-                    System.out.println("Algun planeta neutral esta situado en una posicion que no existe dentro del mapa");
-                }
-            }
-            if(verificador == true){
-                verificador = tablero.comparacionPosPlanetas(misDatos.getJugadores(), verificador);
-                if(verificador == false){
-                    totalErroress += "Dos planetas estan situados en la misma posicion\n";
-                }
-            }
-            if(verificador == true){
-                verificador = tablero.comparacionNeutralaNeutral(misDatos.getpNeutrales(), verificador);
-                if(verificador == false){
-                    totalErrores += "Dos planetas neutrales estan situados en la misma posicion\n";
-                    System.out.println("Dos planetas neutrales estan situados en la misma posicion");
-                }
-            }
-            if(verificador == true){
-                verificador = tablero.comparacionPlanetasyNeutrales(misDatos.getpNeutrales(), misDatos.getJugadores(), verificador);
-                if(verificador == false){
-                    totalErrores += "Dos planetas (normal y un neutral) estan situados en la misma posicion\n";
-                    System.out.println("Dos planetas(normal y un neutral) estan situados en la misma posicion\n");
-                }
-            }
-            if(verificador == true) {
-                crearCuadriculaJuego(misDatos);
-            } else { 
-                panelMensajes.setText(totalErroress);
-            }  
-        }
-        
-    }
   
 :}
 
@@ -224,9 +87,10 @@ parser code {:
              produccion, finalizacion, PLANETAS, nombre, naves, porcMuertes, PLANETAS_NEUTRALES, JUGADORES, planetas,
              tipo, HUMANO, DIFICIL, FACIL, ENTERO, DECIMAL, ID, filas, columnas, color, posX, posY, COLOR, SECUENCIAS,
              TURNO, ACCIONES, Flota, planetaOrigen, planetaDestino, noNaves, noJugadorEnvio, noJugadorAtaque, CONQUISTADO,
-             turnoLlegada, verificador, IMPACTOS, navesRestantes, estado, mensaje, estadoJugador, noFlota, VIVO;
+             turnoLlegada, verificador, IMPACTOS, navesRestantes, estado, mensaje, estadoJugador, noFlota, VIVO,
+             RESUMEN, JUGANDO, FUERA, jugadorAtacante, planetaAtacante;
              
-    non terminal inicio, a, a1, a2, p1, p3, p4, p6;
+    non terminal inicio, a, a1, a2, p1, p3, p4;
 
     non terminal Juego juego, q2;
     
@@ -248,7 +112,7 @@ parser code {:
 
     non terminal ArrayList<Jugadores> jug, ad;
 
-    non terminal Impactos bq, p7, br, bs, bt, bu;
+    non terminal Impactos bq, p7, br, bs, bt, bu, cb, cc;
 
     non terminal ArrayList<Impactos> bv;
 
@@ -264,206 +128,22 @@ parser code {:
 
     non terminal ArrayList<NavesCamino> bd;
 
+    non terminal ResumenTurno bz;
+    
+    non terminal ArrayList<ResumenTurno> p6, by, bx;
+
     start with inicio;
 
-    inicio ::= a a2
-;
-    a ::= LLAVE_A juego:a LLAVE_B {: if(a.getMapa()==null || a.getpNeutrales()==null || a.getJugadores()==null  || a.getPlanetas()==null){ System.out.println("Falta un archivo principal"); } else { boolean interruptor = true;  interruptor = parser.verificadorNombresJugadores(a.getJugadores(), interruptor);  interruptor = parser.verificadorNombresPlanetas(interruptor, a.getPlanetas());  interruptor = parser.verificadorNombresPlanetasNeutrales(interruptor, a.getpNeutrales());  parser.misDatos = a;  parser.datosJuego.add(a);   parser.panelJuego.setVisible(true);   parser.creacionMapa(parser.datosJuego.get(0), interruptor, parser.panelMensajes, parser.totalErrores);               } :} 
-;
-    juego ::= b:a juego:e {: if(e!=null){ if(e.getMapa()==null){ e.setMapa(a); } else { parser.totalErrores += "Atributo MAPA sentenciado mas de una vez\n"; parser.syntax_error(null);  } } RESULT=e; :}
-    | p:a juego:e {: if(e!=null){ if(e.getPlanetas()==null){ e.setPlanetas(a); System.out.println("agrego"); } else {  parser.totalErrores += "Atributo PLANETAS sentenciado mas de una vez\n";  System.out.println("erroasdfr"); } } RESULT=e; :}
-    | pn:a juego:e {: if(e!=null){ if(e.getpNeutrales()==null){e.setpNeutrales(a); System.out.println("agregox2"); } else { parser.totalErrores += "Atributo PLANETAS_NEUTRALES sentenciado mas de una vez\n"; System.out.println("error"); } } RESULT=e; :}
-    | jug:a juego:e {: if(e!=null){ if(e.getJugadores()==null){ e.setJugadores(a); } else { parser.totalErrores += "Atributo JUGADORES sentenciado mas de una vez\n"; System.out.println("error"); } } RESULT=e; :}
-    | COMA q2:a {: RESULT=a; :}
-    | {: RESULT=new Juego(); :}
-    | error juego:e {: parser.totalErrores += "atributo principal mal definido\n"; RESULT=e;  :}
-;
-    q2 ::= b:a juego:e {: if(e!=null){ if(e.getMapa()==null){ e.setMapa(a); } else { parser.totalErrores += "Atributo MAPA sentenciado mas de una vez\n"; System.out.println("error"); } } RESULT=e; :}
-    | p:a juego:e {: if(e!=null){ if(e.getPlanetas()==null){ e.setPlanetas(a);   } else { parser.totalErrores += "Atributo PLANETAS sentenciado mas de una vez\n"; System.out.println("erroraaa"); } } RESULT=e; :}    
-    | pn:a juego:e {: if(e!=null){ if(e.getpNeutrales()==null){ e.setpNeutrales(a);   } else { parser.totalErrores += "Atributo PLANETAS_NEUTRALES sentenciado mas de una vez\n"; System.out.println("error"); } } RESULT=e; :}
-    | jug:a juego:e {: if(e!=null){ if(e.getJugadores()==null){ e.setJugadores(a); } else { parser.totalErrores += "Atributo JUGADORES sentenciado mas de una vez\n"; System.out.println("error"); } } RESULT=e; :}
-    | error juego:e {: parser.totalErrores += "atributo principal mal definido\n"; RESULT=e; :}
-;
-    b ::= MAPA DOS_PUNTOS LLAVE_A c:a {: RESULT=a; :}   
-;
-    c ::= d:a c:e {: if(e!=null){ if(e.getId()==null) { e.setId(a.getId());  } else { parser.totalErrores += "Sub-atributo id del campo MAPA sentenciado mas de una vez\n"; System.out.println("error"); }   } RESULT=e;  :} 
-    |   g:a c:e {: if(e!=null){ if(e.getPlanetasNeutrales()==null){ e.setPlanetasNeutrales(a.getPlanetasNeutrales()); } else {  parser.totalErrores += "Sub-atributo planetasNeutrales del campo MAPA sentenciado mas de una vez\n"; System.out.println("error"); }  } RESULT=e; :}
-    |   e:a c:e1 {: if(e1!=null){ if(e1.getSize_filas()==null && e1.getSize_columnas()==null) { e1.setSize_filas(a.getSize_filas()); e1.setSize_columnas(a.getSize_columnas()); } else { parser.totalErrores += "Sub-atributos columnas/filas del campo MAPA sentenciado mas de una vez\n"; System.out.println("error"); } } RESULT=e1; :}
-    |   f:a c:e {: if(e!=null){ if(e.getAlAzar()==null) { e.setAlAzar(a.getAlAzar()); } else { parser.totalErrores += "Sub-atributo alAzar del campo MAPA sentenciado mas de una vez\n";  System.out.println("error"); } } RESULT=e; :}
-    |   h:a c:e {: if(e!=null){ if(e.getMapaCiego()==null) { e.setMapaCiego(a.getMapaCiego()); } else { parser.totalErrores += "Sub-atributo mapaCiego del campo MAPA sentenciado mas de una vez\n"; System.out.println("error"); } } RESULT=e; :}
-    |   i:a c:e {: if(e!=null){ if(e.getAcumular()==null) { e.setAcumular(a.getAcumular()); } else { parser.totalErrores += "Sub-atributo acumular del campo MAPA sentenciado mas de una vez\n"; System.out.println("error"); } } RESULT=e; :}
-    |   j2:a c:e {: if(e!=null){ if(e.getMapaPNeutral()==null && a!=null) { e.setMapaPNeutral(a.getMapaPNeutral()); } else { parser.totalErrores += "Sub-atributo NEUTRALES del campo MAPA sentenciado mas de una vez\n"; System.out.println("error"); } } RESULT=e; :}
-    |   k:a c:e {: if(e!=null){ if(e.getFinalizacion()==null){ e.setFinalizacion(a.getFinalizacion()); } else { parser.totalErrores += "Sub-atributo finalizacion del campo MAPA sentenciado mas de una vez\n"; System.out.println("error"); } } RESULT=e; :}
-    |    COMA q:e {: RESULT=e; :}
-    |   LLAVE_B {:RESULT=new Mapa();:}
-    |   error c:e {: parser.totalErrores += "atributo en campo MAPAS definido de forma incorrecta\n"; RESULT=e; :}
-;
-    q ::= d:a c:e {: if(e!=null){ if(e.getId()==null) { e.setId(a.getId());  } else { parser.totalErrores += "Sub-atributo id del campo MAPA sentenciado mas de una vez\n"; System.out.println("error"); }   } RESULT=e;  :} 
-    |   g:a c:e {: if(e!=null){ if(e.getPlanetasNeutrales()==null){ e.setPlanetasNeutrales(a.getPlanetasNeutrales()); } else {  parser.totalErrores += "Sub-atributo planetasNeutrales del campo MAPA sentenciado mas de una vez\n"; System.out.println("error"); }  } RESULT=e; :}
-    |   e:a c:e1 {: if(e1!=null){ if(e1.getSize_filas()==null && e1.getSize_columnas()==null) { e1.setSize_filas(a.getSize_filas()); e1.setSize_columnas(a.getSize_columnas()); } else { parser.totalErrores += "Sub-atributos columnas/filas del campo MAPA sentenciado mas de una vez\n"; System.out.println("error"); } } RESULT=e1; :}
-    |   f:a c:e {: if(e!=null){ if(e.getAlAzar()==null) { e.setAlAzar(a.getAlAzar()); } else { parser.totalErrores += "Sub-atributo alAzar del campo MAPA sentenciado mas de una vez\n";  System.out.println("error"); } } RESULT=e; :}
-    |   h:a c:e {: if(e!=null){ if(e.getMapaCiego()==null) { e.setMapaCiego(a.getMapaCiego()); } else { parser.totalErrores += "Sub-atributo mapaCiego del campo MAPA sentenciado mas de una vez\n"; System.out.println("error"); } } RESULT=e; :}
-    |   i:a c:e {: if(e!=null){ if(e.getAcumular()==null) { e.setAcumular(a.getAcumular()); } else { parser.totalErrores += "Sub-atributo acumular del campo MAPA sentenciado mas de una vez\n"; System.out.println("error"); } } RESULT=e; :}
-    |   j2:a c:e {: if(e!=null){ if(e.getMapaPNeutral()==null && a!=null) { e.setMapaPNeutral(a.getMapaPNeutral()); } else { parser.totalErrores += "Sub-atributo NEUTRALES del campo MAPA sentenciado mas de una vez\n"; System.out.println("error"); } } RESULT=e; :}
-    |   k:a c:e {: if(e!=null){ if(e.getFinalizacion()==null){ e.setFinalizacion(a.getFinalizacion()); } else { parser.totalErrores += "Sub-atributo finalizacion del campo MAPA sentenciado mas de una vez\n"; System.out.println("error"); } } RESULT=e; :}
-    |   error c:e {: parser.totalErrores += "atributo en campo MAPAS definido de forma incorrecta\n"; RESULT=e; :}
-;
-    e ::= size DOS_PUNTOS LLAVE_A j:a LLAVE_B {:  RESULT=a; :}
-;
-    f ::= alAzar DOS_PUNTOS VERDADERO:a {: Mapa mapa = new Mapa(); mapa.setAlAzar(a.toString()); RESULT=mapa; :}
-    | alAzar DOS_PUNTOS FALSO:a {: Mapa mapa = new Mapa(); mapa.setAlAzar(a.toString()); RESULT=mapa; :}
-;
-    j ::= filas DOS_PUNTOS ENTERO:a COMA columnas DOS_PUNTOS ENTERO:b {: Mapa mapa = new Mapa(); mapa.setSize_filas(a.toString()); mapa.setSize_columnas(b.toString()); RESULT=mapa; :}
-    | columnas DOS_PUNTOS ENTERO:b COMA filas DOS_PUNTOS ENTERO:a {: Mapa mapa = new Mapa(); mapa.setSize_filas(a.toString()); mapa.setSize_columnas(b.toString()); RESULT=mapa;    :}
-;
-    d ::= id DOS_PUNTOS COMILLAS ID:a COMILLAS  {:  Mapa mapa = new Mapa(); mapa.setId(a.toString());  RESULT=mapa;                    /*if(parser.mapita.getId()==null){ parser.mapita.setId(a.toString());  } else { parser.interruptor = false; parser.syntax_error(parser.getSymbolFactory().newSymbol("d",3, ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.elementAt(CUP$SintaxCreacionMapa$top-5)), ((java_cup.runtime.Symbol)CUP$SintaxCreacionMapa$stack.peek()), RESULT)); parser.totalErrores += "Atributo ID sentenciado mas de una vez dentro de MAPA\n";    }*/ :} 
-;
-    g ::= pNeutrales DOS_PUNTOS ENTERO:a {: Mapa mapa = new Mapa(); mapa.setPlanetasNeutrales(a.toString()); RESULT=mapa; :}
-;
-    h ::= mapaCiego DOS_PUNTOS VERDADERO:a {: Mapa mapa = new Mapa(); mapa.setMapaCiego(a.toString()); RESULT=mapa; :}
-    | mapaCiego DOS_PUNTOS FALSO:a {: Mapa mapa = new Mapa(); mapa.setMapaCiego(a.toString()); RESULT=mapa; :}
-;
-    i ::= acumular DOS_PUNTOS VERDADERO:a {: Mapa mapa = new Mapa(); mapa.setAcumular(a.toString()); RESULT=mapa; :}
-    | acumular DOS_PUNTOS FALSO:a {: Mapa mapa = new Mapa(); mapa.setAcumular(a.toString()); RESULT=mapa; :}
-;
-    j2 ::= NEUTRALES DOS_PUNTOS LLAVE_A l:a LLAVE_B {: Mapa mapa = new Mapa(); if(a.getMostrarNaves()==null || a.getMostrarEstadisticas()==null || a.getProduccion() == null) {System.out.println("ERROR, falta de atributo");} else { mapa.setMapaPNeutral(a); RESULT=mapa; }     :} 
-;
-    l ::= m:a l:e {: if(e!=null){if(e.getMostrarNaves()==null){ e.setMostrarNaves(a.getMostrarNaves()); } else { parser.totalErrores += "Sub-atributo mostrarNaves del campo NEUTRALES sentenciado mas de una vez\n"; System.out.println("error"); }  } RESULT=e; :}
-    | n:a l:e {: if(e!=null){ if(e.getMostrarEstadisticas()==null){ e.setMostrarEstadisticas(a.getMostrarEstadisticas()); } else { parser.totalErrores += "Sub-atributo mostrarEstadisticas del campo NEUTRALES sentenciado mas de una vez\n"; System.out.println("error"); } } RESULT=e; :}
-    | o:a l:e {: if(e!=null){ if(e.getProduccion()==null){ e.setProduccion(a.getProduccion()); } else { parser.totalErrores += "Sub-atributo produccion del campo NEUTRALES sentenciado mas de una vez\n"; System.out.println("error"); } } RESULT=e; :}
-    | COMA q8:e {: RESULT=e; :}
-    | {:RESULT=new MapaPNeutrales();:}
-    | error l:e {: parser.totalErrores += "atributo en sub-campo NEUTRALES definido de forma incorrecta\n"; RESULT=e; :}
-;
-    q8 ::=  m:a l:e {: if(e!=null){if(e.getMostrarNaves()==null){ e.setMostrarNaves(a.getMostrarNaves()); } else { parser.totalErrores += "Sub-atributo mostrarNaves del campo NEUTRALES sentenciado mas de una vez\n"; System.out.println("error"); }  } RESULT=e; :}
-    | n:a l:e {: if(e!=null){ if(e.getMostrarEstadisticas()==null){ e.setMostrarEstadisticas(a.getMostrarEstadisticas()); } else { parser.totalErrores += "Sub-atributo mostrarEstadisticas del campo NEUTRALES sentenciado mas de una vez\n"; System.out.println("error"); } } RESULT=e; :}
-    | o:a l:e {: if(e!=null){ if(e.getProduccion()==null){ e.setProduccion(a.getProduccion()); } else { parser.totalErrores += "Sub-atributo produccion del campo NEUTRALES sentenciado mas de una vez\n"; System.out.println("error"); } } RESULT=e; :}
-    | error l:e {: parser.totalErrores += "atributo en sub-campo NEUTRALES definido de forma incorrecta\n"; RESULT=e; :}
-;
-    m ::= mostrarNaves DOS_PUNTOS VERDADERO:a {: MapaPNeutrales mapa = new MapaPNeutrales(); mapa.setMostrarNaves(a.toString()); RESULT=mapa; :}
-    | mostrarNaves DOS_PUNTOS FALSO:a {: MapaPNeutrales mapa = new MapaPNeutrales(); mapa.setMostrarNaves(a.toString()); RESULT=mapa; :}
-;
-    n ::= mostrarEstadisticas DOS_PUNTOS VERDADERO:a {: MapaPNeutrales mapa = new MapaPNeutrales(); mapa.setMostrarEstadisticas(a.toString()); RESULT=mapa; :}
-    | mostrarEstadisticas DOS_PUNTOS FALSO:a {: MapaPNeutrales mapa = new MapaPNeutrales(); mapa.setMostrarEstadisticas(a.toString()); RESULT=mapa; :}
-;
-    o ::= produccion DOS_PUNTOS ENTERO:a {: MapaPNeutrales mapa = new MapaPNeutrales(); mapa.setProduccion(a.toString()); RESULT=mapa; :}
-;
-    k ::= finalizacion DOS_PUNTOS ENTERO:a {: Mapa mapa = new Mapa(); mapa.setFinalizacion(a.toString()); RESULT=mapa; :}
-;
-    p ::= PLANETAS DOS_PUNTOS AGRUPACION_A r:a AGRUPACION_B  {: RESULT=a; :}
-    | PLANETAS DOS_PUNTOS AGRUPACION_A AGRUPACION_B 
-;
-    r ::= LLAVE_A s:a LLAVE_B COMA r:e {: if(a.getNombre()==null || a.getNaves()==null || a.getProduccion()==null || a.getPorcentajeMuertes()==null || a.getPosicionX() ==null || a.getPosicionY()==null){ System.out.println("Falta un atributo"); } else { e.add(a); RESULT=e; } :}
-    | LLAVE_A s:a LLAVE_B {:  if(a.getNombre()==null || a.getNaves()==null || a.getProduccion()==null || a.getPorcentajeMuertes()==null || a.getPosicionX() ==null || a.getPosicionY()==null){ System.out.println("Falta un atributo"); } else {ArrayList<Planetas> misPlanetas = new ArrayList<>(); misPlanetas.add(a); RESULT=misPlanetas;  }   :}
-;
-    s ::= t:a s:e {: if(e!=null){ if(e.getNombre()==null) { e.setNombre(a.getNombre()); } else { parser.totalErrores += "Sub-atributo nombre de un campo PLANETAS setenciado mas de una vez\n"; System.out.println("error"); } } RESULT=e; :}
-    | u:a s:e {: if(e!=null){ if(e.getNaves()==null){ e.setNaves(a.getNaves()); } else {  parser.totalErrores += "Sub-atributo naves de un campo PLANETAS sentenciado mas de una vez\n"; System.out.println("error"); } } RESULT=e; :}    
-    | v:a s:e {: if(e!=null){ if(e.getProduccion()==null){ e.setProduccion(a.getProduccion()); } else { parser.totalErrores += "Sub-atributo produccion de un campo PLANETAS sentenciado mas de una vez\n"; System.out.println("error"); } } RESULT=e;  :}
-    | w:a s:e {: if(e!=null){ if(e.getPorcentajeMuertes()==null){ e.setPorcentajeMuertes(a.getPorcentajeMuertes()); } else { parser.totalErrores += "Sub-atributo porcentajeMuertes de un campo PLANETAS sentenciado mas de una vez\n"; System.out.println("error"); } } RESULT=e; :}
-    | aj:a s:e {: if(e!=null){ if(e.getPosicionX()==null){ e.setPosicionX(a.getPosicionX()); } else { parser.totalErrores += "Sub-atributo posicionX de un campo PLANETAS sentenciado mas de una vez\n"; System.out.println("error"); } } RESULT=e; :}
-    | ak:a s:e {: if(e!=null){ if(e.getPosicionY()==null){e.setPosicionY(a.getPosicionY());} else { parser.totalErrores += "Sub-atributo posicionY de un campo PLANETAS sentenciado mas de una vez\n";  System.out.println("error"); } } RESULT=e; :}
-    | COMA q3:a {: RESULT=a; :}
-    | {: RESULT=new Planetas(); :} 
-    | error s:e {: parser.totalErrores += "atributo en campo PLANETAS definido de forma incorrecta\n";   RESULT=e; :}
-;
-    q3 ::=  t:a s:e {: if(e!=null){ if(e.getNombre()==null) { e.setNombre(a.getNombre()); } else { parser.totalErrores += "Sub-atributo nombre de un campo PLANETAS setenciado mas de una vez\n"; System.out.println("error"); } } RESULT=e; :}
-    | u:a s:e {: if(e!=null){ if(e.getNaves()==null){ e.setNaves(a.getNaves()); } else {  parser.totalErrores += "Sub-atributo naves de un campo PLANETAS sentenciado mas de una vez\n"; System.out.println("error"); } } RESULT=e; :}    
-    | v:a s:e {: if(e!=null){ if(e.getProduccion()==null){ e.setProduccion(a.getProduccion()); } else { parser.totalErrores += "Sub-atributo produccion de un campo PLANETAS sentenciado mas de una vez\n"; parser.syntax_error(parser.getSymbolFactory().newSymbol("q3",49, ((java_cup.runtime.Symbol)CUP$SintaxReplay$stack.elementAt(CUP$SintaxReplay$top-1)), ((java_cup.runtime.Symbol)CUP$SintaxReplay$stack.peek()), RESULT)); } } RESULT=e;  :}
-    | w:a s:e {: if(e!=null){ if(e.getPorcentajeMuertes()==null){ e.setPorcentajeMuertes(a.getPorcentajeMuertes()); } else { parser.totalErrores += "Sub-atributo porcentajeMuertes de un campo PLANETAS sentenciado mas de una vez\n"; System.out.println("error"); } } RESULT=e; :}
-    | aj:a s:e {: if(e!=null){ if(e.getPosicionX()==null){ e.setPosicionX(a.getPosicionX()); } else { parser.totalErrores += "Sub-atributo posicionX de un campo PLANETAS sentenciado mas de una vez\n"; System.out.println("error"); } } RESULT=e; :}
-    | ak:a s:e {: if(e!=null){ if(e.getPosicionY()==null){e.setPosicionY(a.getPosicionY());} else { parser.totalErrores += "Sub-atributo posicionY de un campo PLANETAS sentenciado mas de una vez\n";  System.out.println("error"); } } RESULT=e; :}
-    | error s:e {: parser.totalErrores += "atributo en campo PLANETAS definido de forma incorrecta\n"; RESULT=e; :}
-;
-    t ::= nombre DOS_PUNTOS COMILLAS ID:a COMILLAS {: Planetas planetas = new Planetas(); planetas.setNombre(a.toString()); RESULT=planetas; :}
-;
-    u ::= naves DOS_PUNTOS ENTERO:a {: Planetas planeta = new Planetas(); planeta.setNaves(a.toString()); RESULT = planeta; :}
-;
-    v ::= produccion DOS_PUNTOS ENTERO:a {: Planetas planeta = new Planetas(); planeta.setProduccion(a.toString()); RESULT = planeta; :}
-;
-    w ::= porcMuertes DOS_PUNTOS DECIMAL:a {: Planetas planeta = new Planetas(); planeta.setPorcentajeMuertes(a.toString());  RESULT = planeta; :}
-;
-    aj ::= posX DOS_PUNTOS ENTERO:a {: Planetas planeta = new Planetas(); planeta.setPosicionX(a.toString()); RESULT=planeta; :}
-;
-    ak ::= posY DOS_PUNTOS ENTERO:a {: Planetas planeta = new Planetas(); planeta.setPosicionY(a.toString()); RESULT=planeta; :}
-;
-    pn ::= PLANETAS_NEUTRALES DOS_PUNTOS AGRUPACION_A x:a AGRUPACION_B {: RESULT=a; :} 
-    | PLANETAS_NEUTRALES DOS_PUNTOS AGRUPACION_A AGRUPACION_B {: RESULT=new ArrayList<>(); :}
-;
-    x ::= LLAVE_A y:a LLAVE_B COMA x:e {: if(a.getNombre()==null || a.getNaves()==null || a.getProduccion()==null || a.getPorcentajeMuertes()==null || a.getPosicionX()==null || a.getPosicionY()==null){ System.out.println("ERROR, Falta un atributo"); } else { e.add(a); RESULT=e; } :}
-    | LLAVE_A y:a LLAVE_B {: if(a.getNombre()==null || a.getNaves()==null || a.getProduccion()==null || a.getPorcentajeMuertes()==null || a.getPosicionX()==null || a.getPosicionY()==null){ System.out.println("ERROR, Falta un atributo"); } else { ArrayList<PlanetasNeutrales> pNeutrales = new ArrayList<>(); pNeutrales.add(a); RESULT=pNeutrales; }  :}
-;
-    y ::= z:a y:e {: if(e!=null){ if(e.getNombre()==null){ e.setNombre(a.getNombre()); } else { parser.totalErrores += "Sub-atributo nombre en un campo PLANETAS_NEUTRALES sentenciado mas de una vez\n"; System.out.println("error"); } } RESULT=e; :}
-    | aa:a y:e {: if(e!=null){ if(e.getNaves()==null){ e.setNaves(a.getNaves()); } else { parser.totalErrores += "Sub-atributo naves en un campo PLANETAS_NEUTRALES sentenciado mas de una vez\n"; System.out.println("error"); } } RESULT=e; :}
-    | ab:a y:e {: if(e!=null){ if(e.getProduccion()==null){e.setProduccion(a.getProduccion());} else {  parser.totalErrores += "Sub-atributo produccion en un campo PLANETAS_NEUTRALES sentenciado mas de una vez\n"; System.out.println("error"); } } RESULT=e; :}
-    | ac:a y:e {: if(e!=null){ if(e.getPorcentajeMuertes()==null){ e.setPorcentajeMuertes(a.getPorcentajeMuertes()); } else { parser.totalErrores += "Sub-atributo porcentajeMuertes en un campo PLANETAS_NEUTRALES sentenciado mas de una vez\n"; System.out.println("error"); } } RESULT=e; :}  
-    | am:a y:e {: if(e!=null){ if(e.getPosicionX()==null){ e.setPosicionX(a.getPosicionX()); } else { parser.totalErrores += "Sub-atributo posicionX en un campo PLANETAS_NEUTRALES sentenciado mas de una vez\n"; System.out.println("error"); } } RESULT=e; :}
-    | an:a y:e {: if(e!=null){ if(e.getPosicionY()==null){ e.setPosicionY(a.getPosicionY()); } else { parser.totalErrores += "Sub-atributo posicionY en un campo PLANETAS_NEUTRALES sentenciado mas de una vez\n"; System.out.println("error"); } } RESULT=e; :}
-    | COMA q5:a {: RESULT=a; :}
-    | {: RESULT=new PlanetasNeutrales(); :}
-    | error y:e {: parser.totalErrores += "atributo en campo PLANETAS NEUTRALES definido de forma incorrecta\n"; RESULT=e; :}
-;
-    q5 ::=  z:a y:e {: if(e!=null){ if(e.getNombre()==null){ e.setNombre(a.getNombre()); } else { parser.totalErrores += "Sub-atributo nombre en un campo PLANETAS_NEUTRALES sentenciado mas de una vez\n"; System.out.println("error"); } } RESULT=e; :}
-    | aa:a y:e {: if(e!=null){ if(e.getNaves()==null){ e.setNaves(a.getNaves()); } else { parser.totalErrores += "Sub-atributo naves en un campo PLANETAS_NEUTRALES sentenciado mas de una vez\n"; System.out.println("error"); } } RESULT=e; :}
-    | ab:a y:e {: if(e!=null){ if(e.getProduccion()==null){e.setProduccion(a.getProduccion());} else {  parser.totalErrores += "Sub-atributo produccion en un campo PLANETAS_NEUTRALES sentenciado mas de una vez\n"; System.out.println("error"); } } RESULT=e; :}
-    | ac:a y:e {: if(e!=null){ if(e.getPorcentajeMuertes()==null){ e.setPorcentajeMuertes(a.getPorcentajeMuertes()); } else { parser.totalErrores += "Sub-atributo porcentajeMuertes en un campo PLANETAS_NEUTRALES sentenciado mas de una vez\n"; System.out.println("error"); } } RESULT=e; :}  
-    | am:a y:e {: if(e!=null){ if(e.getPosicionX()==null){ e.setPosicionX(a.getPosicionX()); } else { parser.totalErrores += "Sub-atributo posicionX en un campo PLANETAS_NEUTRALES sentenciado mas de una vez\n"; System.out.println("error"); } } RESULT=e; :}
-    | an:a y:e {: if(e!=null){ if(e.getPosicionY()==null){ e.setPosicionY(a.getPosicionY()); } else { parser.totalErrores += "Sub-atributo posicionY en un campo PLANETAS_NEUTRALES sentenciado mas de una vez\n"; System.out.println("error"); } } RESULT=e; :}
-    | error y:e {: parser.totalErrores += "atributo en campo PLANETAS NEUTRALES definido de forma incorrecta\n"; RESULT=e; :}
-;
-    z ::=  nombre DOS_PUNTOS COMILLAS ID:a COMILLAS {: PlanetasNeutrales neutral = new PlanetasNeutrales(); neutral.setNombre(a.toString()); RESULT=neutral; :}
-;
-    aa ::= naves DOS_PUNTOS ENTERO:a {: PlanetasNeutrales neutral = new PlanetasNeutrales(); neutral.setNaves(a.toString()); RESULT=neutral; :}
-;
-    ab ::= produccion DOS_PUNTOS ENTERO:a {: PlanetasNeutrales neutral = new PlanetasNeutrales(); neutral.setProduccion(a.toString()); RESULT=neutral; :}
-;
-    ac ::= porcMuertes DOS_PUNTOS DECIMAL:a {: PlanetasNeutrales neutral = new PlanetasNeutrales(); neutral.setPorcentajeMuertes(a.toString()); RESULT=neutral; :}
-;
-    am ::= posX DOS_PUNTOS ENTERO:a {: PlanetasNeutrales neutral = new PlanetasNeutrales(); neutral.setPosicionX(a.toString()); RESULT=neutral; :}
-;
-    an ::= posY DOS_PUNTOS ENTERO:a {: PlanetasNeutrales neutral = new PlanetasNeutrales(); neutral.setPosicionY(a.toString()); RESULT=neutral; :}
-;
-    jug  ::= JUGADORES DOS_PUNTOS AGRUPACION_A ad:a AGRUPACION_B {:  RESULT=a; :} 
-    | JUGADORES DOS_PUNTOS AGRUPACION_A AGRUPACION_B 
-;
-    ad ::= LLAVE_A ae:a LLAVE_B COMA ad:e {: if(a.getNombre()==null || a.getPlanetas()==null || a.getColor()==null || a.getTipo()==null ){ System.out.println("ERROR, Falta de un archivo"); } else { a.setEnJuego("true"); a.setPlanetasConquistados(0);  a.setMisPlanetas(new ArrayList<>());  e.add(a); RESULT=e; } :}
-    | LLAVE_A ae:a LLAVE_B {: if(a.getNombre()==null || a.getPlanetas()==null || a.getColor()==null || a.getTipo()==null ){ System.out.println("ERROR, Falta de un archivo"); } else { ArrayList<Jugadores> misJugadores = new ArrayList<>(); a.setEnJuego("true"); a.setPlanetasConquistados(0);  a.setMisPlanetas(new ArrayList<>()); misJugadores.add(a); RESULT=misJugadores; } :}
-;
-    ae ::= af:a ae:e {: if(e!=null){ if(e.getNombre()==null){ e.setNombre(a.getNombre());  } else { parser.totalErrores += "Sub-atributo nombre en un campo JUGADORES sentenciado mas de una vez\n"; System.out.println("error"); } } RESULT=e; :}
-    | ag:a ae:e {: if(e!=null){ if(e.getPlanetas()==null){ e.setPlanetas(a.getPlanetas()); } else { parser.totalErrores += "Sub-atributo planetas en un campo JUGADORES sentenciado mas de una vez\n"; System.out.println("error"); } } RESULT=e; :}
-    | ah:a ae:e {: if(e!=null){ if(e.getTipo()==null){ e.setTipo(a.getTipo()); } else { parser.totalErrores += "Sub-atributo tipo en un campo JUGADORES sentenciado mas de una vez\n"; System.out.println("error"); } } RESULT=e; :}
-    | al:a ae:e {: if(e!=null){ if(e.getColor()==null){ e.setColor(a.getColor()); } else { parser.totalErrores += "Sub-atributo color en un campo JUGADORES sentenciado mas de una vez\n"; System.out.println("error"); } } RESULT=e; :}
-    | COMA q7:a {: RESULT=a; :}
-    | {: RESULT=new Jugadores(); :}
-    | error ae:e {: parser.totalErrores += "atributo en campo JUGADORES definido de forma incorrecta\n"; RESULT=e; :}
-;
-    q7 ::=  af:a ae:e {: if(e!=null){ if(e.getNombre()==null){ e.setNombre(a.getNombre());  } else { parser.totalErrores += "Sub-atributo nombre en un campo JUGADORES sentenciado mas de una vez\n"; System.out.println("error"); } } RESULT=e; :}
-    | ag:a ae:e {: if(e!=null){ if(e.getPlanetas()==null){ e.setPlanetas(a.getPlanetas()); } else { parser.totalErrores += "Sub-atributo planetas en un campo JUGADORES sentenciado mas de una vez\n"; System.out.println("error"); } } RESULT=e; :}
-    | ah:a ae:e {: if(e!=null){ if(e.getTipo()==null){ e.setTipo(a.getTipo()); } else { parser.totalErrores += "Sub-atributo tipo en un campo JUGADORES sentenciado mas de una vez\n"; System.out.println("error"); } } RESULT=e; :}
-    | al:a ae:e {: if(e!=null){ if(e.getColor()==null){ e.setColor(a.getColor()); } else { parser.totalErrores += "Sub-atributo color en un campo JUGADORES sentenciado mas de una vez\n"; System.out.println("error"); } } RESULT=e; :}
-    | error ae:e {: parser.totalErrores += "atributo en campo JUGADORES definido de forma incorrecta\n"; RESULT=e; :}
-;
-    af ::= nombre DOS_PUNTOS COMILLAS ID:a COMILLAS {: Jugadores jugador = new Jugadores();  jugador.setNombre(a.toString()); RESULT=jugador; :}
-;
-    ag ::= planetas DOS_PUNTOS AGRUPACION_A ai:a AGRUPACION_B {: Jugadores jugador = new Jugadores(); jugador.setPlanetas(a); RESULT=jugador; :}
-;
-    ai ::= COMILLAS ID:a COMILLAS COMA ai:b {: b.add(a.toString()); RESULT=b; :}
-    | COMILLAS ID:a COMILLAS ai:b {: b.add(a.toString()); RESULT=b; :}
-    | {: RESULT=new ArrayList<>(); :}
-;
-    al ::= color DOS_PUNTOS COMILLAS COLOR:a COMILLAS {: Jugadores jugador = new Jugadores(); jugador.setColor(a.toString()); RESULT=jugador; :}
-;
-    ah ::= tipo DOS_PUNTOS FACIL:a {: Jugadores jugador = new Jugadores(); jugador.setTipo(a.toString()); RESULT=jugador; :}
-    | tipo DOS_PUNTOS DIFICIL:a {: Jugadores jugador = new Jugadores(); jugador.setTipo(a.toString()); RESULT=jugador; :}
-    | tipo DOS_PUNTOS HUMANO:a {: Jugadores jugador = new Jugadores(); jugador.setTipo(a.toString()); RESULT=jugador; :}
+    inicio ::= a2
 ;
 
 
-        //SINTACTICO REPLAY CASI TERMINADO A FALTA DE LA PARTE RESUMEN PARA INDICAR ESTADO DE LOS JUGADORES
+     //SINTACTICO REPLAY CASI TERMINADO A FALTA DE LA PARTE RESUMEN PARA INDICAR ESTADO DE LOS JUGADORES
 
 
 
 
-    a2 ::= SECUENCIAS AGRUPACION_A ba:a AGRUPACION_B
+    a2 ::= SECUENCIAS AGRUPACION_A ba:a AGRUPACION_B {:   parser.traspasoDatosFlotas(parser.listReplay, a);         :}
     | SECUENCIAS AGRUPACION_A AGRUPACION_B 
 ;
     ba ::= TURNO ENTERO:a LLAVE_A bb:b LLAVE_B COMA ba:c {: b.setNoTurno((Integer) a); c.add(b); RESULT=c; :}
@@ -471,11 +151,13 @@ parser code {:
 ;
     bb ::= bc:a bb:e {: if(e!=null){ if(e.getListAcciones()==null){ e.setListAcciones(a); } else { System.out.println("error"); } } RESULT=e; :}                   
     | bf:a bb:e {: if(e!=null){ if(e.getListImpactos()==null){ e.setListImpactos(a); } else { System.out.println("error"); } } RESULT=e; :}
+    | bx:a bb:e {: if(e!=null){ if(e.getListResumen()==null){ e.setListResumen(a); } else { System.out.println("error"); } } RESULT=e; :}
     | COMA p2:a {: RESULT=a; :}
     | {: RESULT=new Replay(); :}                          
 ;
     p2 ::= bc:a bb:e {: if(e!=null){ if(e.getListAcciones()==null){ e.setListAcciones(a); } else { System.out.println("error"); } } RESULT=e; :}
     | bf:a bb:e {: if(e!=null){ if(e.getListImpactos()==null){ e.setListImpactos(a); } else { System.out.println("error"); } } RESULT=e; :}                                                                         
+    | bx:a bb:e {: if(e!=null){ if(e.getListResumen()==null){ e.setListResumen(a); } else { System.out.println("error"); } } RESULT=e; :}
 ;
 
 
@@ -535,31 +217,52 @@ parser code {:
     bp ::= ID:a LLAVE_A bv:b LLAVE_B COMA bp:c {: DatosImpacto datos = new DatosImpacto(); datos.setNombreJugador(a.toString());  datos.setListImpactos(b); c.add(datos); RESULT=c; :}
     | ID:a LLAVE_A bv:b LLAVE_B {: DatosImpacto datos = new DatosImpacto(); datos.setNombreJugador(a.toString()); datos.setListImpactos(b); ArrayList<DatosImpacto> listDatos = new ArrayList<>(); listDatos.add(datos); RESULT=listDatos; :}                                    
 ; 
-    bv ::= ID:c AGRUPACION_A bq:a AGRUPACION_B COMA bv:e {: if(a.getNavesRestantes()==null || a.getEstado()==null || a.getMensaje()==null || a.getNoFlota()==null){ System.out.println("ERROR, falta de un atributo en IMPACTOS"); } else {    a.setNombrePlaneta(c.toString()); e.add(a);   parser.listImpactos.add(a);  RESULT=e;  }  :}  
+    bv ::= ID:c AGRUPACION_A bq:a AGRUPACION_B COMA bv:e {: if(a.getNavesRestantes()==null || a.getEstado()==null || a.getMensaje()==null || a.getNoFlota()==null){ System.out.println("ERROR, falta de un atributo en IMPACTOS"); } else {    a.setNombrePlaneta(c.toString()); e.add(a);   RESULT=e;  }  :}  
     | ID:c AGRUPACION_A bq:a AGRUPACION_B {: if(a.getNavesRestantes()==null || a.getEstado()==null || a.getMensaje()==null || a.getNoFlota()==null){ System.out.println("ERROR, falta de un atributo en IMPACTOS"); } else {  a.setNombrePlaneta(c.toString());  ArrayList<Impactos> listImpactos = new ArrayList<>();  listImpactos.add(a);  RESULT=listImpactos; } :}
 ;
-    bq ::=  br:a bq:e {: if(e!=null){if(e.getNavesRestantes()!=null){ e.setNavesRestantes(a.getNavesRestantes()); } else { System.out.println("error"); }  } RESULT=e; :}
-    | bs:a bq:e {: if(e!=null){if(e.getEstado()!=null){ e.setEstado(a.getEstado()); } else { System.out.println("error"); }  } RESULT=e; :}
-    | bt:a bq:e {: if(e!=null){if(e.getMensaje()!=null){ e.setMensaje(a.getMensaje()); } else { System.out.println("error"); }  } RESULT=e;  :}
-    | bu:a bq:e {: if(e!=null){if(e.getNoFlota()!=null){ e.setNoFlota(a.getNoFlota()); } else { System.out.println("error"); }  } RESULT=e; :}
+    bq ::=  br:a bq:e {: if(e!=null){if(e.getNavesRestantes()==null){ e.setNavesRestantes(a.getNavesRestantes()); } else { System.out.println("error"); }  } RESULT=e; :}
+    | bs:a bq:e {: if(e!=null){if(e.getEstado()==null){ e.setEstado(a.getEstado()); } else { System.out.println("error"); }  } RESULT=e; :}
+    | bt:a bq:e {: if(e!=null){if(e.getMensaje()==null){ e.setMensaje(a.getMensaje()); } else { System.out.println("error"); }  } RESULT=e;  :}
+    | bu:a bq:e {: if(e!=null){if(e.getNoFlota()==null){ e.setNoFlota(a.getNoFlota()); } else { System.out.println("error"); }  } RESULT=e; :}
+    | cb:a bq:e {: if(e!=null){if(e.getJugadorAtacante()==null){ e.setJugadorAtacante(a.getJugadorAtacante()); } else { System.out.println("error"); } } RESULT=e; :}
+    | cc:a bq:e {: if(e!=null){if(e.getPlanetaAtacante()==null){ e.setPlanetaAtacante(a.getPlanetaAtacante()); } else { System.out.println("error"); } } RESULT=e; :}
     | COMA p7:a {: RESULT=a; :}
     | {: RESULT=new Impactos(); :}
 ;
-    p7 ::= br:a bq:e {: if(e!=null){if(e.getNavesRestantes()!=null){ e.setNavesRestantes(a.getNavesRestantes()); } else { System.out.println("error"); }  } RESULT=e; :}
-    | bs:a bq:e {: if(e!=null){if(e.getEstado()!=null){ e.setEstado(a.getEstado()); } else { System.out.println("error"); }  } RESULT=e; :}
-    | bt:a bq:e {: if(e!=null){if(e.getMensaje()!=null){ e.setMensaje(a.getMensaje()); } else { System.out.println("error"); }  } RESULT=e;  :}
-    | bu:a bq:e {: if(e!=null){if(e.getNoFlota()!=null){ e.setNoFlota(a.getNoFlota()); } else { System.out.println("error"); }  } RESULT=e; :}
+    p7 ::= br:a bq:e {: if(e!=null){if(e.getNavesRestantes()==null){ e.setNavesRestantes(a.getNavesRestantes()); } else { System.out.println("error"); }  } RESULT=e; :}
+    | bs:a bq:e {: if(e!=null){if(e.getEstado()==null){ e.setEstado(a.getEstado()); } else { System.out.println("error"); }  } RESULT=e; :}
+    | bt:a bq:e {: if(e!=null){if(e.getMensaje()==null){ e.setMensaje(a.getMensaje()); } else { System.out.println("error"); }  } RESULT=e;  :}
+    | bu:a bq:e {: if(e!=null){if(e.getNoFlota()==null){ e.setNoFlota(a.getNoFlota()); } else { System.out.println("error"); }  } RESULT=e; :}
+    | cb:a bq:e {: if(e!=null){if(e.getJugadorAtacante()==null){ e.setJugadorAtacante(a.getJugadorAtacante()); } else { System.out.println("error"); } } RESULT=e; :}
+    | cc:a bq:e {: if(e!=null){if(e.getPlanetaAtacante()==null){ e.setPlanetaAtacante(a.getPlanetaAtacante()); } else { System.out.println("error"); } } RESULT=e; :}
 ;
     br ::= navesRestantes DOS_PUNTOS ENTERO:a {: Impactos impacto = new Impactos(); impacto.setNavesRestantes((Integer) a); RESULT=impacto; :}
 ;
-    bs ::= estado DOS_PUNTOS VIVO {: Impactos impacto = new Impactos(); impacto.setEstado(""); RESULT=impacto; :}
+    bs ::= estado DOS_PUNTOS VIVO {: Impactos impacto = new Impactos(); impacto.setEstado("VIVO"); RESULT=impacto; :}
     | estado DOS_PUNTOS CONQUISTADO ID:a {: Impactos impacto = new Impactos(); impacto.setEstado(a.toString()); RESULT=impacto; :}
 ;
+    cb ::= jugadorAtacante DOS_PUNTOS ENTERO:a {: Impactos impacto = new Impactos(); impacto.setJugadorAtacante((Integer) a); RESULT=impacto; :}
+;
+    cc ::= planetaAtacante DOS_PUNTOS ID:a {: Impactos impacto = new Impactos(); impacto.setPlanetaAtacante(a.toString()); RESULT=impacto; :}
+;
+
+
+
     bt ::= mensaje DOS_PUNTOS ID:a {: Impactos impacto = new Impactos();  impacto.setMensaje(a.toString()); RESULT=impacto; :}
 ;
     bu ::= noFlota DOS_PUNTOS ENTERO:a {: Impactos impacto = new Impactos(); impacto.setNoFlota((Integer) a); RESULT=impacto; :}
 ;
-
+    bx::= RESUMEN LLAVE_A by:a LLAVE_B {: RESULT=a; :}
+;
+    by ::= bz:a by:e {: e.add(a); RESULT=e; :}
+    | COMA p6:a {: RESULT=a; :}      
+    | {: RESULT=new ArrayList<>(); :}
+;
+    p6 ::= bz:a by:e  {: e.add(a); RESULT=e; :}
+;
+    bz ::= estado ID:b DOS_PUNTOS VERDADERO:a {: ResumenTurno resumen = new ResumenTurno(); resumen.setNombreJugador(b.toString());  resumen.setEstadoJugador(Boolean.valueOf(a.toString())); RESULT=resumen; :}
+    | estado ID:b DOS_PUNTOS FALSO:a {: ResumenTurno resumen = new ResumenTurno(); resumen.setNombreJugador(b.toString()); resumen.setEstadoJugador(Boolean.valueOf(a.toString())); RESULT=resumen; :}
+;
     
 
 

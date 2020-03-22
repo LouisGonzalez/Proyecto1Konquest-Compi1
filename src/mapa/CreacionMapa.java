@@ -68,7 +68,6 @@ public class CreacionMapa {
                                 distancias.verificarExistenciaPlaneta2(misDatos, posX, posY, nodosJalar, btnDistancia, btnFlotas);
                             }
                         } else {
-
                             if (contClicks % 2 != 0) {
                                 nodoJalar = jugabilidad.accionesPrimerClick(misDatos, posX, posY);
                             } else {
