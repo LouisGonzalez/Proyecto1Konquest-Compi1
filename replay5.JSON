@@ -247,6 +247,7 @@ SECUENCIAS [
 	       estado Jodde: true,
 	       estado Jode: true
 	   }
+	},
 	TURNO 5: {
 	   ACCIONES: {
 	     Jodde: [

@@ -147,8 +147,8 @@ public class Jugabilidad {
                 String planeta2 = misDatos.getJugadores().get(jugador).getMisPlanetas().get(noPlaneta).getNombre();
                 float porcentajeMuertes = Float.parseFloat(misDatos.getJugadores().get(VentanaPrincipal.contador).getMisPlanetas().get(nodoJalar).getPorcentajeMuertes());
                 camino = seteoNavesCamino(nodoJalar, misDatos, camino, navesCamino, navesEnvio, jugador, planeta1, planeta2, porcentajeMuertes, turno);
-                agregarLanzamientosReplay(misDatos, camino);
                 navesCamino.add(camino);
+                agregarLanzamientosReplay(misDatos, camino);
                 System.out.println(VentanaPrincipal.textoReplay);
             } else if (interruptor == 2) {
                 pitagoras = distanciaPlanetaANeutral(nodoJalar, noPlaneta, misDatos, pitagoras);
@@ -159,40 +159,39 @@ public class Jugabilidad {
                 String planeta2 = misDatos.getpNeutrales().get(noPlaneta).getNombre();
                 NavesCamino camino = new NavesCamino();
                 camino = seteoNavesCamino(nodoJalar, misDatos, camino, navesCamino, navesEnvio, null, planeta1, planeta2, porcentajeMuertes, turno);
-                agregarLanzamientosReplay(misDatos, camino);
                 navesCamino.add(camino);
+                agregarLanzamientosReplay(misDatos, camino);
                 System.out.println(VentanaPrincipal.textoReplay);
             }
             funciona = true;
             txtNaves.setEnabled(false);
             txtNaves.setText("");
             btnTurno.setEnabled(true);
-            
-            
-            
+
         }
         return funciona;
     }
-    
-    public void agregarLanzamientosReplay(Juego misDatos, NavesCamino camino){
+
+    public void agregarLanzamientosReplay(Juego misDatos, NavesCamino camino) {
         String nombreJugador = misDatos.getJugadores().get(VentanaPrincipal.contador).getNombre();
-        VentanaPrincipal.aux += "\t     "+nombreJugador+": [\n";
+        VentanaPrincipal.aux += "\t     " + nombreJugador + ": [\n";
         VentanaPrincipal.aux += "\t         Flota [\n";
-        VentanaPrincipal.aux += "\t           noFlota: "+camino.getNoFlota()+",\n";
-        VentanaPrincipal.aux += "\t           planetaOrigen: "+camino.getPlanetaOrigen()+",\n";
-        VentanaPrincipal.aux += "\t           planetaDestino: "+camino.getPlanetaDestino()+",\n";
-        VentanaPrincipal.aux += "\t           noNaves: "+camino.getNoNaves()+",\n";
-        VentanaPrincipal.aux += "\t           noJugadorEnvio: "+camino.getNoJugadorEnvio()+",\n";
-        VentanaPrincipal.aux += "\t           noJugadorAtaque: "+camino.getNoJugadorAtaque()+",\n";
-        VentanaPrincipal.aux += "\t           porcentajeMuertes: "+camino.getPorcentajeMuertes()+",\n";
-        VentanaPrincipal.aux += "\t           turnoLlegada: "+camino.getTurnoLlegada()+",\n";
-        VentanaPrincipal.aux += "\t           verificador: "+camino.getVerificador()+"\n";
-        VentanaPrincipal.aux += "\t         ]\n";
-        if(VentanaPrincipal.contador == misDatos.getJugadores().size()-1){
-            VentanaPrincipal.aux += "\t       ]\n";
+        VentanaPrincipal.aux += "\t           noFlota: " + camino.getNoFlota() + ",\n";
+        VentanaPrincipal.aux += "\t           planetaOrigen: " + camino.getPlanetaOrigen() + ",\n";
+        VentanaPrincipal.aux += "\t           planetaDestino: " + camino.getPlanetaDestino() + ",\n";
+        VentanaPrincipal.aux += "\t           noNaves: " + camino.getNoNaves() + ",\n";
+        VentanaPrincipal.aux += "\t           noJugadorEnvio: " + camino.getNoJugadorEnvio() + ",\n";
+        if (camino.getNoJugadorAtaque() == null) {
+            VentanaPrincipal.aux += "\t           noJugadorAtaque: " + -1 + ",\n";
         } else {
-            VentanaPrincipal.aux += "\t       ],\n";
+            VentanaPrincipal.aux += "\t           noJugadorAtaque: " + camino.getNoJugadorAtaque() + ",\n";
         }
+        VentanaPrincipal.aux += "\t           porcentajeMuertes: " + camino.getPorcentajeMuertes() + ",\n";
+        VentanaPrincipal.aux += "\t           turnoLlegada: " + camino.getTurnoLlegada() + ",\n";
+        VentanaPrincipal.aux += "\t           verificador: " + camino.getVerificador() + "\n";
+        VentanaPrincipal.aux += "\t         ]\n";
+        VentanaPrincipal.aux += "\t       ]\n";
+
     }
 
     public int distanciaPlanetaPlaneta(int nodoJalar, int jugador, int nodoPlaneta, Juego misDatos, int pitagoras) {
@@ -297,10 +296,10 @@ public class Jugabilidad {
                     int navesAtacanteLlegada = totalNavesAtacante - navesAtacanteDestruidas;
                     int navesDefensaDestruidas = (int) (navesPlanetaAtacado * porcMuerteAtacante);
                     int totalNavesDefensa = navesPlanetaAtacado - navesDefensaDestruidas;
-                    
+
                     if (totalNavesDefensa <= navesAtacanteLlegada) {
-                         misDatos.getJugadores().get(jugadorAtaque).getMisPlanetas().get(noPlaneta).setNaves(Integer.toString(totalNavesDefensa));
-                       
+                        misDatos.getJugadores().get(jugadorAtaque).getMisPlanetas().get(noPlaneta).setNaves(Integer.toString(totalNavesDefensa));
+
                         Planetas aux = misDatos.getJugadores().get(jugadorAtaque).getMisPlanetas().get(noPlaneta);
 
                         aux.setColor(misDatos.getJugadores().get(jugadorEnvio).getColor());
@@ -313,7 +312,7 @@ public class Jugabilidad {
                         VentanaPrincipal.tablero[Integer.parseInt(aux.getPosicionY())][Integer.parseInt(aux.getPosicionX())].setBackground(new Color(colores[0], colores[1], colores[2], colores[3]));
                         removerPlaneta(misDatos, jugadorAtaque, planetaAtaque);
                         misDatos.getJugadores().get(jugadorEnvio).getMisPlanetas().add(aux);
-                        
+
                         if (misDatos.getJugadores().get(jugadorEnvio).getPlanetasConquistados() == 0) {
                             misDatos.getJugadores().get(jugadorEnvio).setPlanetasConquistados(1);
                         } else {
@@ -323,14 +322,9 @@ public class Jugabilidad {
                         }
 
                         JOptionPane.showMessageDialog(null, "Planeta: " + planetaAtaque + " ha sido conquistado por " + misDatos.getJugadores().get(jugadorEnvio).getNombre());
-                        
-                        
-                        archivo.textoNavesImpactadas(misDatos, i, jugadorAtaque, planetaAtaque, totalNavesDefensa, "false");
-                        
-                    
-                                    
-                        
-                        
+
+                        archivo.textoNavesImpactadas(misDatos, i, jugadorAtaque, planetaAtaque, totalNavesDefensa, "CONQUISTADO " + jugadorAtaque);
+
                         String texto = panelMensajes.getText();
                         String mensaje = texto + "    Planeta: " + planetaAtaque + " ha sido conquistado por " + misDatos.getJugadores().get(jugadorEnvio).getNombre() + "\n";
                         panelMensajes.setText(mensaje);
@@ -338,19 +332,14 @@ public class Jugabilidad {
                         verificadorExistenciaPlanetas(misDatos, jugadorAtaque);
 
                     } else {
-                       
+
                         misDatos.getJugadores().get(jugadorAtaque).getMisPlanetas().get(noPlaneta).setNaves(Integer.toString(totalNavesDefensa));
                         JOptionPane.showMessageDialog(null, "Planeta: " + planetaAtaque + " ha bloqueado un ataque proveniente del planeta: " + listNaves.get(i).getPlanetaOrigen());
                         String texto = panelMensajes.getText();
                         String mensaje = texto + "    Planeta: " + planetaAtaque + " ha bloqueado un ataque proveniente del planeta: " + listNaves.get(i).getPlanetaOrigen() + "\n";
-                    
-                        archivo.textoNavesImpactadas(misDatos, i, jugadorAtaque, planetaAtaque, totalNavesDefensa, "true");
-                      
-                        
-                        
-                        
-                        
-                        
+
+                        archivo.textoNavesImpactadas(misDatos, i, jugadorAtaque, planetaAtaque, totalNavesDefensa, "VIVO");
+
                         panelMensajes.setText(mensaje);
                     }
                     listNaves.get(i).setVerificador(true);
@@ -382,14 +371,10 @@ public class Jugabilidad {
     public void verificacionesAtaqueNeutral(int i, ArrayList<NavesCamino> listNaves, Juego misDatos, JTextArea panelMensajes) {
         if (listNaves.get(i).getTurnoLlegada() == VentanaPrincipal.contadorTurnos) {
             int jugadorEnvio = listNaves.get(i).getNoJugadorEnvio();
-            
-            
+
             int navesAtacante = listNaves.get(i).getNoNaves();
             float porcMuerteAtacante = listNaves.get(i).getPorcentajeMuertes();
-            
-            
-            
-            
+
             String planetaAtaque = listNaves.get(i).getPlanetaDestino();
             int planetaNeutral = 0;
             float porcMuertesNeutral = 0;
@@ -403,57 +388,53 @@ public class Jugabilidad {
                     break;
                 }
             }
-            
-            
-            
+
             int navesAtacanteDestruidas = (int) (navesAtacante * porcMuertesNeutral);
             int totalNavesLlegada = navesAtacante - navesAtacanteDestruidas;
             int navesDefensaDestruidas = (int) (navesNeutral * porcMuerteAtacante);
             int navesDefensa = navesNeutral - navesDefensaDestruidas;
-            
-            
-            
-                if (navesDefensa <= totalNavesLlegada) {
-                    Planetas planetas = new Planetas();
-                    planetas.setNombre(misDatos.getpNeutrales().get(planetaNeutral).getNombre());
-                    planetas.setNaves(misDatos.getpNeutrales().get(planetaNeutral).getNaves());
-                    planetas.setColor(misDatos.getJugadores().get(jugadorEnvio).getColor());
-                    planetas.setInterruptor(misDatos.getpNeutrales().get(planetaNeutral).isInterruptor());
-                    planetas.setPorcentajeMuertes(misDatos.getpNeutrales().get(planetaNeutral).getPorcentajeMuertes());
-                    planetas.setPosicionX(misDatos.getpNeutrales().get(planetaNeutral).getPosicionX());
-                    planetas.setPosicionY(misDatos.getpNeutrales().get(planetaNeutral).getPosicionY());
-                    planetas.setProduccion(misDatos.getpNeutrales().get(planetaNeutral).getProduccion());
-                    misDatos.getJugadores().get(jugadorEnvio).getMisPlanetas().add(planetas);
-                    misDatos.getpNeutrales().remove(planetaNeutral);
-                    String[] color = planetas.getColor().split(",");
-                    int[] colores = new int[color.length];
-                    for (int j = 0; j < colores.length; j++) {
-                        colores[i] = Integer.parseInt(color[i]);
-                    }
-                    if (misDatos.getJugadores().get(jugadorEnvio).getPlanetasConquistados() == 0) {
-                        misDatos.getJugadores().get(jugadorEnvio).setPlanetasConquistados(1);
-                    } else {
-                        int planetasConquistados = misDatos.getJugadores().get(jugadorEnvio).getPlanetasConquistados();
-                        int nuevoValor = planetasConquistados + 1;
-                        misDatos.getJugadores().get(jugadorEnvio).setPlanetasConquistados(nuevoValor);
-                    }
-                    VentanaPrincipal.tablero[Integer.parseInt(planetas.getPosicionY())][Integer.parseInt(planetas.getPosicionX())].setBackground(new Color(255, 255, 255, 100));
-                    VentanaPrincipal.tablero[Integer.parseInt(planetas.getPosicionY())][Integer.parseInt(planetas.getPosicionX())].setBackground(new Color(colores[0], colores[1], colores[2], colores[3]));
-                    JOptionPane.showMessageDialog(null, "Planeta Neutral: " + planetaAtaque + " ha sido conquistado por " + misDatos.getJugadores().get(jugadorEnvio).getNombre());
-                    String texto = panelMensajes.getText();
-                    String mensaje = texto + "    Planeta Neutral: " + planetaAtaque + " ha sido conquistado por " + misDatos.getJugadores().get(jugadorEnvio).getNombre() + "\n";
-                    
-                    archivo.textoNeutralAtacado(planetaAtaque, "false", i, navesDefensa);
-                    
-                    panelMensajes.setText(mensaje);
-                } else {
-                    misDatos.getpNeutrales().get(planetaNeutral).setNaves(Integer.toString(navesDefensa));
-                    JOptionPane.showMessageDialog(null, "Planeta Neutral: " + planetaAtaque + " ha bloqueado un ataque proveniente del planeta: " + listNaves.get(i).getPlanetaOrigen());
-                    String texto = panelMensajes.getText();
-                    String mensaje = texto + "    Planeta Neutral: " + planetaAtaque + " ha bloqueado un ataque proveniente del planeta: " + listNaves.get(i).getPlanetaOrigen() + "\n";
-                    archivo.textoNeutralAtacado(planetaAtaque, "true", i, navesDefensa);
-                    panelMensajes.setText(mensaje);
+
+            if (navesDefensa <= totalNavesLlegada) {
+                Planetas planetas = new Planetas();
+                planetas.setNombre(misDatos.getpNeutrales().get(planetaNeutral).getNombre());
+                planetas.setNaves(misDatos.getpNeutrales().get(planetaNeutral).getNaves());
+                planetas.setColor(misDatos.getJugadores().get(jugadorEnvio).getColor());
+                planetas.setInterruptor(misDatos.getpNeutrales().get(planetaNeutral).isInterruptor());
+                planetas.setPorcentajeMuertes(misDatos.getpNeutrales().get(planetaNeutral).getPorcentajeMuertes());
+                planetas.setPosicionX(misDatos.getpNeutrales().get(planetaNeutral).getPosicionX());
+                planetas.setPosicionY(misDatos.getpNeutrales().get(planetaNeutral).getPosicionY());
+                planetas.setProduccion(misDatos.getpNeutrales().get(planetaNeutral).getProduccion());
+                misDatos.getJugadores().get(jugadorEnvio).getMisPlanetas().add(planetas);
+                misDatos.getpNeutrales().remove(planetaNeutral);
+                String[] color = planetas.getColor().split(",");
+                int[] colores = new int[color.length];
+                for (int j = 0; j < colores.length; j++) {
+                    colores[i] = Integer.parseInt(color[i]);
                 }
+                if (misDatos.getJugadores().get(jugadorEnvio).getPlanetasConquistados() == 0) {
+                    misDatos.getJugadores().get(jugadorEnvio).setPlanetasConquistados(1);
+                } else {
+                    int planetasConquistados = misDatos.getJugadores().get(jugadorEnvio).getPlanetasConquistados();
+                    int nuevoValor = planetasConquistados + 1;
+                    misDatos.getJugadores().get(jugadorEnvio).setPlanetasConquistados(nuevoValor);
+                }
+                VentanaPrincipal.tablero[Integer.parseInt(planetas.getPosicionY())][Integer.parseInt(planetas.getPosicionX())].setBackground(new Color(255, 255, 255, 100));
+                VentanaPrincipal.tablero[Integer.parseInt(planetas.getPosicionY())][Integer.parseInt(planetas.getPosicionX())].setBackground(new Color(colores[0], colores[1], colores[2], colores[3]));
+                JOptionPane.showMessageDialog(null, "Planeta Neutral: " + planetaAtaque + " ha sido conquistado por " + misDatos.getJugadores().get(jugadorEnvio).getNombre());
+                String texto = panelMensajes.getText();
+                String mensaje = texto + "    Planeta Neutral: " + planetaAtaque + " ha sido conquistado por " + misDatos.getJugadores().get(jugadorEnvio).getNombre() + "\n";
+
+                archivo.textoNeutralAtacado(planetaAtaque, "CONQUISTADO " + jugadorEnvio, i, navesDefensa);
+
+                panelMensajes.setText(mensaje);
+            } else {
+                misDatos.getpNeutrales().get(planetaNeutral).setNaves(Integer.toString(navesDefensa));
+                JOptionPane.showMessageDialog(null, "Planeta Neutral: " + planetaAtaque + " ha bloqueado un ataque proveniente del planeta: " + listNaves.get(i).getPlanetaOrigen());
+                String texto = panelMensajes.getText();
+                String mensaje = texto + "    Planeta Neutral: " + planetaAtaque + " ha bloqueado un ataque proveniente del planeta: " + listNaves.get(i).getPlanetaOrigen() + "\n";
+                archivo.textoNeutralAtacado(planetaAtaque, "VIVO", i, navesDefensa);
+                panelMensajes.setText(mensaje);
+            }
             listNaves.get(i).setVerificador(true);
 
         }
@@ -462,14 +443,13 @@ public class Jugabilidad {
 
     public void verificadorExistenciaPlanetas(Juego misDatos, int noJugador) {
         int totalPlanetas = misDatos.getJugadores().get(noJugador).getMisPlanetas().size();
-        
-        if(misDatos.getJugadores().get(noJugador).getMisPlanetas().isEmpty()){
-            JOptionPane.showMessageDialog(null, "Este planeta ha sido eliminado");
+
+        if (misDatos.getJugadores().get(noJugador).getMisPlanetas().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Este jugador ha sido eliminado del");
             misDatos.getJugadores().get(noJugador).setEnJuego("false");
-            
+
         }
-        
-        
+
     }
 
 }

@@ -6,7 +6,7 @@ SECUENCIAS [
 	           noFlota: 1,
 	           planetaOrigen: B,
 	           planetaDestino: A,
-	           noNaves: 3,
+	           noNaves: 4,
 	           noJugadorEnvio: 0,
 	           noJugadorAtaque: 1,
 	           porcentajeMuertes: 0.4,
@@ -63,6 +63,19 @@ SECUENCIAS [
 	           verificador: false
 	         ]
 	       ]
+	     Jode: [
+	         Flota [
+	           noFlota: 2,
+	           planetaOrigen: C,
+	           planetaDestino: D,
+	           noNaves: 1,
+	           noJugadorEnvio: 1,
+	           noJugadorAtaque: -1,
+	           porcentajeMuertes: 0.4,
+	           turnoLlegada: 3,
+	           verificador: false
+	         ]
+	       ]
 	   }
 	   IMPACTOS {
 	       Jodde {
@@ -86,7 +99,7 @@ SECUENCIAS [
 	           noFlota: 2,
 	           planetaOrigen: B,
 	           planetaDestino: C,
-	           noNaves: 6,
+	           noNaves: 4,
 	           noJugadorEnvio: 0,
 	           noJugadorAtaque: 1,
 	           porcentajeMuertes: 0.4,
@@ -96,7 +109,7 @@ SECUENCIAS [
 	       ]
 	     Jode: [
 	         Flota [
-	           noFlota: 1,
+	           noFlota: 2,
 	           planetaOrigen: C,
 	           planetaDestino: B,
 	           noNaves: 1,
@@ -111,7 +124,7 @@ SECUENCIAS [
 	   IMPACTOS {
 	       Jode {
 	         C [
-	           navesRestantes: 22,
+	           navesRestantes: 21,
 	           estado: VIVO,
 	           mensaje: dd,
 	           noFlota:1
@@ -138,14 +151,14 @@ SECUENCIAS [
 	           noFlota: 2,
 	           planetaOrigen: B,
 	           planetaDestino: C,
-	           noNaves: 5,
+	           noNaves: 6,
 	           noJugadorEnvio: 0,
 	           noJugadorAtaque: 1,
 	           porcentajeMuertes: 0.4,
 	           turnoLlegada: 4,
 	           verificador: false
 	         ]
-	       ]
+	       ]	
 	     Jode: [
 	         Flota [
 	           noFlota: 1,
@@ -159,130 +172,27 @@ SECUENCIAS [
 	           verificador: false
 	         ]
 	       ]
-	     Jode: [
-	         Flota [
-	           noFlota: 2,
-	           planetaOrigen: C,
-	           planetaDestino: D,
-	           noNaves: 1,
-	           noJugadorEnvio: 1,
-	           noJugadorAtaque: -1,
-	           porcentajeMuertes: 0.4,
-	           turnoLlegada: 5,
-	           verificador: false
-	         ]
-	       ]
 	   }
 	   IMPACTOS {
+	       NEUTRAL {
+	         D [
+	           navesRestantes: 31,
+	           estado: VIVO,
+	           mensaje: dd,
+	           noFlota:1
+	         ]
+	       }
 	       Jode {
 	         C [
 	           navesRestantes: 18,
 	           estado: VIVO,
 	           mensaje: dd,
-	           noFlota:1
-	         ]
-	       }
-	       Jodde {
-	         B [
-	           navesRestantes: 6,
-	           estado: VIVO,
-	           mensaje: dd,
-	           noFlota:2
-	         ]
-	       }
-	   }
-	   RESUMEN {
-	       estado Jodde: true,
-	       estado Jode: true
-	   }
-	},
-	TURNO 4: {
-	   ACCIONES: {
-	     Jodde: [
-	         Flota [
-	           noFlota: 2,
-	           planetaOrigen: B,
-	           planetaDestino: C,
-	           noNaves: 6,
-	           noJugadorEnvio: 0,
-	           noJugadorAtaque: 1,
-	           porcentajeMuertes: 0.4,
-	           turnoLlegada: 5,
-	           verificador: false
-	         ]
-	       ]
-	     Jode: [
-	         Flota [
-	           noFlota: 2,
-	           planetaOrigen: C,
-	           planetaDestino: B,
-	           noNaves: 1,
-	           noJugadorEnvio: 1,
-	           noJugadorAtaque: 0,
-	           porcentajeMuertes: 0.4,
-	           turnoLlegada: 5,
-	           verificador: false
-	         ]
-	       ]
-	   }
-	   IMPACTOS {
-	       Jode {
-	         C [
-	           navesRestantes: 15,
-	           estado: VIVO,
-	           mensaje: dd,
-	           noFlota:1
-	         ]
-	       }
-	       Jodde {
-	         B [
-	           navesRestantes: 6,
-	           estado: VIVO,
-	           mensaje: dd,
-	           noFlota:2
-	         ]
-	       }
-	   }
-	   RESUMEN {
-	       estado Jodde: true,
-	       estado Jode: true
-	   }
-	TURNO 5: {
-	   ACCIONES: {
-	     Jodde: [
-	         Flota [
-	           noFlota: 2,
-	           planetaOrigen: B,
-	           planetaDestino: C,
-	           noNaves: 4,
-	           noJugadorEnvio: 0,
-	           noJugadorAtaque: 1,
-	           porcentajeMuertes: 0.4,
-	           turnoLlegada: 6,
-	           verificador: false
-	         ]
-	       ]
-	   }
-	   IMPACTOS {
-	       NEUTRAL {
-	         D [
-	           navesRestantes: 45,
-	           estado: VIVO,
-	           mensaje: dd,
-	           noFlota:1
-	         ]
-	       }
-	       Jode {
-	         C [
-	           navesRestantes: 14,
-	           estado: VIVO,
-	           mensaje: dd,
 	           noFlota:2
 	         ]
 	       }
 	       Jodde {
 	         B [
-	           navesRestantes: 6,
+	           navesRestantes: 7,
 	           estado: VIVO,
 	           mensaje: dd,
 	           noFlota:3
@@ -295,4 +205,3 @@ SECUENCIAS [
 	   }
 	}
 ]
-turnoJugador: 1

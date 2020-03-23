@@ -96,6 +96,9 @@ Espacio = {Salto} | [ \t\f]
          "VIVO"                                                             {return symbol(sym.VIVO);}
          "CONQUISTADO"                                                      {return symbol(sym.CONQUISTADO);}
 
+         "turnoJugador"                                                     {return symbol(sym.turnoJugador);}
+
+
          "HUMANO"                                                           {return symbol(sym.HUMANO, new String(yytext()));}
          "DIFICIL"                                                                   {return symbol(sym.DIFICIL, new String(yytext()));}
          "FACIL"                                                                     {return symbol(sym.FACIL, new String(yytext()));}

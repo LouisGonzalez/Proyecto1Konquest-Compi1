@@ -29,8 +29,7 @@ public class CreacionArchivoREPLAY {
         } else {
             try {
                 buffer = new BufferedWriter(new FileWriter(replay));
-                buffer.write("SECUENCIAS [\n");
-                buffer.write("]");
+                buffer.write(VentanaPrincipal.textoReplay);
                 buffer.close();
             } catch (IOException ex) {
                 Logger.getLogger(CreacionArchivoREPLAY.class.getName()).log(Level.SEVERE, null, ex);
@@ -39,23 +38,7 @@ public class CreacionArchivoREPLAY {
         return replay.toString();
     }
 
-    public void obtenerUltimaLinea(String replay) {
-        try {
-            FileReader lector = new FileReader(replay);
-            BufferedReader buffer = new BufferedReader(lector);
-            int noLinea = 0;
-            String linea;
-            while ((linea = buffer.readLine()) != null) {
-                noLinea++;
-
-            }
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(CreacionArchivoREPLAY.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(CreacionArchivoREPLAY.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
+    
     public void textoNavesImpactadas(Juego misDatos, int i, int jugadorAtaque, String planeta, int totalNaves, String estado) {
         VentanaPrincipal.aux2 += "\t       " + misDatos.getJugadores().get(jugadorAtaque).getNombre() + " {\n";
         VentanaPrincipal.aux2 += "\t         " + planeta + " [\n";
@@ -83,9 +66,9 @@ public class CreacionArchivoREPLAY {
     public void textoNeutral(Juego misDatos){
         for (int i = 0; i < misDatos.getJugadores().size(); i++) {
             if(i  == misDatos.getJugadores().size() - 1){
-                VentanaPrincipal.aux3 += "\t       "+misDatos.getJugadores().get(i).getEnJuego()+"\n";
+                VentanaPrincipal.aux3 += "\t       estado "+misDatos.getJugadores().get(i).getNombre()+": "+misDatos.getJugadores().get(i).getEnJuego()+"\n";
             } else {
-                VentanaPrincipal.aux3 += "\t       "+misDatos.getJugadores().get(i).getEnJuego()+",\n";
+                VentanaPrincipal.aux3 += "\t       estado"+misDatos.getJugadores().get(i).getNombre()+": "+misDatos.getJugadores().get(i).getEnJuego()+",\n";
             }
         }
     }

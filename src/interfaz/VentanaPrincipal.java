@@ -43,6 +43,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private String archivo;
     public CreacionMapa mapa;
     public static JLabel[][] tablero;
+    public String path = "";
     private Juego juego = null;
     public static int contador = 0;
     public static int contadorTurnos = 0;
@@ -104,6 +105,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         opcionesGuardar = new javax.swing.JMenu();
         guardar1 = new javax.swing.JMenuItem();
         guardar2 = new javax.swing.JMenuItem();
+        guardarReplay = new javax.swing.JMenuItem();
         replay = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
 
@@ -256,6 +258,14 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
         itemNuevo.add(opcionesGuardar);
 
+        guardarReplay.setText("Guardar replay");
+        guardarReplay.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                guardarReplayActionPerformed(evt);
+            }
+        });
+        itemNuevo.add(guardarReplay);
+
         replay.setText("Replay de una partida");
         replay.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -288,7 +298,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         datosJuego.clear();
         JFileChooser chooser = new JFileChooser();
         panelMensajes.setText("");
-        String path = "";
         SintaxCreacionMapa.totalErrores = "";
         String seleccion = "Seleccione el JSON para abrir el juego";
         chooser.setCurrentDirectory(new File("."));
@@ -297,10 +306,10 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         chooser.setAcceptAllFileFilterUsed(false);
         if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             System.out.println("getCurrentDirectory(): " + chooser.getCurrentDirectory());
+            path = chooser.getCurrentDirectory().toString();
             System.out.println("getSelectedFile(): " + chooser.getSelectedFile());
             // archivoPrincipal = chooser.getSelectedFile().toString();
             proyecto = new File(chooser.getSelectedFile().getAbsolutePath());
-            path = chooser.getSelectedFile().toString();
             archivo = proyecto.toString();
             if (archivo.endsWith(".JSON")) {
                 FileReader fr;
@@ -391,7 +400,9 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         }
         if (contador == juego.getJugadores().size()) {
             archivoReplay.textoNeutral(juego);
-            textoReplay += "\t},\n";
+            if (contadorTurnos > 0) {
+                textoReplay += "\t},\n";
+            }
             textoReplay += "\tTURNO " + contadorTurnos + ": {\n";
             textoReplay += "\t   ACCIONES: {\n";
             textoReplay += aux;
@@ -519,8 +530,17 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                     new SintaxReplay(lexico, mapa, panelMensajes, contador, txtNaves, datosJuego, btnTurno, listNaves, panelJuego, btnDistancia, btnFlotas, listReplay).parse();
 
                     JOptionPane.showMessageDialog(null, "listo");
+                    
+                    
+                    
+                   
                     acciones.lanzamientoFlotas(lblTurno, listReplay, juego, listNaves);
 
+                    System.out.println(listNaves.size()+"sdss");
+                    
+                       // System.out.println(listRe);
+                        
+                    
                 } catch (Exception ex) {
                     Logger.getLogger(VentanaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
                     JOptionPane.showMessageDialog(null, "ERROR");
@@ -533,6 +553,34 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
     }//GEN-LAST:event_replayActionPerformed
 
+    private void guardarReplayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_guardarReplayActionPerformed
+        textoReplay += "\t},\n";
+        textoReplay += "\tTURNO " + contadorTurnos + ": {\n";
+        textoReplay += "\t   ACCIONES: {\n";
+        textoReplay += aux;
+        aux = "";
+        textoReplay += "\t   }\n";
+        textoReplay += "\t   IMPACTOS {\n";
+        textoReplay += aux2;
+        aux2 = "";
+        textoReplay += "\t   }\n";
+        textoReplay += "\t   RESUMEN {\n";
+        archivoReplay.textoNeutral(juego);
+        textoReplay += aux3;
+        aux3 = "";
+        textoReplay += "\t   }\n";
+        textoReplay += "\t}\n";
+        textoReplay += "]\n";
+        textoReplay += "turnoJugador: "+contador;
+        System.out.println(textoReplay);
+        if (!path.equals("")) {
+            archivoReplay.creacionJSON(path);
+        } else {
+            textoReplay = "";
+            JOptionPane.showMessageDialog(null, "No has abierto ningun juego para poder hacer replay.");
+        }
+    }//GEN-LAST:event_guardarReplayActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDistancia;
@@ -540,6 +588,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private javax.swing.JButton btnTurno;
     private javax.swing.JMenuItem guardar1;
     private javax.swing.JMenuItem guardar2;
+    private javax.swing.JMenuItem guardarReplay;
     private javax.swing.JMenuItem itemLectura;
     private javax.swing.JMenu itemNuevo;
     private javax.swing.JMenu jMenu2;

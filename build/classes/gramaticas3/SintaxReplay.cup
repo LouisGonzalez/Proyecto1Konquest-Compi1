@@ -20,6 +20,7 @@ import javax.swing.JTextField;
 import javax.swing.JTextArea;
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import interfaz.VentanaPrincipal;
 
 parser code {:
 
@@ -88,9 +89,9 @@ parser code {:
              tipo, HUMANO, DIFICIL, FACIL, ENTERO, DECIMAL, ID, filas, columnas, color, posX, posY, COLOR, SECUENCIAS,
              TURNO, ACCIONES, Flota, planetaOrigen, planetaDestino, noNaves, noJugadorEnvio, noJugadorAtaque, CONQUISTADO,
              turnoLlegada, verificador, IMPACTOS, navesRestantes, estado, mensaje, estadoJugador, noFlota, VIVO,
-             RESUMEN, JUGANDO, FUERA, jugadorAtacante, planetaAtacante;
+             RESUMEN, JUGANDO, FUERA, jugadorAtacante, planetaAtacante, turnoJugador;
              
-    non terminal inicio, a, a1, a2, p1, p3, p4;
+    non terminal inicio, a, a1, a2, a3, p1, p3, p4;
 
     non terminal Juego juego, q2;
     
@@ -134,20 +135,18 @@ parser code {:
 
     start with inicio;
 
-    inicio ::= a2
+    inicio ::= a2 a3
 ;
 
-
      //SINTACTICO REPLAY CASI TERMINADO A FALTA DE LA PARTE RESUMEN PARA INDICAR ESTADO DE LOS JUGADORES
-
 
 
 
     a2 ::= SECUENCIAS AGRUPACION_A ba:a AGRUPACION_B {:   parser.traspasoDatosFlotas(parser.listReplay, a);         :}
     | SECUENCIAS AGRUPACION_A AGRUPACION_B 
 ;
-    ba ::= TURNO ENTERO:a LLAVE_A bb:b LLAVE_B COMA ba:c {: b.setNoTurno((Integer) a); c.add(b); RESULT=c; :}
-    | TURNO ENTERO:a LLAVE_A bb:b LLAVE_B {: b.setNoTurno((Integer) a); ArrayList<Replay> listReplay = new ArrayList<>(); listReplay.add(b); RESULT=listReplay; :}      
+    ba ::= TURNO ENTERO:a DOS_PUNTOS LLAVE_A bb:b LLAVE_B COMA ba:c {: b.setNoTurno((Integer) a); c.add(b); RESULT=c; :}
+    | TURNO ENTERO:a DOS_PUNTOS LLAVE_A bb:b LLAVE_B {: b.setNoTurno((Integer) a); ArrayList<Replay> listReplay = new ArrayList<>(); listReplay.add(b); RESULT=listReplay; :}      
 ;
     bb ::= bc:a bb:e {: if(e!=null){ if(e.getListAcciones()==null){ e.setListAcciones(a); } else { System.out.println("error"); } } RESULT=e; :}                   
     | bf:a bb:e {: if(e!=null){ if(e.getListImpactos()==null){ e.setListImpactos(a); } else { System.out.println("error"); } } RESULT=e; :}
@@ -161,8 +160,8 @@ parser code {:
 ;
 
 
-    bc ::= ACCIONES LLAVE_A bw:a LLAVE_B {: RESULT=a; :} 
-    | ACCIONES LLAVE_A LLAVE_B {: RESULT=new ArrayList<>(); :}
+    bc ::= ACCIONES DOS_PUNTOS LLAVE_A bw:a LLAVE_B {: RESULT=a; :} 
+    | ACCIONES DOS_PUNTOS LLAVE_A LLAVE_B {: RESULT=new ArrayList<>(); :}
 ;
     bw ::= ID:a DOS_PUNTOS AGRUPACION_A bd:b AGRUPACION_B bw:c {: DatosAcciones datos = new DatosAcciones(); datos.setNombreJugador(a.toString()); datos.setListNaves(b); c.add(datos); RESULT=c; :}
     | ID:a DOS_PUNTOS AGRUPACION_A bd:b AGRUPACION_B {: DatosAcciones datos = new DatosAcciones(); datos.setNombreJugador(a.toString()); datos.setListNaves(b); ArrayList<DatosAcciones> listAcciones = new ArrayList<>(); listAcciones.add(datos); RESULT=listAcciones; :} 
@@ -202,7 +201,7 @@ parser code {:
 ;
     bk ::= noJugadorEnvio DOS_PUNTOS ENTERO:a {: NavesCamino naves = new NavesCamino(); naves.setNoJugadorEnvio((Integer) a); RESULT=naves; :}
 ;
-    bl ::= noJugadorAtaque DOS_PUNTOS ENTERO:a {: NavesCamino naves = new NavesCamino(); naves.setNoJugadorAtaque((Integer) a); RESULT=naves; :}
+    bl ::= noJugadorAtaque DOS_PUNTOS ENTERO:a {: NavesCamino naves = new NavesCamino(); naves.setNoJugadorAtaque((Integer) a);  RESULT=naves; :}
 ;
     bm ::= porcMuertes DOS_PUNTOS DECIMAL:a {: NavesCamino naves = new NavesCamino(); naves.setPorcentajeMuertes(Float.parseFloat(a.toString())); RESULT=naves; :}
 ;
@@ -214,7 +213,7 @@ parser code {:
     bf ::= IMPACTOS LLAVE_A bp:a LLAVE_B {: RESULT=a; :}
     | IMPACTOS LLAVE_A LLAVE_B {: RESULT=new ArrayList<>(); :}
 ;
-    bp ::= ID:a LLAVE_A bv:b LLAVE_B COMA bp:c {: DatosImpacto datos = new DatosImpacto(); datos.setNombreJugador(a.toString());  datos.setListImpactos(b); c.add(datos); RESULT=c; :}
+    bp ::= ID:a LLAVE_A bv:b LLAVE_B bp:c {: DatosImpacto datos = new DatosImpacto(); datos.setNombreJugador(a.toString());  datos.setListImpactos(b); c.add(datos); RESULT=c; :}
     | ID:a LLAVE_A bv:b LLAVE_B {: DatosImpacto datos = new DatosImpacto(); datos.setNombreJugador(a.toString()); datos.setListImpactos(b); ArrayList<DatosImpacto> listDatos = new ArrayList<>(); listDatos.add(datos); RESULT=listDatos; :}                                    
 ; 
     bv ::= ID:c AGRUPACION_A bq:a AGRUPACION_B COMA bv:e {: if(a.getNavesRestantes()==null || a.getEstado()==null || a.getMensaje()==null || a.getNoFlota()==null){ System.out.println("ERROR, falta de un atributo en IMPACTOS"); } else {    a.setNombrePlaneta(c.toString()); e.add(a);   RESULT=e;  }  :}  
@@ -246,8 +245,6 @@ parser code {:
     cc ::= planetaAtacante DOS_PUNTOS ID:a {: Impactos impacto = new Impactos(); impacto.setPlanetaAtacante(a.toString()); RESULT=impacto; :}
 ;
 
-
-
     bt ::= mensaje DOS_PUNTOS ID:a {: Impactos impacto = new Impactos();  impacto.setMensaje(a.toString()); RESULT=impacto; :}
 ;
     bu ::= noFlota DOS_PUNTOS ENTERO:a {: Impactos impacto = new Impactos(); impacto.setNoFlota((Integer) a); RESULT=impacto; :}
@@ -263,7 +260,8 @@ parser code {:
     bz ::= estado ID:b DOS_PUNTOS VERDADERO:a {: ResumenTurno resumen = new ResumenTurno(); resumen.setNombreJugador(b.toString());  resumen.setEstadoJugador(Boolean.valueOf(a.toString())); RESULT=resumen; :}
     | estado ID:b DOS_PUNTOS FALSO:a {: ResumenTurno resumen = new ResumenTurno(); resumen.setNombreJugador(b.toString()); resumen.setEstadoJugador(Boolean.valueOf(a.toString())); RESULT=resumen; :}
 ;
-    
+    a3 ::= turnoJugador DOS_PUNTOS ENTERO:a {: VentanaPrincipal.contador = (Integer) a; :}
+;
 
 
 

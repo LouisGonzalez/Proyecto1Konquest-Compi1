@@ -48,6 +48,14 @@
                 </MenuItem>
               </SubComponents>
             </Menu>
+            <MenuItem class="javax.swing.JMenuItem" name="guardarReplay">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Guardar replay"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="guardarReplayActionPerformed"/>
+              </Events>
+            </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="replay">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Replay de una partida"/>

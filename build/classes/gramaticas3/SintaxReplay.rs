@@ -1,4 +1,0 @@
-gramaticas.SintaxReplay
-gramaticas3.CUP$SintaxReplay$actions
-gramaticas.CUP$SintaxReplay$actions
-gramaticas3.SintaxReplay

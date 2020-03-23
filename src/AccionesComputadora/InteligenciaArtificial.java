@@ -14,6 +14,7 @@ import mapa.Jugabilidad;
 public class InteligenciaArtificial {
 
     private Jugabilidad jugabilidad = new Jugabilidad();
+    
 
     public void accionesModoFacil(Juego misDatos, ArrayList<NavesCamino> listNaves) {
         int noJugador = VentanaPrincipal.contador;
@@ -126,7 +127,7 @@ public class InteligenciaArtificial {
         float porcentajeMuertes = Float.parseFloat(misDatos.getJugadores().get(VentanaPrincipal.contador).getMisPlanetas().get(noPlanetaAtacante).getPorcentajeMuertes());
         camino = jugabilidad.seteoNavesCamino(noPlanetaAtacante, misDatos, camino, listNaves, navesEnvio, noJugadorAtacado, planeta1, planeta2, porcentajeMuertes, turno);
         listNaves.add(camino);
-
+        jugabilidad.agregarLanzamientosReplay(misDatos, camino);
     }
 
     
