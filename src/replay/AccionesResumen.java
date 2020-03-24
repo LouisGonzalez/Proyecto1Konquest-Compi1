@@ -1,8 +1,11 @@
 package replay;
 
 import Pollitos.Juego;
+import Pollitos.NavesCamino;
 import Pollitos.ResumenTurno;
+import java.util.ArrayList;
 import javax.swing.JOptionPane;
+import mapa.Jugabilidad;
 
 /**
  *
@@ -10,11 +13,14 @@ import javax.swing.JOptionPane;
  */
 public class AccionesResumen {
     
-    public void verificarEstadoJugadores(Juego misDatos, ResumenTurno resumen){
+    private Jugabilidad jugabilidad = new Jugabilidad();
+    
+    public void verificarEstadoJugadores(Juego misDatos, ResumenTurno resumen, ArrayList<NavesCamino> listNaves){
         String nombreJugador = resumen.getNombreJugador();
         int nodoJugador = busquedaJugador(nombreJugador, misDatos);
         if(resumen.getEstadoJugador() == false){
             misDatos.getJugadores().get(nodoJugador).setEnJuego("false");
+            jugabilidad.eliminarFlotasJugador(misDatos, listNaves, nodoJugador);
             JOptionPane.showMessageDialog(null, nombreJugador+" ha salido del juego");
         } 
     }

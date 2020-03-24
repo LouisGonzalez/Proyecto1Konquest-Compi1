@@ -31,6 +31,6 @@ public class AccionesFlotas {
     
     public void agregarFlotas(ArrayList<NavesCamino> listNaves, NavesCamino aux){
         listNaves.add(aux);
-        System.out.println(listNaves.size()+" aqui se agrega");
+        System.out.println(listNaves.size()-1+" aqui se agrega A    "+aux.getPlanetaOrigen());
     }
 }

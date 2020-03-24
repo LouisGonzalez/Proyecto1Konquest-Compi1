@@ -30,21 +30,6 @@ public class Jugabilidad {
     private int noPlaneta = 0;
     private final CreacionArchivoREPLAY archivo = new CreacionArchivoREPLAY();
 
-    public void circulacionTurnos(ArrayList<Jugadores> jugadores, Mapa mapita) {
-        if (Integer.parseInt(mapita.getFinalizacion()) > 0) {
-            while (turnos <= Integer.parseInt(mapita.getFinalizacion())) {
-                for (int i = 0; i < jugadores.size(); i++) {
-                    boolean acaboTurno;
-                    if (!jugadores.get(i).getMisPlanetas().isEmpty()) {
-
-                    }
-                }
-            }
-        } else {
-
-        }
-    }
-
     public int accionesPrimerClick(Juego juego, int x, int y) {
         boolean encontrado = false;
         Planetas aux = new Planetas();
@@ -266,19 +251,17 @@ public class Jugabilidad {
     }
 
     public void verificacionNavesLlegada(ArrayList<NavesCamino> listNaves, Juego misDatos, JTextArea panelMensajes) {
-        int cont = 0;
         for (int i = 0; i < listNaves.size(); i++) {
-            cont++;
             if (listNaves.get(i).getNoJugadorAtaque() != null && listNaves.get(i).getVerificador() == false) {
                 if (listNaves.get(i).getTurnoLlegada() == VentanaPrincipal.contadorTurnos) {
                     System.out.println("ENCONTRADO");
                     //nuevo
                     int totalNavesAtacante = listNaves.get(i).getNoNaves();
                     float porcMuerteAtacante = listNaves.get(i).getPorcentajeMuertes();
-
                     int jugadorAtaque = listNaves.get(i).getNoJugadorAtaque();
                     int jugadorEnvio = listNaves.get(i).getNoJugadorEnvio();
                     String planetaAtaque = listNaves.get(i).getPlanetaDestino();
+                    String planetaOrigen = listNaves.get(i).getPlanetaOrigen();
                     int noPlaneta = 0;
                     float porMuerteAtacado = 0;
                     int navesPlanetaAtacado = 0;
@@ -291,17 +274,13 @@ public class Jugabilidad {
                             break;
                         }
                     }
-
                     int navesAtacanteDestruidas = (int) (totalNavesAtacante * porMuerteAtacado);
                     int navesAtacanteLlegada = totalNavesAtacante - navesAtacanteDestruidas;
                     int navesDefensaDestruidas = (int) (navesPlanetaAtacado * porcMuerteAtacante);
                     int totalNavesDefensa = navesPlanetaAtacado - navesDefensaDestruidas;
-
                     if (totalNavesDefensa <= navesAtacanteLlegada) {
                         misDatos.getJugadores().get(jugadorAtaque).getMisPlanetas().get(noPlaneta).setNaves(Integer.toString(totalNavesDefensa));
-
                         Planetas aux = misDatos.getJugadores().get(jugadorAtaque).getMisPlanetas().get(noPlaneta);
-
                         aux.setColor(misDatos.getJugadores().get(jugadorEnvio).getColor());
                         String[] color = aux.getColor().split(",");
                         int[] colores = new int[color.length];
@@ -312,7 +291,6 @@ public class Jugabilidad {
                         VentanaPrincipal.tablero[Integer.parseInt(aux.getPosicionY())][Integer.parseInt(aux.getPosicionX())].setBackground(new Color(colores[0], colores[1], colores[2], colores[3]));
                         removerPlaneta(misDatos, jugadorAtaque, planetaAtaque);
                         misDatos.getJugadores().get(jugadorEnvio).getMisPlanetas().add(aux);
-
                         if (misDatos.getJugadores().get(jugadorEnvio).getPlanetasConquistados() == 0) {
                             misDatos.getJugadores().get(jugadorEnvio).setPlanetasConquistados(1);
                         } else {
@@ -320,26 +298,19 @@ public class Jugabilidad {
                             int nuevoValor = planetasConquistados + 1;
                             misDatos.getJugadores().get(jugadorEnvio).setPlanetasConquistados(nuevoValor);
                         }
-
+                        eliminarFlotas(planetaAtaque, listNaves, jugadorEnvio);
                         JOptionPane.showMessageDialog(null, "Planeta: " + planetaAtaque + " ha sido conquistado por " + misDatos.getJugadores().get(jugadorEnvio).getNombre());
-
-                        archivo.textoNavesImpactadas(misDatos, i, jugadorAtaque, planetaAtaque, totalNavesDefensa, "CONQUISTADO " + jugadorAtaque);
-
+                        archivo.textoNavesImpactadas(misDatos, i, jugadorAtaque, planetaAtaque, totalNavesDefensa, "CONQUISTADO ", jugadorEnvio, planetaOrigen);
                         String texto = panelMensajes.getText();
                         String mensaje = texto + "    Planeta: " + planetaAtaque + " ha sido conquistado por " + misDatos.getJugadores().get(jugadorEnvio).getNombre() + "\n";
                         panelMensajes.setText(mensaje);
-                        //Verifica si existen planetas aun dentro del jugador que fue atacado    
-                        verificadorExistenciaPlanetas(misDatos, jugadorAtaque);
-
+                        verificadorExistenciaPlanetas(misDatos, jugadorAtaque, listNaves);
                     } else {
-
                         misDatos.getJugadores().get(jugadorAtaque).getMisPlanetas().get(noPlaneta).setNaves(Integer.toString(totalNavesDefensa));
                         JOptionPane.showMessageDialog(null, "Planeta: " + planetaAtaque + " ha bloqueado un ataque proveniente del planeta: " + listNaves.get(i).getPlanetaOrigen());
                         String texto = panelMensajes.getText();
                         String mensaje = texto + "    Planeta: " + planetaAtaque + " ha bloqueado un ataque proveniente del planeta: " + listNaves.get(i).getPlanetaOrigen() + "\n";
-
-                        archivo.textoNavesImpactadas(misDatos, i, jugadorAtaque, planetaAtaque, totalNavesDefensa, "VIVO");
-
+                        archivo.textoNavesImpactadas(misDatos, i, jugadorAtaque, planetaAtaque, totalNavesDefensa, "VIVO", jugadorEnvio, planetaOrigen);
                         panelMensajes.setText(mensaje);
                     }
                     listNaves.get(i).setVerificador(true);
@@ -355,7 +326,25 @@ public class Jugabilidad {
             }
         }
     }
-
+    
+    public void eliminarFlotas(String nombrePlaneta, ArrayList<NavesCamino> listNaves, int cambioJugador){
+        
+        for (int i = 0; i < listNaves.size(); i++) {
+            if(listNaves.get(i).getPlanetaOrigen().equals(nombrePlaneta) && listNaves.get(i).getVerificador()==false ){
+                NavesCamino navesAux;
+                navesAux = listNaves.get(i);
+                navesAux.setVerificador(true);
+                listNaves.set(i, navesAux);
+                System.out.println(i+"supuesto nodo a ser eliminado ENTRARAsdfddddddddddddddddddddddddddddddd");
+                System.out.println(listNaves.size()-1);
+            }
+        }
+        
+        
+        
+        
+    }
+    
     public void removerPlaneta(Juego misDatos, int jugadorAtaque, String planetaAtacado) {
         int nodo = 0;
         for (int i = 0; i < misDatos.getJugadores().get(jugadorAtaque).getMisPlanetas().size(); i++) {
@@ -371,7 +360,7 @@ public class Jugabilidad {
     public void verificacionesAtaqueNeutral(int i, ArrayList<NavesCamino> listNaves, Juego misDatos, JTextArea panelMensajes) {
         if (listNaves.get(i).getTurnoLlegada() == VentanaPrincipal.contadorTurnos) {
             int jugadorEnvio = listNaves.get(i).getNoJugadorEnvio();
-
+            String planetaOrigen = listNaves.get(i).getPlanetaOrigen();
             int navesAtacante = listNaves.get(i).getNoNaves();
             float porcMuerteAtacante = listNaves.get(i).getPorcentajeMuertes();
 
@@ -424,7 +413,7 @@ public class Jugabilidad {
                 String texto = panelMensajes.getText();
                 String mensaje = texto + "    Planeta Neutral: " + planetaAtaque + " ha sido conquistado por " + misDatos.getJugadores().get(jugadorEnvio).getNombre() + "\n";
 
-                archivo.textoNeutralAtacado(planetaAtaque, "CONQUISTADO " + jugadorEnvio, i, navesDefensa);
+                archivo.textoNeutralAtacado(planetaAtaque, "CONQUISTADO", i, navesDefensa, jugadorEnvio, planetaOrigen);
 
                 panelMensajes.setText(mensaje);
             } else {
@@ -432,7 +421,7 @@ public class Jugabilidad {
                 JOptionPane.showMessageDialog(null, "Planeta Neutral: " + planetaAtaque + " ha bloqueado un ataque proveniente del planeta: " + listNaves.get(i).getPlanetaOrigen());
                 String texto = panelMensajes.getText();
                 String mensaje = texto + "    Planeta Neutral: " + planetaAtaque + " ha bloqueado un ataque proveniente del planeta: " + listNaves.get(i).getPlanetaOrigen() + "\n";
-                archivo.textoNeutralAtacado(planetaAtaque, "VIVO", i, navesDefensa);
+                archivo.textoNeutralAtacado(planetaAtaque, "VIVO", i, navesDefensa, jugadorEnvio, planetaOrigen);
                 panelMensajes.setText(mensaje);
             }
             listNaves.get(i).setVerificador(true);
@@ -441,15 +430,28 @@ public class Jugabilidad {
 
     }
 
-    public void verificadorExistenciaPlanetas(Juego misDatos, int noJugador) {
+    public void verificadorExistenciaPlanetas(Juego misDatos, int noJugador, ArrayList<NavesCamino> listNaves) {
         int totalPlanetas = misDatos.getJugadores().get(noJugador).getMisPlanetas().size();
 
         if (misDatos.getJugadores().get(noJugador).getMisPlanetas().isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Este jugador ha sido eliminado del");
+            JOptionPane.showMessageDialog(null, "Este jugador ha sido eliminado del juego");
             misDatos.getJugadores().get(noJugador).setEnJuego("false");
-
+            eliminarFlotasJugador(misDatos, listNaves, noJugador);
         }
 
     }
+
+    public void eliminarFlotasJugador(Juego misDatos, ArrayList<NavesCamino> listNaves, int noJugador){
+        for (int i = 0; i < listNaves.size(); i++) {
+            if(listNaves.get(i).getNoJugadorEnvio() == noJugador){
+                listNaves.remove(i);
+                i--;
+            }
+        }
+        
+    
+    }
+    
+    
 
 }

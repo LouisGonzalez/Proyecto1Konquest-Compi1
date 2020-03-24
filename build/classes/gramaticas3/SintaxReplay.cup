@@ -152,14 +152,12 @@ parser code {:
     | bf:a bb:e {: if(e!=null){ if(e.getListImpactos()==null){ e.setListImpactos(a); } else { System.out.println("error"); } } RESULT=e; :}
     | bx:a bb:e {: if(e!=null){ if(e.getListResumen()==null){ e.setListResumen(a); } else { System.out.println("error"); } } RESULT=e; :}
     | COMA p2:a {: RESULT=a; :}
-    | {: RESULT=new Replay(); :}                          
+    | {: RESULT=new Replay(); :}
 ;
     p2 ::= bc:a bb:e {: if(e!=null){ if(e.getListAcciones()==null){ e.setListAcciones(a); } else { System.out.println("error"); } } RESULT=e; :}
     | bf:a bb:e {: if(e!=null){ if(e.getListImpactos()==null){ e.setListImpactos(a); } else { System.out.println("error"); } } RESULT=e; :}                                                                         
     | bx:a bb:e {: if(e!=null){ if(e.getListResumen()==null){ e.setListResumen(a); } else { System.out.println("error"); } } RESULT=e; :}
 ;
-
-
     bc ::= ACCIONES DOS_PUNTOS LLAVE_A bw:a LLAVE_B {: RESULT=a; :} 
     | ACCIONES DOS_PUNTOS LLAVE_A LLAVE_B {: RESULT=new ArrayList<>(); :}
 ;
@@ -238,7 +236,7 @@ parser code {:
     br ::= navesRestantes DOS_PUNTOS ENTERO:a {: Impactos impacto = new Impactos(); impacto.setNavesRestantes((Integer) a); RESULT=impacto; :}
 ;
     bs ::= estado DOS_PUNTOS VIVO {: Impactos impacto = new Impactos(); impacto.setEstado("VIVO"); RESULT=impacto; :}
-    | estado DOS_PUNTOS CONQUISTADO ID:a {: Impactos impacto = new Impactos(); impacto.setEstado(a.toString()); RESULT=impacto; :}
+    | estado DOS_PUNTOS CONQUISTADO {: Impactos impacto = new Impactos(); impacto.setEstado("CONQUISTADO"); RESULT=impacto; :}
 ;
     cb ::= jugadorAtacante DOS_PUNTOS ENTERO:a {: Impactos impacto = new Impactos(); impacto.setJugadorAtacante((Integer) a); RESULT=impacto; :}
 ;

@@ -1,4 +1,4 @@
-{
+{q
   MAPA: {
 	id: "_mapa1_",
 	size: {
@@ -92,6 +92,7 @@ PLANETAS_NEUTRALES: [
 }
 CAMBIOS: [
 	turno: 1,
+	turnoJugador: 0,
 	NAVES_CAMINO [
 	{
 	  noFlota: 1,

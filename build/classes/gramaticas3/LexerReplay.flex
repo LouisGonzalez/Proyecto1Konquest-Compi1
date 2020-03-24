@@ -1,5 +1,6 @@
 package gramaticas3;
 import java_cup.runtime.Symbol;
+import interfaz.VentanaPrincipal;
 
 %%
 %public
@@ -97,7 +98,7 @@ Espacio = {Salto} | [ \t\f]
          "CONQUISTADO"                                                      {return symbol(sym.CONQUISTADO);}
 
          "turnoJugador"                                                     {return symbol(sym.turnoJugador);}
-
+         
 
          "HUMANO"                                                           {return symbol(sym.HUMANO, new String(yytext()));}
          "DIFICIL"                                                                   {return symbol(sym.DIFICIL, new String(yytext()));}

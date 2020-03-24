@@ -7,7 +7,7 @@ import java.util.ArrayList;
  * @author luisGonzalez
  */
 public class Jugadores {
-    
+
     private String nombre;
     private ArrayList<String> planetas;
     private ArrayList<Planetas> misPlanetas;
@@ -15,6 +15,15 @@ public class Jugadores {
     private String color;
     private Integer planetasConquistados;
     private String enJuego;
+    private Boolean todoCorrecto;
+
+    public Boolean getTodoCorrecto() {
+        return todoCorrecto;
+    }
+
+    public void setTodoCorrecto(Boolean todoCorrecto) {
+        this.todoCorrecto = todoCorrecto;
+    }
 
     public String getEnJuego() {
         return enJuego;
@@ -47,7 +56,7 @@ public class Jugadores {
     public void setMisPlanetas(ArrayList<Planetas> misPlanetas) {
         this.misPlanetas = misPlanetas;
     }
-    
+
     public String getNombre() {
         return nombre;
     }
@@ -71,5 +80,5 @@ public class Jugadores {
     public void setTipo(String tipo) {
         this.tipo = tipo;
     }
-    
+
 }

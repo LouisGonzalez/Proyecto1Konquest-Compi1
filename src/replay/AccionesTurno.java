@@ -32,7 +32,8 @@ public class AccionesTurno {
             VentanaPrincipal.contadorTurnos = listReplay.get(i).getNoTurno();
             lblTurno.setText("Turno: " + VentanaPrincipal.contadorTurnos);
             aumentoProduccion(misDatos);
-            for (int j = listReplay.get(i).getListAcciones().size() - 1; j >=0 ; j--) {
+
+            for (int j = listReplay.get(i).getListAcciones().size() - 1; j >= 0; j--) {
                 String nombreJugador = listReplay.get(i).getListAcciones().get(j).getNombreJugador();
                 Integer nodoJugador = impacto.busquedaJugador(misDatos, nombreJugador);
                 for (int k = listReplay.get(i).getListAcciones().get(j).getListNaves().size() - 1; k >= 0; k--) {
@@ -47,14 +48,7 @@ public class AccionesTurno {
                 }
             }
 
-            
-            
-            
-            
-            
-            
-            for (int j = 0; j < listReplay.get(i).getListImpactos().size(); j++) {
-
+            for (int j = listReplay.get(i).getListImpactos().size() - 1; j >= 0; j--) {
                 String nombreJugador = listReplay.get(i).getListImpactos().get(j).getNombreJugador();
 
                 Integer nodoJugador;
@@ -64,8 +58,12 @@ public class AccionesTurno {
                     nodoJugador = null;
                 }
 
-                for (int k = 0; k < listReplay.get(i).getListImpactos().get(j).getListImpactos().size(); k++) {
+                for (int k = listReplay.get(i).getListImpactos().get(j).getListImpactos().size() - 1; k >= 0; k--) {
                     Impactos impactoAux = listReplay.get(i).getListImpactos().get(j).getListImpactos().get(k);
+                    String jugadorAtacado = listReplay.get(i).getListImpactos().get(j).getNombreJugador();
+
+                    Integer nodoJugadorAtacado = nodoJugador(misDatos, jugadorAtacado);
+
                     String planetaAux = impactoAux.getNombrePlaneta();
                     System.out.println(planetaAux);
                     Integer nodoPlaneta;
@@ -77,13 +75,12 @@ public class AccionesTurno {
                         impacto.restarNavesPlaneta(misDatos, nodoJugador, nodoPlaneta, impactoAux.getNavesRestantes());
                     }
                     if (impactoAux.getEstado().equals("VIVO")) {
-                        JOptionPane.showMessageDialog(null, "Planeta " + planetaAux + " ha sido atacado por " + impactoAux.getPlanetaAtacante());
+                        JOptionPane.showMessageDialog(null, "Planeta " + planetaAux + " ha sido atacado por " + misDatos.getJugadores().get(impactoAux.getJugadorAtacante()).getNombre());
                     } else {
                         if (nodoJugador == null) {
                             impacto.destruirNeutral(misDatos, impactoAux.getJugadorAtacante(), impactoAux.getPlanetaAtacante(), planetaAux);
-
                         } else {
-                            impacto.destruirPlaneta(misDatos, impactoAux.getJugadorAtacante(), nodoJugador, impactoAux.getPlanetaAtacante(), planetaAux);
+                            impacto.destruirPlaneta(listNaves, misDatos, impactoAux.getJugadorAtacante(), nodoJugador, impactoAux.getPlanetaAtacante(), planetaAux);
                         }
                     }
                     impacto.eliminarFlotaAtacante(listNaves, impactoAux.getNoFlota());
@@ -94,10 +91,16 @@ public class AccionesTurno {
                     }
                 }
             }
+            for (int a = 0; a < listNaves.size(); a++) {
+                if (listNaves.get(a).getVerificador()) {
+                    listNaves.remove(a);
+                    a--;
+                }
+            }
 
             for (int j = listReplay.get(i).getListResumen().size() - 1; j >= 0; j--) {
                 ResumenTurno aux = listReplay.get(i).getListResumen().get(j);
-                resumen.verificarEstadoJugadores(misDatos, aux);
+                resumen.verificarEstadoJugadores(misDatos, aux, listNaves);
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException ex) {
@@ -107,6 +110,17 @@ public class AccionesTurno {
 
         }
 
+    }
+
+    public Integer nodoJugador(Juego misDatos, String nombreJugador) {
+        Integer nodoJugador = null;
+        for (int i = 0; i < misDatos.getJugadores().size(); i++) {
+            String aux = misDatos.getJugadores().get(i).getNombre();
+            if (aux.equals(nombreJugador)) {
+                nodoJugador = i;
+            }
+        }
+        return nodoJugador;
     }
 
     public void aumentoProduccion(Juego misDatos) {

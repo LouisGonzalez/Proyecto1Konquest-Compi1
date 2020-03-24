@@ -3,6 +3,7 @@ package mapa;
 import Pollitos.Juego;
 import Pollitos.Jugadores;
 import Pollitos.Mapa;
+import Pollitos.MapaPNeutrales;
 import Pollitos.NavesCamino;
 import Pollitos.Planetas;
 import Pollitos.PlanetasNeutrales;
@@ -175,6 +176,7 @@ public class CreacionJSON {
     }
 
     public Mapa seteoDatosMapa(ArrayList<PlanetasNeutrales> neutrales, ArrayList<Planetas> listPlanetas, ArrayList<Jugadores> listJugadores, Mapa mapita, String id, String filas, String columnas, JCheckBox checkAzar, JCheckBox checkMapaCiego, JCheckBox checkAcumular, JCheckBox checkNaves, JCheckBox checkStats, JSpinner spinProduccion, JSpinner spinFinalizacion) {
+        mapita.setMapaPNeutral(new MapaPNeutrales());
         mapita.setId(id);
         mapita.setSize_filas(filas);
         mapita.setSize_columnas(columnas);
@@ -196,6 +198,8 @@ public class CreacionJSON {
         }
         if (!checkNaves.isSelected()) {
             mapita.getMapaPNeutral().setMostrarNaves("false");
+        
+        
         } else {
             mapita.getMapaPNeutral().setMostrarNaves("true");
         }

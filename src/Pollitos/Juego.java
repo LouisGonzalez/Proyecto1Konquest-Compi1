@@ -12,6 +12,15 @@ public class Juego {
     private ArrayList<Jugadores> jugadores;
     private ArrayList<PlanetasNeutrales> pNeutrales;
     private ArrayList<Planetas> planetas;
+    private Boolean todoCorrecto;
+
+    public Boolean getTodoCorrecto() {
+        return todoCorrecto;
+    }
+
+    public void setTodoCorrecto(Boolean todoCorrecto) {
+        this.todoCorrecto = todoCorrecto;
+    }
 
     public Mapa getMapa() {
         return mapa;

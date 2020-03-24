@@ -14,7 +14,16 @@ public class Planetas {
     private String posicionY;
     private String color;
     private boolean interruptor;
+    private Boolean todoCorrecto;
 
+    public Boolean getTodoCorrecto() {
+        return todoCorrecto;
+    }
+
+    public void setTodoCorrecto(Boolean todoCorrecto) {
+        this.todoCorrecto = todoCorrecto;
+    }
+    
     public boolean isInterruptor() {
         return interruptor;
     }

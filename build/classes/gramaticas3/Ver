@@ -1,298 +1,110 @@
-SECUENCIAS [
-	TURNO 0: {
-	   ACCIONES: {
-	     Jodde: [
-	         Flota [
-	           noFlota: 1,
-	           planetaOrigen: B,
-	           planetaDestino: A,
-	           noNaves: 3,
-	           noJugadorEnvio: 0,
-	           noJugadorAtaque: 1,
-	           porcentajeMuertes: 0.4,
-	           turnoLlegada: 6,
-	           verificador: false
-	         ]
-	       ]
-	     Jode: [
-	         Flota [
-	           noFlota: 1,
-	           planetaOrigen: C,
-	           planetaDestino: B,
-	           noNaves: 1,
-	           noJugadorEnvio: 1,
-	           noJugadorAtaque: 0,
-	           porcentajeMuertes: 0.4,
-	           turnoLlegada: 1,
-	           verificador: false
-	         ]
-	       ]
-	   }
-	   IMPACTOS {
-	   }
-	   RESUMEN {
-	       estado Jodde: true,
-	       estado Jode: true
-	   }
+{
+  MAPA: {
+	id: "_mapa1_",
+	size: {
+  	  filas: 10,
+  	  columnas: 10
 	},
-	TURNO 1: {
-	   ACCIONES: {
-	     Jodde: [
-	         Flota [
-	           noFlota: 2,
-	           planetaOrigen: B,
-	           planetaDestino: C,
-	           noNaves: 6,
-	           noJugadorEnvio: 0,
-	           noJugadorAtaque: 1,
-	           porcentajeMuertes: 0.4,
-	           turnoLlegada: 2,
-	           verificador: false
-	         ]
-	       ]
-	     Jode: [
-	         Flota [
-	           noFlota: 1,
-	           planetaOrigen: C,
-	           planetaDestino: B,
-	           noNaves: 1,
-	           noJugadorEnvio: 1,
-	           noJugadorAtaque: 0,
-	           porcentajeMuertes: 0.4,
-	           turnoLlegada: 2,
-	           verificador: false
-	         ]
-	       ]
-	   }
-	   IMPACTOS {
-	       Jodde {
-	         B [
-	           navesRestantes: 6,
-	           estado: VIVO,
-	           mensaje: dd,
-	           noFlota:1
-	         ]
-	       }
-	   }
-	   RESUMEN {
-	       estado Jodde: true,
-	       estado Jode: true
-	   }
+	alAzar: false,
+	planetasNeutrales: 20,
+	mapaCiego: false,
+	acumular: false,
+	NEUTRALES: {
+  	  mostrarNaves: true,
+  	  mostrarEstadisticas: true,
+	  produccion: 12
 	},
-	TURNO 2: {
-	   ACCIONES: {
-	     Jodde: [
-	         Flota [
-	           noFlota: 2,
-	           planetaOrigen: B,
-	           planetaDestino: C,
-	           noNaves: 6,
-	           noJugadorEnvio: 0,
-	           noJugadorAtaque: 1,
-	           porcentajeMuertes: 0.4,
-	           turnoLlegada: 3,
-	           verificador: false
-	         ]
-	       ]
-	     Jode: [
-	         Flota [
-	           noFlota: 1,
-	           planetaOrigen: C,
-	           planetaDestino: B,
-	           noNaves: 1,
-	           noJugadorEnvio: 1,
-	           noJugadorAtaque: 0,
-	           porcentajeMuertes: 0.4,
-	           turnoLlegada: 3,
-	           verificador: false
-	         ]
-	       ]
-	   }
-	   IMPACTOS {
-	       Jode {
-	         C [
-	           navesRestantes: 22,
-	           estado: VIVO,
-	           mensaje: dd,
-	           noFlota:1
-	         ]
-	       }
-	       Jodde {
-	         B [
-	           navesRestantes: 6,
-	           estado: VIVO,
-	           mensaje: dd,
-	           noFlota:2
-	         ]
-	       }
-	   }
-	   RESUMEN {
-	       estado Jodde: true,
-	       estado Jode: true
-	   }
+	finalizacion: 0
+ },
+  PLANETAS: [				
+	{
+       	  nombre: "B",
+  	  naves: 4,
+  	  produccion: 9,
+  	  porcentajeMuertes: 0.40,
+	  posicionX: 2,
+	  posicionY: 3
 	},
-	TURNO 3: {
-	   ACCIONES: {
-	     Jodde: [
-	         Flota [
-	           noFlota: 2,
-	           planetaOrigen: B,
-	           planetaDestino: C,
-	           noNaves: 5,
-	           noJugadorEnvio: 0,
-	           noJugadorAtaque: 1,
-	           porcentajeMuertes: 0.4,
-	           turnoLlegada: 4,
-	           verificador: false
-	         ]
-	       ]
-	     Jode: [
-	         Flota [
-	           noFlota: 1,
-	           planetaOrigen: C,
-	           planetaDestino: B,
-	           noNaves: 1,
-	           noJugadorEnvio: 1,
-	           noJugadorAtaque: 0,
-	           porcentajeMuertes: 0.4,
-	           turnoLlegada: 4,
-	           verificador: false
-	         ]
-	       ]
-	     Jode: [
-	         Flota [
-	           noFlota: 2,
-	           planetaOrigen: C,
-	           planetaDestino: D,
-	           noNaves: 1,
-	           noJugadorEnvio: 1,
-	           noJugadorAtaque: -1,
-	           porcentajeMuertes: 0.4,
-	           turnoLlegada: 5,
-	           verificador: false
-	         ]
-	       ]
-	   }
-	   IMPACTOS {
-	       Jode {
-	         C [
-	           navesRestantes: 18,
-	           estado: VIVO,
-	           mensaje: dd,
-	           noFlota:1
-	         ]
-	       }
-	       Jodde {
-	         B [
-	           navesRestantes: 6,
-	           estado: VIVO,
-	           mensaje: dd,
-	           noFlota:2
-	         ]
-	       }
-	   }
-	   RESUMEN {
-	       estado Jodde: true,
-	       estado Jode: true
-	   }
+	{
+       	  nombre: "C",
+  	  naves: 20,
+  	  produccion: 9,
+  	  porcentajeMuertes: 0.40,
+	  posicionX: 3,
+	  posicionY: 3
 	},
-	TURNO 4: {
-	   ACCIONES: {
-	     Jodde: [
-	         Flota [
-	           noFlota: 2,
-	           planetaOrigen: B,
-	           planetaDestino: C,
-	           noNaves: 6,
-	           noJugadorEnvio: 0,
-	           noJugadorAtaque: 1,
-	           porcentajeMuertes: 0.4,
-	           turnoLlegada: 5,
-	           verificador: false
-	         ]
-	       ]
-	     Jode: [
-	         Flota [
-	           noFlota: 2,
-	           planetaOrigen: C,
-	           planetaDestino: B,
-	           noNaves: 1,
-	           noJugadorEnvio: 1,
-	           noJugadorAtaque: 0,
-	           porcentajeMuertes: 0.4,
-	           turnoLlegada: 5,
-	           verificador: false
-	         ]
-	       ]
-	   }
-	   IMPACTOS {
-	       Jode {
-	         C [
-	           navesRestantes: 15,
-	           estado: VIVO,
-	           mensaje: dd,
-	           noFlota:1
-	         ]
-	       }
-	       Jodde {
-	         B [
-	           navesRestantes: 6,
-	           estado: VIVO,
-	           mensaje: dd,
-	           noFlota:2
-	         ]
-	       }
-	   }
-	   RESUMEN {
-	       estado Jodde: true,
-	       estado Jode: true
-	   }
-	TURNO 5: {
-	   ACCIONES: {
-	     Jodde: [
-	         Flota [
-	           noFlota: 2,
-	           planetaOrigen: B,
-	           planetaDestino: C,
-	           noNaves: 4,
-	           noJugadorEnvio: 0,
-	           noJugadorAtaque: 1,
-	           porcentajeMuertes: 0.4,
-	           turnoLlegada: 6,
-	           verificador: false
-	         ]
-	       ]
-	   }
-	   IMPACTOS {
-	       NEUTRAL {
-	         D [
-	           navesRestantes: 45,
-	           estado: VIVO,
-	           mensaje: dd,
-	           noFlota:1
-	         ]
-	       }
-	       Jode {
-	         C [
-	           navesRestantes: 14,
-	           estado: VIVO,
-	           mensaje: dd,
-	           noFlota:2
-	         ]
-	       }
-	       Jodde {
-	         B [
-	           navesRestantes: 6,
-	           estado: VIVO,
-	           mensaje: dd,
-	           noFlota:3
-	         ]
-	       }
-	   }
-	   RESUMEN {
-	       estado Jodde: true,
-	       estado Jode: true
-	   }
+	{
+  	  nombre: "A",
+  	  naves: 20,
+  	  produccion: 9,
+  	  porcentajeMuertes: 0.40,
+	  posicionX: 1,
+	  posicionY: 9	
 	}
+  ],
+PLANETAS_NEUTRALES: [
+	{
+  	  nombre: "D",
+  	  naves: 15,
+  	  produccion: 12,
+  	  porcentajeMuertes: 0.8,
+	  posicionX: 3,
+	  posicionY: 1
+	},
+	{
+  	  nombre: "E",
+  	  naves: 11,
+  	  produccion: 9,
+  	  porcentajeMuertes: 0.998501
+	  posicionX: 2,
+	  posicionY: 9
+	},
+	{
+  	  nombre: "F",
+  	  naves: 20,
+  	  produccion: 25,
+  	  porcentajeMuertes: 0.21502
+	  posicionX: 5,
+	  posicionY: 8
+	}
+  ],
+  JUGADORES: [
+	{
+ 	  nombre: "Jode",
+	  color: "0,255,255,75",
+  	  planetas: [
+    	    "A",
+    	    "C"
+  	  ],
+  	  tipo: HUMANO,
+	  enJuego: true
+	},
+	{
+  	  nombre: "Jodde",
+	  color: "0,255,0,75",
+  	  planetas: [
+    	    "B"
+  	  ],
+  	  tipo: DIFICIL,
+	  enJuego: true
+	}
+  ]
+}
+CAMBIOS: [
+	turno: 1,
+	turnoJugador: 0,
+	NAVES_CAMINO [
+	{
+	  noFlota: 1,
+	  planetaOrigen: B,
+	  planetaDestino: C,
+	  noNaves: 2,
+	  porcentajeMuertes: 0.5,
+	  llegada: 4,
+	  jugadorEnvio: 0,
+	  jugadorAtaque: 1,
+	  verificador: false
+	}
+	]
 ]
-turnoJugador: 1
+

@@ -9,6 +9,15 @@ public class MapaPNeutrales {
     private String mostrarNaves;
     private String mostrarEstadisticas;
     private String produccion;
+    private Boolean todoCorrecto;
+
+    public Boolean getTodoCorrecto() {
+        return todoCorrecto;
+    }
+
+    public void setTodoCorrecto(Boolean todoCorrecto) {
+        this.todoCorrecto = todoCorrecto;
+    }
 
     public String getMostrarNaves() {
         return mostrarNaves;

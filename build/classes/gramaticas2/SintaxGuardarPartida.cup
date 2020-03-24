@@ -61,6 +61,7 @@ parser code {:
     public void syntax_error(Symbol s){
         setAccion("ERROR", "Error sintaxis columna: "+s.right+" fila: "+s.left,"");
         totalErrores += "ERROR: Error sintaxis columna: "+s.right+" fila: "+s.left+"\n";
+        panelMensajes.setText(totalErrores);
     }
 
     public void crearCuadriculaJuego(Juego misDatos){
@@ -266,11 +267,13 @@ parser code {:
     | jug:a juego:e {: if(e!=null){ if(e.getJugadores()==null){ e.setJugadores(a); } else { System.out.println("error"); } } RESULT=e; :}
     | COMA q2:a {: RESULT=a; :}
     | {: RESULT=new Juego(); :}
+    | error juego:e {: parser.totalErrores += "atributo principal mal definido. Fila: "+eleft+" Columna: "+eright+"\n"; RESULT=e; :}
 ;
     q2 ::= b:a juego:e {: if(e!=null){ if(e.getMapa()==null){ e.setMapa(a); } else { System.out.println("error"); } } RESULT=e; :}
     | p:a juego:e {: if(e!=null){ if(e.getPlanetas()==null){ e.setPlanetas(a);   } else { System.out.println("erroraaa"); } } RESULT=e; :}    
     | pn:a juego:e {: if(e!=null){ if(e.getpNeutrales()==null){ e.setpNeutrales(a);   } else { System.out.println("error"); } } RESULT=e; :}
     | jug:a juego:e {: if(e!=null){ if(e.getJugadores()==null){ e.setJugadores(a); } else { System.out.println("error"); } } RESULT=e; :}
+    | error juego:e {: parser.totalErrores += "atributo principal mal definido. Fila: "+eleft+" Columna: "+eright+"\n"; RESULT=e; :}
 ;
     b ::= MAPA DOS_PUNTOS LLAVE_A c:a {: RESULT=a; :}   
 ;
@@ -284,6 +287,7 @@ parser code {:
     |   k:a c:e {: if(e!=null){ if(e.getFinalizacion()==null){ e.setFinalizacion(a.getFinalizacion()); } else { System.out.println("error"); } } RESULT=e; :}
     |    COMA q:e {: RESULT=e; :}
     |   LLAVE_B {:RESULT=new Mapa();:}
+    |   error c:e {: RESULT=e; :}
 ;
     q ::= d:a c:e {: if(e!=null){ if(e.getId()==null) { e.setId(a.getId());  } else { System.out.println("error"); }   } RESULT=e;  :} 
     |     g:a c:e {: if(e!=null){ if(e.getPlanetasNeutrales()==null) { e.setPlanetasNeutrales(a.getPlanetasNeutrales());  } else { System.out.println("error"); }   } RESULT=e;  :} 
@@ -293,6 +297,7 @@ parser code {:
     |   i:a c:e {: if(e!=null){ if(e.getAcumular()==null) { e.setAcumular(a.getAcumular()); } else { System.out.println("error"); } } RESULT=e; :}
     |   j2:a c:e {: if(e!=null){ if(e.getMapaPNeutral()==null && a!=null) { e.setMapaPNeutral(a.getMapaPNeutral()); } else { System.out.println("error"); } } RESULT=e; :}
     |   k:a c:e {: if(e!=null){ if(e.getFinalizacion()==null){ e.setFinalizacion(a.getFinalizacion()); } else { System.out.println("error"); } } RESULT=e; :}
+    |   error c:e {: RESULT=e; :}
 ;
     e ::= size DOS_PUNTOS LLAVE_A j:a LLAVE_B {:  RESULT=a; :}
 ;
@@ -319,10 +324,12 @@ parser code {:
     | o:a l:e {: if(e!=null){ if(e.getProduccion()==null){ e.setProduccion(a.getProduccion()); } else { System.out.println("error"); } } RESULT=e; :}
     | COMA q8:e {: RESULT=e; :}
     | {:RESULT=new MapaPNeutrales();:}
+    | error l:e {: RESULT=e; :}
 ;
     q8 ::= m:a l:e {: if(e!=null){if(e.getMostrarNaves()==null){ e.setMostrarNaves(a.getMostrarNaves()); } else { System.out.println("error"); }  } RESULT=e; :}
     | n:a l:e {: if(e!=null){ if(e.getMostrarEstadisticas()==null){ e.setMostrarEstadisticas(a.getMostrarEstadisticas()); } else { System.out.println("error"); } } RESULT=e; :}
     | o:a l:e {: if(e!=null){ if(e.getProduccion()==null){ e.setProduccion(a.getProduccion()); } else { System.out.println("error"); } } RESULT=e; :}
+    | error l:e {: RESULT=e; :}
 ;
     m ::= mostrarNaves DOS_PUNTOS VERDADERO:a {: MapaPNeutrales mapa = new MapaPNeutrales(); mapa.setMostrarNaves(a.toString()); RESULT=mapa; :}
     | mostrarNaves DOS_PUNTOS FALSO:a {: MapaPNeutrales mapa = new MapaPNeutrales(); mapa.setMostrarNaves(a.toString()); RESULT=mapa; :}
@@ -348,6 +355,7 @@ parser code {:
     | ak:a s:e {: if(e!=null){ if(e.getPosicionY()==null){e.setPosicionY(a.getPosicionY());} else { System.out.println("error"); } } RESULT=e; :}
     | COMA q3:a {: RESULT=a; :}
     | {: RESULT=new Planetas(); :} 
+    | error s:e {: RESULT=e; :}
 ;
     q3 ::= t:a s:e {: if(e!=null){ if(e.getNombre()==null){ e.setNombre(a.getNombre()); } else { System.out.println("error"); } } RESULT=e; :}
     | u:a s:e {: if(e!=null){ if(e.getNaves()==null){ e.setNaves(a.getNaves()); } else { System.out.println("error"); } } RESULT=e; :}    
@@ -355,6 +363,7 @@ parser code {:
     | w:a s:e {: if(e!=null){ if(e.getPorcentajeMuertes()==null){ e.setPorcentajeMuertes(a.getPorcentajeMuertes()); } else { System.out.println("error"); } } RESULT=e; :}
     | aj:a s:e {: if(e!=null){ if(e.getPosicionX()==null){ e.setPosicionX(a.getPosicionX()); } else { System.out.println("error"); } } RESULT=e; :}
     | ak:a s:e {: if(e!=null){ if(e.getPosicionY()==null){e.setPosicionY(a.getPosicionY());} else { System.out.println("error"); } } RESULT=e; :}
+    | error s:e {: RESULT=e; :}
 ;
     t ::= nombre DOS_PUNTOS COMILLAS ID:a COMILLAS {: Planetas planetas = new Planetas(); planetas.setNombre(a.toString()); RESULT=planetas; :}
 ;
@@ -382,6 +391,7 @@ parser code {:
     | an:a y:e {: if(e!=null){ if(e.getPosicionY()==null){ e.setPosicionY(a.getPosicionY()); } else { System.out.println("error"); } } RESULT=e; :}
     | COMA q5:a {: RESULT=a; :}
     | {: RESULT=new PlanetasNeutrales(); :}
+    | error y:e {: RESULT=e; :}
 ;
     q5 ::= z:a y:e {: if(e!=null){ if(e.getNombre()==null){ e.setNombre(a.getNombre()); } else { System.out.println("error"); } } RESULT=e; :}
     | aa:a y:e {: if(e!=null){ if(e.getNaves()==null){ e.setNaves(a.getNaves()); } else { System.out.println("error"); } } RESULT=e; :}
@@ -389,6 +399,7 @@ parser code {:
     | ac:a y:e {: if(e!=null){ if(e.getPorcentajeMuertes()==null){ e.setPorcentajeMuertes(a.getPorcentajeMuertes()); } else { System.out.println("error"); } } RESULT=e; :}  
     | am:a y:e {: if(e!=null){ if(e.getPosicionX()==null){ e.setPosicionX(a.getPosicionX()); } else { System.out.println("error"); } } RESULT=e; :}
     | an:a y:e {: if(e!=null){ if(e.getPosicionY()==null){ e.setPosicionY(a.getPosicionY()); } else { System.out.println("error"); } } RESULT=e; :}
+    | error y:e {: RESULT=e; :}
 ;
     z ::=  nombre DOS_PUNTOS COMILLAS ID:a COMILLAS {: PlanetasNeutrales neutral = new PlanetasNeutrales(); neutral.setNombre(a.toString()); RESULT=neutral; :}
 ;
@@ -416,6 +427,7 @@ parser code {:
     | bp:a ae:e {: if(e!=null){ if(e.getPlanetasConquistados()==null){ e.setPlanetasConquistados(a.getPlanetasConquistados()); } else { System.out.println("error"); } } RESULT=e; :}
     | COMA q7:a {: RESULT=a; :}
     | {: RESULT=new Jugadores(); :}
+    | error ae:e {: RESULT=e; :}
 ;
     q7 ::= af:a ae:e {: if(e!=null){ if(e.getNombre()==null){ e.setNombre(a.getNombre()); } else { System.out.println("error"); } } RESULT=e; :}
     | ag:a ae:e {: if(e!=null){ if(e.getPlanetas()==null){ e.setPlanetas(a.getPlanetas()); } else { System.out.println("error"); } } RESULT=e; :}
@@ -423,6 +435,7 @@ parser code {:
     | al:a ae:e {: if(e!=null){ if(e.getColor()==null){ e.setColor(a.getColor()); } else { System.out.println("error"); } } RESULT=e; :}
     | ba:a ae:e {: if(e!=null){  if(e.getEnJuego()==null){ e.setEnJuego(a.getEnJuego()); } else { System.out.println("error"); }  } RESULT=e; :}
     | bp:a ae:e {: if(e!=null){ if(e.getPlanetasConquistados()==null){ e.setPlanetasConquistados(a.getPlanetasConquistados()); } else { System.out.println("error"); } } RESULT=e; :}
+    | error ae:e {: RESULT=e; :}
 ;
     af ::= nombre DOS_PUNTOS COMILLAS ID:a COMILLAS {: Jugadores jugador = new Jugadores();  jugador.setNombre(a.toString()); RESULT=jugador; :}
 ;
@@ -450,10 +463,12 @@ parser code {:
     | bc:a bo:e {: if(e!=null){if(e.getListNaves()==null){ e.setListNaves(a); } else { System.out.println("error"); }  } RESULT=e; :}
     | COMA rep1:a {: RESULT=a; :}
     | {: RESULT=new DatosGuardados(); :}
+    | error bo:e {: RESULT=e; :}
 ;
     rep1 ::=  bb:a bo:e {: if(e!=null){if(e.getContador()==null){ e.setContador(a.getContador()); } else { System.out.println("error"); }  } RESULT=e; :}
     | bq:a bo:e {: if(e!=null){if(e.getTurnoJugador()==null){ e.setTurnoJugador(a.getTurnoJugador()); } else { System.out.println("error"); } } RESULT=e; :}
     | bc:a bo:e {: if(e!=null){if(e.getListNaves()==null){ e.setListNaves(a); } else { System.out.println("error"); }  } RESULT=e; :}
+    | error bo:e {: RESULT=e; :}
 ;
     bb ::= turno DOS_PUNTOS ENTERO:a {: DatosGuardados dato = new DatosGuardados(); dato.setContador((Integer) a); RESULT=dato; :}
 ;
@@ -476,6 +491,7 @@ parser code {:
     | bn:a be:e {: if(e!=null){ if(e.getVerificador()==null){ e.setVerificador(a.getVerificador()); } else { System.out.println("error"); } } RESULT=e; :}
     | COMA rep2:e {: RESULT=e; :}
     | {: RESULT=new NavesCamino(); :}
+    | error be:e {: RESULT=e; :}
 ;
     rep2 ::= bf:a be:e {: if(e!=null){ if(e.getNoFlota()==null){ e.setNoFlota(a.getNoFlota()); } else { System.out.println("error"); }  } RESULT=e; :}
     | bg:a be:e {: if(e!=null){ if(e.getPlanetaOrigen()==null){ e.setPlanetaOrigen(a.getPlanetaOrigen()); } else { System.out.println("error"); } } RESULT=e; :}
@@ -486,6 +502,7 @@ parser code {:
     | bl:a be:e {: if(e!=null){ if(e.getNoJugadorEnvio()==null){ e.setNoJugadorEnvio(a.getNoJugadorEnvio()); } else { System.out.println("error"); } } RESULT=e; :}
     | bm:a be:e {: if(e!=null){ if(e.getNoJugadorAtaque()==null){ e.setNoJugadorAtaque(a.getNoJugadorAtaque()); } else { System.out.println("error"); } } RESULT=e; :}
     | bn:a be:e {: if(e!=null){ if(e.getVerificador()==null){ e.setVerificador(a.getVerificador()); } else { System.out.println("error"); } } RESULT=e; :}
+    | error be:e {: RESULT=e; :}
 ;
     bf ::= noFlota DOS_PUNTOS ENTERO:a {: NavesCamino naves = new NavesCamino(); naves.setNoFlota((Integer) a); RESULT=naves; :}
 ;

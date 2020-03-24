@@ -12,13 +12,17 @@ import Pollitos.PlanetasNeutrales;
 import java.awt.Color;
 import interfaz.VentanaPrincipal;
 import java.util.ArrayList;
+import java.util.Objects;
 import javax.swing.JOptionPane;
+import mapa.Jugabilidad;
 
 /**
  *
  * @author luisGonzalez
  */
 public class AccionesImpacto {
+
+    private Jugabilidad jugabilidad = new Jugabilidad();
 
     public Integer busquedaJugador(Juego misDatos, String nombreJugador) {
         Integer nodoJugador = null;
@@ -58,13 +62,19 @@ public class AccionesImpacto {
 
     public void restarNavesPlaneta(Juego misDatos, int nodoJugador, int nodoPlaneta, int noNaves) {
         misDatos.getJugadores().get(nodoJugador).getMisPlanetas().get(nodoPlaneta).setNaves(Integer.toString(noNaves));
+    /*    for (int i = 0; i < listNaves.size(); i++) {
+            if (Objects.equals(listNaves.get(i).getNoJugadorAtaque(), jugadorAtacado)) {
+                listNaves.remove(i);
+                i--;
+            }
+        }*/
     }
 
     public void restarNavesNeutral(Juego misDatos, int nodoPlaneta, int noNaves) {
         misDatos.getpNeutrales().get(nodoPlaneta).setNaves(Integer.toString(noNaves));
     }
 
-    public void destruirPlaneta(Juego misDatos, int jugadorAtacante, int jugadorAtacado, String planetaAtacante, String planetaAtacado) {
+    public void destruirPlaneta(ArrayList<NavesCamino> listNaves, Juego misDatos, int jugadorAtacante, int jugadorAtacado, String planetaAtacante, String planetaAtacado) {
         int posX = 0;
         int posY = 0;
         String color = "";
@@ -98,7 +108,16 @@ public class AccionesImpacto {
         misDatos.getJugadores().get(jugadorAtacado).getMisPlanetas().remove(nodoPlaneta);
         misDatos.getJugadores().get(jugadorAtacante).getMisPlanetas().add(nuevoPlaneta);
         JOptionPane.showMessageDialog(null, "Planeta: " + planetaAtacado + " ha sido conquistado por " + misDatos.getJugadores().get(jugadorAtacante).getNombre());
-
+        jugabilidad.eliminarFlotas(planetaAtacado, listNaves, jugadorAtacante);
+    
+        
+        aumentoPlanetasConquistados(misDatos, jugadorAtacante);
+    }
+    
+    public void aumentoPlanetasConquistados(Juego misDatos, int jugadorAtacante){
+        int planetasConquistados = misDatos.getJugadores().get(jugadorAtacante).getPlanetasConquistados();
+        int nuevoValor = planetasConquistados + 1;
+        misDatos.getJugadores().get(jugadorAtacante).setPlanetasConquistados(nuevoValor);
     }
 
     public void destruirNeutral(Juego misDatos, int jugadorAtacante, String planetaAtacante, String planetaAtacado) {
@@ -134,9 +153,9 @@ public class AccionesImpacto {
         misDatos.getJugadores().get(jugadorAtacante).getMisPlanetas().add(nuevo);
         misDatos.getpNeutrales().remove(nodoNeutral);
         JOptionPane.showMessageDialog(null, "Planeta Neutral: " + planetaAtacado + " ha sido conquistado por " + misDatos.getJugadores().get(jugadorAtacante).getNombre());
-}
+    }
 
-    public Planetas traspasarDatosNeutral(PlanetasNeutrales encontrado, Planetas nuevo){
+    public Planetas traspasarDatosNeutral(PlanetasNeutrales encontrado, Planetas nuevo) {
         nuevo.setNombre(encontrado.getNombre());
         nuevo.setInterruptor(encontrado.isInterruptor());
         nuevo.setNaves(encontrado.getNaves());
@@ -146,12 +165,21 @@ public class AccionesImpacto {
         nuevo.setProduccion(encontrado.getProduccion());
         return nuevo;
     }
-    
+
     public void eliminarFlotaAtacante(ArrayList<NavesCamino> listNaves, int nodoFlota) {
-        System.out.println("-----------------------------------------------------");
-        System.out.println(nodoFlota+"supuesto nodo a ser eliminado");
-        listNaves.remove(nodoFlota);
-        System.out.println(listNaves.size()+"aqui se ELIMINA");
+        
+       System.out.println("-----------------------------------------------------");
+        System.out.println(nodoFlota + "supuesto nodo a ser eliminado");
+        System.out.println(listNaves.get(nodoFlota).getPlanetaOrigen()+"HA SIDO ELIMINADO");
+        System.out.println(listNaves.size()-1 + "aqui se ELIMINA");
+        
+        NavesCamino aux = listNaves.get(nodoFlota);
+        aux.setVerificador(true);
+        listNaves.set(nodoFlota, aux);
+        
+        
+        
+        
     }
 
 }

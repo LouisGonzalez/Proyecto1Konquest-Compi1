@@ -17,6 +17,15 @@ public class Mapa {
     private String acumular;
     private String finalizacion;
     private MapaPNeutrales mapaPNeutral;
+    private Boolean todoCorrecto;
+
+    public Boolean getTodoCorrecto() {
+        return todoCorrecto;
+    }
+
+    public void setTodoCorrecto(Boolean todoCorrecto) {
+        this.todoCorrecto = todoCorrecto;
+    }
 
     public MapaPNeutrales getMapaPNeutral() {
         return mapaPNeutral;
