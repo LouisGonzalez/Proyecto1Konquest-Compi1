@@ -11,7 +11,16 @@ public class DatosGuardados {
     private Integer contador;
     private ArrayList<NavesCamino> listNaves;
     private Integer turnoJugador;
+    private Boolean todoCorrecto;
 
+    public Boolean getTodoCorrecto() {
+        return todoCorrecto;
+    }
+
+    public void setTodoCorrecto(Boolean todoCorrecto) {
+        this.todoCorrecto = todoCorrecto;
+    }
+    
     public Integer getTurnoJugador() {
         return turnoJugador;
     }

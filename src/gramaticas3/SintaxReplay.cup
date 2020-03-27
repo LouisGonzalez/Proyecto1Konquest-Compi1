@@ -73,7 +73,7 @@ parser code {:
     }
 
 
-        public void traspasoDatosFlotas(ArrayList<Replay> listReplay, ArrayList<Replay> listTemporal){
+    public void traspasoDatosFlotas(ArrayList<Replay> listReplay, ArrayList<Replay> listTemporal){
         for(int i = 0; i < listTemporal.size(); i++){
             listReplay.add(listTemporal.get(i));
         }
@@ -147,16 +147,19 @@ parser code {:
 ;
     ba ::= TURNO ENTERO:a DOS_PUNTOS LLAVE_A bb:b LLAVE_B COMA ba:c {: b.setNoTurno((Integer) a); c.add(b); RESULT=c; :}
     | TURNO ENTERO:a DOS_PUNTOS LLAVE_A bb:b LLAVE_B {: b.setNoTurno((Integer) a); ArrayList<Replay> listReplay = new ArrayList<>(); listReplay.add(b); RESULT=listReplay; :}      
+    | error ba:a {: RESULT=a; :}
 ;
     bb ::= bc:a bb:e {: if(e!=null){ if(e.getListAcciones()==null){ e.setListAcciones(a); } else { System.out.println("error"); } } RESULT=e; :}                   
     | bf:a bb:e {: if(e!=null){ if(e.getListImpactos()==null){ e.setListImpactos(a); } else { System.out.println("error"); } } RESULT=e; :}
     | bx:a bb:e {: if(e!=null){ if(e.getListResumen()==null){ e.setListResumen(a); } else { System.out.println("error"); } } RESULT=e; :}
     | COMA p2:a {: RESULT=a; :}
     | {: RESULT=new Replay(); :}
+    | error bb:e {: RESULT=e; :}
 ;
     p2 ::= bc:a bb:e {: if(e!=null){ if(e.getListAcciones()==null){ e.setListAcciones(a); } else { System.out.println("error"); } } RESULT=e; :}
     | bf:a bb:e {: if(e!=null){ if(e.getListImpactos()==null){ e.setListImpactos(a); } else { System.out.println("error"); } } RESULT=e; :}                                                                         
     | bx:a bb:e {: if(e!=null){ if(e.getListResumen()==null){ e.setListResumen(a); } else { System.out.println("error"); } } RESULT=e; :}
+    | error bb:e {: RESULT=e; :}
 ;
     bc ::= ACCIONES DOS_PUNTOS LLAVE_A bw:a LLAVE_B {: RESULT=a; :} 
     | ACCIONES DOS_PUNTOS LLAVE_A LLAVE_B {: RESULT=new ArrayList<>(); :}
@@ -178,6 +181,7 @@ parser code {:
     | bo:a be:e {: if(e!=null){ if(e.getVerificador()==null){ e.setVerificador(a.getVerificador()); } else { System.out.println("error"); } } RESULT=e; :}
     | COMA p5:a {: RESULT=a; :}
     | {: RESULT=new NavesCamino(); :}
+    | error be:e {: RESULT=e; :}
 ;
     p5 ::= bg:a be:e {: if(e!=null){ if(e.getNoFlota()==null){ e.setNoFlota(a.getNoFlota()); } else { System.out.println("error"); } } RESULT=e; :}
     | bh:a be:e {: if(e!=null){ if(e.getPlanetaOrigen()==null){ e.setPlanetaOrigen(a.getPlanetaOrigen()); } else { System.out.println("error"); } } RESULT=e; :}
@@ -188,6 +192,7 @@ parser code {:
     | bm:a be:e {: if(e!=null){ if(e.getPorcentajeMuertes()==null){ e.setPorcentajeMuertes(a.getPorcentajeMuertes()); } else { System.out.println("error"); } } RESULT=e; :}
     | bn:a be:e {: if(e!=null){ if(e.getTurnoLlegada()==null){ e.setTurnoLlegada(a.getTurnoLlegada()); } else { System.out.println("error"); }   } RESULT=e; :}
     | bo:a be:e {: if(e!=null){ if(e.getVerificador()==null){ e.setVerificador(a.getVerificador()); } else { System.out.println("error"); } } RESULT=e; :}
+    | error be:e {: RESULT=e; :}
 ;
     bg ::= noFlota DOS_PUNTOS ENTERO:a {: NavesCamino naves = new NavesCamino(); naves.setNoFlota((Integer) a); RESULT=naves; :}
 ;
@@ -211,6 +216,7 @@ parser code {:
     bf ::= IMPACTOS LLAVE_A bp:a LLAVE_B {: RESULT=a; :}
     | IMPACTOS LLAVE_A LLAVE_B {: RESULT=new ArrayList<>(); :}
 ;
+
     bp ::= ID:a LLAVE_A bv:b LLAVE_B bp:c {: DatosImpacto datos = new DatosImpacto(); datos.setNombreJugador(a.toString());  datos.setListImpactos(b); c.add(datos); RESULT=c; :}
     | ID:a LLAVE_A bv:b LLAVE_B {: DatosImpacto datos = new DatosImpacto(); datos.setNombreJugador(a.toString()); datos.setListImpactos(b); ArrayList<DatosImpacto> listDatos = new ArrayList<>(); listDatos.add(datos); RESULT=listDatos; :}                                    
 ; 
@@ -225,6 +231,7 @@ parser code {:
     | cc:a bq:e {: if(e!=null){if(e.getPlanetaAtacante()==null){ e.setPlanetaAtacante(a.getPlanetaAtacante()); } else { System.out.println("error"); } } RESULT=e; :}
     | COMA p7:a {: RESULT=a; :}
     | {: RESULT=new Impactos(); :}
+    | error bq:e {: RESULT=e; :}
 ;
     p7 ::= br:a bq:e {: if(e!=null){if(e.getNavesRestantes()==null){ e.setNavesRestantes(a.getNavesRestantes()); } else { System.out.println("error"); }  } RESULT=e; :}
     | bs:a bq:e {: if(e!=null){if(e.getEstado()==null){ e.setEstado(a.getEstado()); } else { System.out.println("error"); }  } RESULT=e; :}
@@ -232,6 +239,7 @@ parser code {:
     | bu:a bq:e {: if(e!=null){if(e.getNoFlota()==null){ e.setNoFlota(a.getNoFlota()); } else { System.out.println("error"); }  } RESULT=e; :}
     | cb:a bq:e {: if(e!=null){if(e.getJugadorAtacante()==null){ e.setJugadorAtacante(a.getJugadorAtacante()); } else { System.out.println("error"); } } RESULT=e; :}
     | cc:a bq:e {: if(e!=null){if(e.getPlanetaAtacante()==null){ e.setPlanetaAtacante(a.getPlanetaAtacante()); } else { System.out.println("error"); } } RESULT=e; :}
+    | error bq:e {: RESULT=e; :}
 ;
     br ::= navesRestantes DOS_PUNTOS ENTERO:a {: Impactos impacto = new Impactos(); impacto.setNavesRestantes((Integer) a); RESULT=impacto; :}
 ;
@@ -252,8 +260,10 @@ parser code {:
     by ::= bz:a by:e {: e.add(a); RESULT=e; :}
     | COMA p6:a {: RESULT=a; :}      
     | {: RESULT=new ArrayList<>(); :}
+    | error by:e {: RESULT=e; :}
 ;
     p6 ::= bz:a by:e  {: e.add(a); RESULT=e; :}
+    | error by:e {: RESULT=e; :}
 ;
     bz ::= estado ID:b DOS_PUNTOS VERDADERO:a {: ResumenTurno resumen = new ResumenTurno(); resumen.setNombreJugador(b.toString());  resumen.setEstadoJugador(Boolean.valueOf(a.toString())); RESULT=resumen; :}
     | estado ID:b DOS_PUNTOS FALSO:a {: ResumenTurno resumen = new ResumenTurno(); resumen.setNombreJugador(b.toString()); resumen.setEstadoJugador(Boolean.valueOf(a.toString())); RESULT=resumen; :}

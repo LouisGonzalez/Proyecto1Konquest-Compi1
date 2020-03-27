@@ -140,24 +140,15 @@ public class GuardarPartida {
             buffer.write("]");
 
             buffer.close();
-            /*String texto = "";
-                    JOptionPane.showMessageDialog(null, "Partida guardada con exito ");
-                    FileReader fr = new FileReader(json);
-                    BufferedReader entrada = new BufferedReader(fr);
-                    while (entrada.ready()) {
-                        texto += entrada.readLine() + "\n";
-                    }
-                    AnalizadorLexico2 lexico = new AnalizadorLexico2(new StringReader(texto));
-                    try {
-                        new SintaxGuardarPartida(lexico, mapa, panelMensajes, contador, txtNaves, datosJuego, btnTurno, listNaves, panelJuego).parse();
-                    } catch (Exception ex) {
-                        Logger.getLogger(CreacionJSON.class.getName()).log(Level.SEVERE, null, ex);
-                    }*/
-
         } catch (IOException ex) {
             Logger.getLogger(CreacionJSON.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+    }
+    
+    public void guardarComo(String path, String nombre, Juego misDatos, ArrayList<NavesCamino> listNaves){
+        String archivo = path+"/"+nombre+".JSON";
+        crearJSON(misDatos, listNaves, archivo);
     }
 
 }

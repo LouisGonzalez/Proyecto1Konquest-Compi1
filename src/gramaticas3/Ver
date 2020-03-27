@@ -1,110 +1,72 @@
-{
-  MAPA: {
-	id: "_mapa1_",
-	size: {
-  	  filas: 10,
-  	  columnas: 10
-	},
-	alAzar: false,
-	planetasNeutrales: 20,
-	mapaCiego: false,
-	acumular: false,
-	NEUTRALES: {
-  	  mostrarNaves: true,
-  	  mostrarEstadisticas: true,
-	  produccion: 12
-	},
-	finalizacion: 0
- },
-  PLANETAS: [				
-	{
-       	  nombre: "B",
-  	  naves: 4,
-  	  produccion: 9,
-  	  porcentajeMuertes: 0.40,
-	  posicionX: 2,
-	  posicionY: 3
-	},
-	{
-       	  nombre: "C",
-  	  naves: 20,
-  	  produccion: 9,
-  	  porcentajeMuertes: 0.40,
-	  posicionX: 3,
-	  posicionY: 3
-	},
-	{
-  	  nombre: "A",
-  	  naves: 20,
-  	  produccion: 9,
-  	  porcentajeMuertes: 0.40,
-	  posicionX: 1,
-	  posicionY: 9	
+SECUENCIAS {
+	ACCIONES: {
+	     j4: [
+	         Flota [
+	           noFlota: 1,
+	           planetaOrigen: P4,
+	           planetaDestino: P1,
+	           noNaves: 1,
+	           noJugadorEnvio: 0,
+	           noJugadorAtaque: 3,
+	           porcentajeMuertes: 0.6,
+	           turnoLlegada: 2,
+	           verificador: false
+	         ]
+	       ]
+	     j3: [
+	         Flota [
+	           noFlota: 1,
+	           planetaOrigen: P3,
+	           planetaDestino: P1,
+	           noNaves: 1,
+	           noJugadorEnvio: 1,
+	           noJugadorAtaque: 3,
+	           porcentajeMuertes: 0.5,
+	           turnoLlegada: 1,
+	           verificador: false
+	         ]
+	       ]
 	}
-  ],
-PLANETAS_NEUTRALES: [
-	{
-  	  nombre: "D",
-  	  naves: 15,
-  	  produccion: 12,
-  	  porcentajeMuertes: 0.8,
-	  posicionX: 3,
-	  posicionY: 1
-	},
-	{
-  	  nombre: "E",
-  	  naves: 11,
-  	  produccion: 9,
-  	  porcentajeMuertes: 0.998501
-	  posicionX: 2,
-	  posicionY: 9
-	},
-	{
-  	  nombre: "F",
-  	  naves: 20,
-  	  produccion: 25,
-  	  porcentajeMuertes: 0.21502
-	  posicionX: 5,
-	  posicionY: 8
+	IMPACTOS {
+	       j1 {
+	         P1 [
+	           navesRestantes: 4,
+	           estado: VIVO,
+	           mensaje: dd,
+	           noFlota:1,
+	           jugadorAtacante: 1,
+	           planetaAtacante: P3
+	         ]
+	       }
+	       j1 {
+	         P1 [
+	           navesRestantes: 2,
+	           estado: VIVO,
+	           mensaje: dd,
+	           noFlota:2,
+	           jugadorAtacante: 2,
+	           planetaAtacante: P2
+	         ]
+	       }
+	       j2 {
+	         P2 [
+	           navesRestantes: 1,
+	           estado: CONQUISTADO ,
+	           mensaje: dd,
+	           noFlota:3,
+	           jugadorAtacante: 3,	
+	           planetaAtacante: P1
+	         ]
+	       }
+	   }
+	   RESUMEN {
+	       estado j4: true,
+	       estado j3: true,
+	       estado j2: false,
+	       estado j1: true
+	   }
+	GENERAL {
+		turnoJugador: 1,
+	 	turno: 4
 	}
-  ],
-  JUGADORES: [
-	{
- 	  nombre: "Jode",
-	  color: "0,255,255,75",
-  	  planetas: [
-    	    "A",
-    	    "C"
-  	  ],
-  	  tipo: HUMANO,
-	  enJuego: true
-	},
-	{
-  	  nombre: "Jodde",
-	  color: "0,255,0,75",
-  	  planetas: [
-    	    "B"
-  	  ],
-  	  tipo: DIFICIL,
-	  enJuego: true
-	}
-  ]
 }
-CAMBIOS: [
-	turno: 1,
-	turnoJugador: 0,
-	NAVES_CAMINO [
-	{
-	  noFlota: 1,
-	  planetaOrigen: B,
-	  planetaDestino: C,
-	  noNaves: 2,
-	  porcentajeMuertes: 0.5,
-	  llegada: 4,
-	  jugadorEnvio: 0,
-	  jugadorAtaque: 1,
-	  verificador: false
-	}
-	]
-]
-

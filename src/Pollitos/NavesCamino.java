@@ -15,6 +15,15 @@ public class NavesCamino {
     private Float porcentajeMuertes;
     private Integer turnoLlegada;
     private Boolean verificador;
+    private Boolean todoCorrecto;
+
+    public Boolean getTodoCorrecto() {
+        return todoCorrecto;
+    }
+
+    public void setTodoCorrecto(Boolean todoCorrecto) {
+        this.todoCorrecto = todoCorrecto;
+    }
 
     public Integer getNoFlota() {
         return noFlota;

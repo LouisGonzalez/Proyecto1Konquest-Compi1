@@ -50,7 +50,6 @@ public class AccionesTurno {
 
             for (int j = listReplay.get(i).getListImpactos().size() - 1; j >= 0; j--) {
                 String nombreJugador = listReplay.get(i).getListImpactos().get(j).getNombreJugador();
-
                 Integer nodoJugador;
                 if (!nombreJugador.equals("NEUTRAL")) {
                     nodoJugador = impacto.busquedaJugador(misDatos, nombreJugador);
@@ -80,7 +79,7 @@ public class AccionesTurno {
                         if (nodoJugador == null) {
                             impacto.destruirNeutral(misDatos, impactoAux.getJugadorAtacante(), impactoAux.getPlanetaAtacante(), planetaAux);
                         } else {
-                            impacto.destruirPlaneta(listNaves, misDatos, impactoAux.getJugadorAtacante(), nodoJugador, impactoAux.getPlanetaAtacante(), planetaAux);
+                            impacto.destruirPlaneta(impactoAux.getNoFlota(), listNaves, misDatos, impactoAux.getJugadorAtacante(), nodoJugador, impactoAux.getPlanetaAtacante(), planetaAux);
                         }
                     }
                     impacto.eliminarFlotaAtacante(listNaves, impactoAux.getNoFlota());

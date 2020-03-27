@@ -1,0 +1,40 @@
+SECUENCIAS {
+	ACCIONES {
+	     j4: [
+	         Flota [
+	           noFlota: 1,
+	           planetaOrigen: P4,
+	           planetaDestino: P1,
+	           noNaves: 1,
+	           noJugadorEnvio: 0,
+	           noJugadorAtaque: 3,
+	           porcentajeMuertes: 0.6,
+	           turnoLlegada: 2,
+	           verificador: false
+	         ]
+	       ]
+	     j3: [
+	         Flota [
+	           noFlota: 1,
+	           planetaOrigen: P3,
+	           planetaDestino: P1,
+	           noNaves: 1,
+	           noJugadorEnvio: 1,
+	           noJugadorAtaque: 3,
+	           porcentajeMuertes: 0.5,
+	           turnoLlegada: 1,
+	           verificador: false
+	         ]
+	       ]
+	}
+	   RESUMEN {
+	       estado j4: true,
+	       estado j3: true,
+	       estado j2: false,
+	       estado j1: true
+	   }
+	GENERAL {
+		turnoJugador: 1,
+	 	turno: 4
+	}
+}

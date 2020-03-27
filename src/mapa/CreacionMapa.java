@@ -272,14 +272,14 @@ public class CreacionMapa {
             }
             matriz.setBackground(new Color(convertidos[0], convertidos[1], convertidos[2], convertidos[3]));
             matriz.setBorder(new LineBorder(Color.black));
-            ImageIcon imagen = new ImageIcon("/home/luisitopapurey/Escritorio/Compiladores 1/Proyecto1.Konquest/circle-cropped.png");
+            ImageIcon imagen = new ImageIcon(getClass().getResource("/imagenes/circle-cropped.png"));
             Icon icono = new ImageIcon(imagen.getImage().getScaledInstance(panelFondo.getWidth() / columnas, panelFondo.getHeight() / filas, Image.SCALE_DEFAULT));
             matriz.setIcon(icono);
             VentanaPrincipal.tablero[concordanciaX][concordanciaY] = matriz;
         } else if (concordanciaNeutral == true) {
             matriz.setOpaque(true);
             matriz.setBorder(new LineBorder(Color.black));
-            ImageIcon imagen = new ImageIcon("/home/luisitopapurey/Escritorio/Compiladores 1/Proyecto1.Konquest/circle.png");
+            ImageIcon imagen = new ImageIcon(getClass().getResource("/imagenes/circle.png"));
             Icon icono = new ImageIcon(imagen.getImage().getScaledInstance(panelFondo.getWidth() / columnas, panelFondo.getHeight() / filas, Image.SCALE_DEFAULT));
             matriz.setIcon(icono);
             VentanaPrincipal.tablero[concordanciaX][concordanciaY] = matriz;

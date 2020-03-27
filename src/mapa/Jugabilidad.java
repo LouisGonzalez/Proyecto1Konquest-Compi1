@@ -1,8 +1,6 @@
 package mapa;
 
 import Pollitos.Juego;
-import Pollitos.Jugadores;
-import Pollitos.Mapa;
 import Pollitos.NavesCamino;
 import Pollitos.Planetas;
 import interfaz.VentanaPrincipal;
@@ -11,7 +9,6 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -252,16 +249,32 @@ public class Jugabilidad {
 
     public void verificacionNavesLlegada(ArrayList<NavesCamino> listNaves, Juego misDatos, JTextArea panelMensajes) {
         for (int i = 0; i < listNaves.size(); i++) {
-            if (listNaves.get(i).getNoJugadorAtaque() != null && listNaves.get(i).getVerificador() == false) {
+            // if (listNaves.get(i).getNoJugadorAtaque() != null && listNaves.get(i).getVerificador() == false) {
+            //   if (listNaves.get(i).getTurnoLlegada() == VentanaPrincipal.contadorTurnos) {
+            System.out.println("ENCONTRADO");
+            //nuevo
+            int totalNavesAtacante = listNaves.get(i).getNoNaves();
+            float porcMuerteAtacante = listNaves.get(i).getPorcentajeMuertes();
+            // int jugadorAtaque = listNaves.get(i).getNoJugadorAtaque();
+
+            int jugadorEnvio = listNaves.get(i).getNoJugadorEnvio();
+            String planetaAtaque = listNaves.get(i).getPlanetaDestino();
+            String planetaOrigen = listNaves.get(i).getPlanetaOrigen();
+
+            Integer jugadorAtaque = busquedaPlaneta(misDatos, planetaAtaque);
+            
+            
+            
+            
+            
+            
+            
+            
+            
+
+            if (jugadorAtaque != null) {
                 if (listNaves.get(i).getTurnoLlegada() == VentanaPrincipal.contadorTurnos) {
-                    System.out.println("ENCONTRADO");
-                    //nuevo
-                    int totalNavesAtacante = listNaves.get(i).getNoNaves();
-                    float porcMuerteAtacante = listNaves.get(i).getPorcentajeMuertes();
-                    int jugadorAtaque = listNaves.get(i).getNoJugadorAtaque();
-                    int jugadorEnvio = listNaves.get(i).getNoJugadorEnvio();
-                    String planetaAtaque = listNaves.get(i).getPlanetaDestino();
-                    String planetaOrigen = listNaves.get(i).getPlanetaOrigen();
+
                     int noPlaneta = 0;
                     float porMuerteAtacado = 0;
                     int navesPlanetaAtacado = 0;
@@ -279,6 +292,9 @@ public class Jugabilidad {
                     int navesDefensaDestruidas = (int) (navesPlanetaAtacado * porcMuerteAtacante);
                     int totalNavesDefensa = navesPlanetaAtacado - navesDefensaDestruidas;
                     if (totalNavesDefensa <= navesAtacanteLlegada) {
+
+                        devolverJugadorAlJuego(misDatos, jugadorEnvio);
+
                         misDatos.getJugadores().get(jugadorAtaque).getMisPlanetas().get(noPlaneta).setNaves(Integer.toString(totalNavesDefensa));
                         Planetas aux = misDatos.getJugadores().get(jugadorAtaque).getMisPlanetas().get(noPlaneta);
                         aux.setColor(misDatos.getJugadores().get(jugadorEnvio).getColor());
@@ -298,7 +314,11 @@ public class Jugabilidad {
                             int nuevoValor = planetasConquistados + 1;
                             misDatos.getJugadores().get(jugadorEnvio).setPlanetasConquistados(nuevoValor);
                         }
-                        eliminarFlotas(planetaAtaque, listNaves, jugadorEnvio);
+                        
+                        eliminarFlotas(i, planetaAtaque, listNaves, jugadorEnvio);
+                        
+                        
+                        
                         JOptionPane.showMessageDialog(null, "Planeta: " + planetaAtaque + " ha sido conquistado por " + misDatos.getJugadores().get(jugadorEnvio).getNombre());
                         archivo.textoNavesImpactadas(misDatos, i, jugadorAtaque, planetaAtaque, totalNavesDefensa, "CONQUISTADO ", jugadorEnvio, planetaOrigen);
                         String texto = panelMensajes.getText();
@@ -313,6 +333,7 @@ public class Jugabilidad {
                         archivo.textoNavesImpactadas(misDatos, i, jugadorAtaque, planetaAtaque, totalNavesDefensa, "VIVO", jugadorEnvio, planetaOrigen);
                         panelMensajes.setText(mensaje);
                     }
+
                     listNaves.get(i).setVerificador(true);
                 }
             } else {
@@ -326,25 +347,30 @@ public class Jugabilidad {
             }
         }
     }
-    
-    public void eliminarFlotas(String nombrePlaneta, ArrayList<NavesCamino> listNaves, int cambioJugador){
-        
-        for (int i = 0; i < listNaves.size(); i++) {
-            if(listNaves.get(i).getPlanetaOrigen().equals(nombrePlaneta) && listNaves.get(i).getVerificador()==false ){
+
+        public void eliminarFlotas(int nodo, String nombrePlaneta, ArrayList<NavesCamino> listNaves, int cambioJugador) {
+
+        /*for (int i = 0; i < listNaves.size(); i++) {
+            if (listNaves.get(i).getPlanetaOrigen().equals(nombrePlaneta) && listNaves.get(i).getVerificador() == false) {
                 NavesCamino navesAux;
                 navesAux = listNaves.get(i);
                 navesAux.setVerificador(true);
                 listNaves.set(i, navesAux);
-                System.out.println(i+"supuesto nodo a ser eliminado ENTRARAsdfddddddddddddddddddddddddddddddd");
-                System.out.println(listNaves.size()-1);
+                System.out.println(i + "supuesto nodo a ser eliminado ENTRARAsdfddddddddddddddddddddddddddddddd");
+                System.out.println(listNaves.size() - 1);
             }
-        }
+        }*/
         
         
         
         
+        NavesCamino navesAux = listNaves.get(nodo);
+        navesAux.setVerificador(true);
+        listNaves.set(nodo, navesAux);
+        
+
     }
-    
+
     public void removerPlaneta(Juego misDatos, int jugadorAtaque, String planetaAtacado) {
         int nodo = 0;
         for (int i = 0; i < misDatos.getJugadores().get(jugadorAtaque).getMisPlanetas().size(); i++) {
@@ -431,27 +457,42 @@ public class Jugabilidad {
     }
 
     public void verificadorExistenciaPlanetas(Juego misDatos, int noJugador, ArrayList<NavesCamino> listNaves) {
-        int totalPlanetas = misDatos.getJugadores().get(noJugador).getMisPlanetas().size();
-
         if (misDatos.getJugadores().get(noJugador).getMisPlanetas().isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Este jugador ha sido eliminado del juego");
+            JOptionPane.showMessageDialog(null, "Este jugador ha sido eliminado del juego, pero CUIDADO, si tiene flotas en juego todavia podria volver");
             misDatos.getJugadores().get(noJugador).setEnJuego("false");
-            eliminarFlotasJugador(misDatos, listNaves, noJugador);
+
         }
 
     }
 
-    public void eliminarFlotasJugador(Juego misDatos, ArrayList<NavesCamino> listNaves, int noJugador){
+    public void eliminarFlotasJugador(Juego misDatos, ArrayList<NavesCamino> listNaves, int noJugador) {
         for (int i = 0; i < listNaves.size(); i++) {
-            if(listNaves.get(i).getNoJugadorEnvio() == noJugador){
+            if (listNaves.get(i).getNoJugadorEnvio() == noJugador) {
                 listNaves.remove(i);
                 i--;
             }
         }
-        
-    
     }
-    
-    
+
+    public void devolverJugadorAlJuego(Juego misDatos, int nodoJugador) {
+        if (misDatos.getJugadores().get(nodoJugador).getEnJuego().equals("false")) {
+            misDatos.getJugadores().get(nodoJugador).setEnJuego("true");
+            JOptionPane.showMessageDialog(null, misDatos.getJugadores().get(nodoJugador).getNombre() + " ha vuelto al juego!");
+        }
+    }
+
+    public Integer busquedaPlaneta(Juego misDatos, String nombrePlaneta) {
+        Integer nodoJugador = null;
+        for (int i = 0; i < misDatos.getJugadores().size(); i++) {
+            for (int j = 0; j < misDatos.getJugadores().get(i).getMisPlanetas().size(); j++) {
+                String planetaAux = misDatos.getJugadores().get(i).getMisPlanetas().get(j).getNombre();
+                if (planetaAux.equals(nombrePlaneta)) {
+                    nodoJugador = i;
+                    break;
+                }
+            }
+        }
+        return nodoJugador;
+    }
 
 }

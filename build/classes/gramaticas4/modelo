@@ -1,0 +1,214 @@
+
+package gramaticas4;
+import java_cup.runtime.Symbol;
+import java.util.ArrayList;
+import Pollitos.ArchivoConfiguracion;
+import Pollitos.Mapa;
+import Pollitos.Planetas;
+import Pollitos.PlanetasNeutrales;
+import Pollitos.Jugadores;
+import Pollitos.MapaPNeutrales;
+import Pollitos.Juego;
+import Pollitos.Impactos;
+import Pollitos.DatosImpacto;
+import Pollitos.NavesCamino;
+import Pollitos.Replay;
+import Pollitos.ResumenTurno;
+import Pollitos.DatosAcciones;
+import mapa.CreacionMapa;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
+import javax.swing.JTextArea;
+import javax.swing.JButton;
+import javax.swing.JPanel;
+import interfaz.VentanaPrincipal;
+import Pollitos.Turnos;
+import Pollitos.AccionesOnline;
+
+parser code {:
+
+    public AccionesOnline online;
+    public static String totalErrores;
+    public JTextArea panelMensajes;
+
+   public SintaxOnline(AnalizadorLexico4 lex, JTextArea panelMensajes, AccionesOnline online){
+        super(lex);
+        this.online = online;
+        this.panelMensajes = panelMensajes;
+        
+    }
+
+    public void setAccion(String tipo, String mensaje, String accion){
+        System.out.println(tipo+" "+mensaje);
+    }
+  
+    public void syntax_error(Symbol s){
+        setAccion("ERROR", "Error sintaxis columna: "+s.right+" fila: "+s.left,"");
+        totalErrores += "ERROR: Error sintaxis columna: "+s.right+" fila: "+s.left+"\n";
+        panelMensajes.setText(totalErrores);
+    }
+
+    
+
+:}
+
+    terminal VERDADERO, FALSO, LLAVE_A, LLAVE_B, AGRUPACION_A, AGRUPACION_B, DOS_PUNTOS, COMA, PUNTO, COMILLAS,
+             MAPA, id, size, alAzar, pNeutrales, mapaCiego, acumular, NEUTRALES, mostrarNaves, mostrarEstadisticas,
+             produccion, finalizacion, PLANETAS, nombre, naves, porcMuertes, PLANETAS_NEUTRALES, JUGADORES, planetas,
+             tipo, HUMANO, DIFICIL, FACIL, ENTERO, DECIMAL, ID, filas, columnas, color, posX, posY, COLOR, SECUENCIAS,
+             TURNO, ACCIONES, Flota, planetaOrigen, planetaDestino, noNaves, noJugadorEnvio, noJugadorAtaque, CONQUISTADO,
+             turnoLlegada, verificador, IMPACTOS, navesRestantes, estado, mensaje, estadoJugador, noFlota, VIVO,
+             RESUMEN, JUGANDO, FUERA, jugadorAtacante, planetaAtacante, turnoJugador, GENERAL, turno;
+  
+    non terminal inicio, a;
+
+    non terminal NavesCamino c3, p1, c4, c5, c6, c7, c8, c9, c10, c11, c12;  
+
+    non terminal ArrayList<NavesCamino> c2;
+
+    non terminal DatosAcciones c1, c;
+
+    non terminal Turnos f, f1, f2, f3, p5;
+
+    non terminal ResumenTurno e2;
+
+    non terminal ArrayList<ResumenTurno> e, e1, p3;
+
+    non terminal Impactos d4, d5, d6, d7, d8, d9, p2, d3;
+
+    non terminal ArrayList<Impactos> d2;
+
+    non terminal ArrayList<DatosImpacto> d1, d;
+
+    non terminal AccionesOnline b, p4;
+
+    start with inicio;
+
+    inicio ::= a
+;
+    a ::= SECUENCIAS LLAVE_A b:a LLAVE_B {: if(a.getDatosAcciones()==null || a.getListImpactos()==null || a.getListResumen()==null ||  a.getTurnos()==null){} else {  parser.online = a;  } :}
+;
+    b ::= c:a b:e {: if(e!=null){ if(e.getDatosAcciones()==null){ e.setDatosAcciones(a); } else {} } RESULT=e; :}
+    | d:a b:e {: if(e!=null){ if(e.getListImpactos()==null){ e.setListImpactos(a); } else {} } RESULT=e; :}
+    | e:a b:e {: if(e!=null){ if(e.getListResumen()==null){ e.setListResumen(a); } else {} } RESULT=e; :}
+    | f:a b:e {: if(e!=null){ if(e.getTurnos()==null){ e.setTurnos(a); } else {} } RESULT=e; :}
+    | COMA p4:a {: RESULT=a; :}
+    | {: RESULT=new AccionesOnline(); :}
+;
+    p4 ::= c:a b:e {: if(e!=null){ if(e.getDatosAcciones()==null){ e.setDatosAcciones(a); } else {} } RESULT=e; :}
+    | d:a b:e {: if(e!=null){ if(e.getListImpactos()==null){ e.setListImpactos(a); } else {} } RESULT=e; :}
+    | e:a b:e {: if(e!=null){ if(e.getListResumen()==null){ e.setListResumen(a); } else {} } RESULT=e; :}
+    | f:a b:e {: if(e!=null){ if(e.getTurnos()==null){ e.setTurnos(a); } else {} } RESULT=e; :}
+;
+    c ::= ACCIONES LLAVE_A c1:a LLAVE_B {: RESULT=a; :}
+    | ACCIONES LLAVE_A LLAVE_B {: RESULT=new DatosAcciones(); :}
+;
+    c1 ::= ID:a DOS_PUNTOS AGRUPACION_A c2:b AGRUPACION_B {: DatosAcciones datos = new DatosAcciones(); datos.setNombreJugador(a.toString()); datos.setListNaves(b); RESULT=datos; :}
+;
+    c2 ::= Flota AGRUPACION_A c3:a AGRUPACION_B c2:e {: if(a.getNoFlota()==null || a.getPlanetaOrigen()==null || a.getPlanetaDestino() == null || a.getNoNaves()==null || a.getNoJugadorEnvio()==null || a.getNoJugadorAtaque()==null || a.getPorcentajeMuertes()==null || a.getTurnoLlegada()==null || a.getVerificador()==null){} else { e.add(a); RESULT=e; } :}
+    | Flota AGRUPACION_A c3:a AGRUPACION_B {: if(a.getNoFlota()==null || a.getPlanetaOrigen()==null || a.getPlanetaDestino() == null || a.getNoNaves()==null || a.getNoJugadorEnvio()==null || a.getNoJugadorAtaque()==null || a.getPorcentajeMuertes()==null || a.getTurnoLlegada()==null || a.getVerificador()==null){} else { ArrayList<NavesCamino> listNaves = new ArrayList<>(); listNaves.add(a); RESULT=listNaves; } :}
+;
+    c3 ::= c4:a c3:e {: if(e!=null){ if(e.getNoFlota()==null){ e.setNoFlota(a.getNoFlota()); } else {} } RESULT=e; :}
+    | c5:a c3:e {: if(e!=null){ if(e.getPlanetaOrigen()==null){ e.setPlanetaOrigen(a.getPlanetaOrigen()); } else {} } RESULT=e; :}
+    | c6:a c3:e {: if(e!=null){ if(e.getPlanetaDestino()==null){ e.setPlanetaDestino(a.getPlanetaDestino()); } else {} } RESULT=e; :}
+    | c7:a c3:e {: if(e!=null){ if(e.getNoNaves()==null){ e.setNoNaves(a.getNoNaves()); } else {  } } RESULT=e; :}
+    | c8:a c3:e {: if(e!=null){ if(e.getNoJugadorEnvio()==null){ e.setNoJugadorEnvio(a.getNoJugadorEnvio()); } else {} } RESULT=e; :}
+    | c9:a c3:e {: if(e!=null){ if(e.getNoJugadorAtaque()==null){ e.setNoJugadorAtaque(a.getNoJugadorAtaque()); } else {} } RESULT=e; :}
+    | c10:a c3:e {: if(e!=null){ if(e.getPorcentajeMuertes()==null){ e.setPorcentajeMuertes(a.getPorcentajeMuertes()); } else {} } RESULT=e; :}
+    | c11:a c3:e {: if(e!=null){ if(e.getTurnoLlegada()==null){ e.setTurnoLlegada(a.getTurnoLlegada()); } else {} } RESULT=e; :}
+    | c12:a c3:e {: if(e!=null){ if(e.getVerificador()==null){ e.setVerificador(a.getVerificador()); } else {} } RESULT=e; :}
+    | COMA p1:a {: RESULT=a; :}
+    | {: RESULT=new NavesCamino(); :}
+;
+    p1 ::= c4:a c3:e {: if(e!=null){ if(e.getNoFlota()==null){ e.setNoFlota(a.getNoFlota()); } else {} } RESULT=e; :}
+    | c5:a c3:e {: if(e!=null){ if(e.getPlanetaOrigen()==null){ e.setPlanetaOrigen(a.getPlanetaOrigen()); } else {} } RESULT=e; :}
+    | c6:a c3:e {: if(e!=null){ if(e.getPlanetaDestino()==null){ e.setPlanetaDestino(a.getPlanetaDestino()); } else {} } RESULT=e; :}
+    | c7:a c3:e {: if(e!=null){ if(e.getNoNaves()==null){ e.setNoNaves(a.getNoNaves()); } else {  } } RESULT=e; :}
+    | c8:a c3:e {: if(e!=null){ if(e.getNoJugadorEnvio()==null){ e.setNoJugadorEnvio(a.getNoJugadorEnvio()); } else {} } RESULT=e; :}
+    | c9:a c3:e {: if(e!=null){ if(e.getNoJugadorAtaque()==null){ e.setNoJugadorAtaque(a.getNoJugadorAtaque()); } else {} } RESULT=e; :}
+    | c10:a c3:e {: if(e!=null){ if(e.getPorcentajeMuertes()==null){ e.setPorcentajeMuertes(a.getPorcentajeMuertes()); } else {} } RESULT=e; :}
+    | c11:a c3:e {: if(e!=null){ if(e.getTurnoLlegada()==null){ e.setTurnoLlegada(a.getTurnoLlegada()); } else {} } RESULT=e; :}
+    | c12:a c3:e {: if(e!=null){ if(e.getVerificador()==null){ e.setVerificador(a.getVerificador()); } else {} } RESULT=e; :}
+;
+    c4 ::= noFlota DOS_PUNTOS ENTERO:a {: NavesCamino naves = new NavesCamino(); naves.setNoFlota((Integer) a); RESULT=naves; :}
+;
+    c5 ::= planetaOrigen DOS_PUNTOS ID:a {:  NavesCamino naves = new NavesCamino(); naves.setPlanetaOrigen(a.toString()); RESULT=naves; :}
+;
+    c6 ::= planetaDestino DOS_PUNTOS ID:a {: NavesCamino naves = new NavesCamino(); naves.setPlanetaDestino(a.toString()); RESULT=naves; :}
+;
+    c7 ::= noNaves DOS_PUNTOS ENTERO:a {: NavesCamino naves = new NavesCamino(); naves.setNoNaves((Integer) a); RESULT=naves; :}
+;
+    c8 ::= noJugadorEnvio DOS_PUNTOS ENTERO:a {: NavesCamino naves = new NavesCamino(); naves.setNoJugadorEnvio((Integer) a); RESULT=naves; :}
+;
+    c9 ::= noJugadorAtaque DOS_PUNTOS ENTERO:a {: NavesCamino naves = new NavesCamino(); naves.setNoJugadorAtaque((Integer) a ); RESULT=naves; :}
+;
+    c10 ::= porcMuertes DOS_PUNTOS DECIMAL:a {: NavesCamino naves = new NavesCamino(); naves.setPorcentajeMuertes(Float.parseFloat(a.toString())); RESULT=naves; :}
+;
+    c11 ::= turnoLlegada DOS_PUNTOS ENTERO:a {: NavesCamino naves = new NavesCamino(); naves.setTurnoLlegada((Integer) a); RESULT=naves; :}
+;
+    c12 ::= verificador DOS_PUNTOS VERDADERO:a {: NavesCamino naves = new NavesCamino(); naves.setVerificador(false); RESULT=naves; :}
+    | verificador DOS_PUNTOS FALSO:a {: NavesCamino naves = new NavesCamino(); naves.setVerificador(false); RESULT=naves; :}
+;
+    d ::= IMPACTOS LLAVE_A d1:a LLAVE_B {: RESULT=a; :}
+    | IMPACTOS LLAVE_A LLAVE_B {: RESULT=new ArrayList<>(); :}
+;
+    d1 ::= ID:a LLAVE_A d2:b LLAVE_B d1:c {: DatosImpacto datos = new DatosImpacto(); datos.setNombreJugador(a.toString());  datos.setListImpactos(b); c.add(datos); RESULT=c; :}
+    | ID:a LLAVE_A d2:b LLAVE_B {: DatosImpacto datos = new DatosImpacto(); datos.setNombreJugador(a.toString()); datos.setListImpactos(b); ArrayList<DatosImpacto> listDatos = new ArrayList<>(); listDatos.add(datos); RESULT=listDatos; :}                                    
+;
+    d2 ::= ID:c AGRUPACION_A d3:a AGRUPACION_B COMA d2:e {: if(a.getNavesRestantes()==null || a.getEstado()==null || a.getMensaje()==null || a.getNoFlota()==null){ System.out.println("ERROR, falta de un atributo en IMPACTOS"); } else {    a.setNombrePlaneta(c.toString()); e.add(a);   RESULT=e;  }  :}  
+    | ID:c AGRUPACION_A d3:a AGRUPACION_B {: if(a.getNavesRestantes()==null || a.getEstado()==null || a.getMensaje()==null || a.getNoFlota()==null){ System.out.println("ERROR, falta de un atributo en IMPACTOS"); } else {  a.setNombrePlaneta(c.toString());  ArrayList<Impactos> listImpactos = new ArrayList<>();  listImpactos.add(a);  RESULT=listImpactos; } :}
+;
+    d3 ::= d4:a d3:e {: if(e!=null){ if(e.getNavesRestantes()==null){ e.setNavesRestantes(a.getNavesRestantes()); } else {} } RESULT=e; :}
+    | d5:a d3:e {: if(e!=null){ if(e.getEstado()==null){ e.setEstado(a.getEstado()); } else {} } RESULT=e; :} 
+    | d6:a d3:e {: if(e!=null){ if(e.getJugadorAtacante()==null){ e.setJugadorAtacante(a.getJugadorAtacante()); } else {} } RESULT=e; :}
+    | d7:a d3:e {: if(e!=null){ if(e.getPlanetaAtacante()==null){ e.setPlanetaAtacante(a.getPlanetaAtacante()); } else {} } RESULT=e; :}
+    | d8:a d3:e {: if(e!=null){ if(e.getMensaje()==null){ e.setMensaje(a.getMensaje()); } else {} } RESULT=e; :}
+    | d9:a d3:e {: if(e!=null){ if(e.getNoFlota()==null){ e.setNoFlota(a.getNoFlota()); } else {} } RESULT=e; :}
+    | COMA p2:a {: RESULT=a; :}
+    | {: RESULT=new Impactos(); :} 
+;
+    p2 ::= d4:a d3:e {: if(e!=null){ if(e.getNavesRestantes()==null){ e.setNavesRestantes(a.getNavesRestantes()); } else {} } RESULT=e; :}
+    | d5:a d3:e {: if(e!=null){ if(e.getEstado()==null){ e.setEstado(a.getEstado()); } else {} } RESULT=e; :} 
+    | d6:a d3:e {: if(e!=null){ if(e.getJugadorAtacante()==null){ e.setJugadorAtacante(a.getJugadorAtacante()); } else {} } RESULT=e; :}
+    | d7:a d3:e {: if(e!=null){ if(e.getPlanetaAtacante()==null){ e.setPlanetaAtacante(a.getPlanetaAtacante()); } else {} } RESULT=e; :}
+    | d8:a d3:e {: if(e!=null){ if(e.getMensaje()==null){ e.setMensaje(a.getMensaje()); } else {} } RESULT=e; :}
+    | d9:a d3:e {: if(e!=null){ if(e.getNoFlota()==null){ e.setNoFlota(a.getNoFlota()); } else {} } RESULT=e; :}
+;
+    d4 ::= navesRestantes DOS_PUNTOS ENTERO:a {: Impactos impacto = new Impactos(); impacto.setNavesRestantes((Integer) a); RESULT=impacto; :}
+;
+    d5 ::= estado DOS_PUNTOS VIVO:a {: Impactos impacto = new Impactos(); impacto.setEstado(a.toString()); RESULT=impacto; :}
+    | estado DOS_PUNTOS CONQUISTADO:a {: Impactos impacto = new Impactos(); impacto.setEstado(a.toString()); RESULT=impacto; :}
+;
+    d6 ::= jugadorAtacante DOS_PUNTOS ENTERO:a {: Impactos impacto = new Impactos(); impacto.setJugadorAtacante((Integer) a); RESULT=impacto; :}
+;
+    d7 ::= planetaAtacante DOS_PUNTOS ID:a {: Impactos impacto = new Impactos(); impacto.setPlanetaAtacante(a.toString()); RESULT=impacto; :}
+;
+    d8 ::= mensaje DOS_PUNTOS ID:a {: Impactos impacto = new Impactos(); impacto.setMensaje(a.toString()); RESULT=impacto; :}
+;
+    d9 ::= noFlota DOS_PUNTOS ENTERO:a {: Impactos impacto = new Impactos(); impacto.setNoFlota((Integer) a); RESULT=impacto; :}
+;
+    e ::= RESUMEN LLAVE_A e1:a LLAVE_B {: RESULT=a; :}
+;
+    e1 ::= e2:a e1:e {: e.add(a); RESULT=e; :}
+    | COMA p3:a {: RESULT=a; :}
+    | {: RESULT=new ArrayList<>(); :}
+;
+    p3 ::= e2:a e1:e {: e.add(a); RESULT=e; :}
+;
+    e2 ::= estado ID:a DOS_PUNTOS VERDADERO:b {: ResumenTurno resumen = new ResumenTurno(); resumen.setNombreJugador(b.toString()); resumen.setEstadoJugador(Boolean.valueOf(a.toString())); RESULT=resumen; :}
+    | estado ID:a DOS_PUNTOS FALSO:b {: ResumenTurno resumen = new ResumenTurno(); resumen.setNombreJugador(a.toString()); resumen.setEstadoJugador(Boolean.valueOf(a.toString())); RESULT=resumen; :}
+;
+    f ::= GENERAL LLAVE_A f1:a LLAVE_B {: RESULT=a; :} 
+;
+    f1 ::= f2:a f1:e {: if(e!=null){ if(e.getTurnoJugador()==null){ e.setTurnoJugador(a.getTurnoJugador()); } else { } } RESULT=e; :}
+    | f3:a f1:e {: if(e!=null){ if(e.getTurno()==null){ e.setTurno(a.getTurno()); } else {} } RESULT=e; :}
+    | COMA p5:a {: RESULT=a; :}
+    | {: RESULT=new Turnos(); :}
+;
+    p5 ::= f2:a f1:e {: if(e!=null){ if(e.getTurnoJugador()==null){ e.setTurnoJugador(a.getTurnoJugador()); } else { } } RESULT=e; :}
+    | f3:a f1:e {: if(e!=null){ if(e.getTurno()==null){ e.setTurno(a.getTurno()); } else {} } RESULT=e; :}
+;
+    f2 ::= turnoJugador DOS_PUNTOS ENTERO:a {: Turnos turno = new Turnos(); turno.setTurnoJugador((Integer) a); RESULT=turno; :}
+;
+    f3 ::= turno DOS_PUNTOS ENTERO:a {: Turnos turno = new Turnos(); turno.setTurno((Integer) a); RESULT=turno; :}
+;

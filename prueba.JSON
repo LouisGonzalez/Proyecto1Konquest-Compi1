@@ -1,4 +1,4 @@
-{
+{	
   MAPA: {
 	id: "_mapa1_",
 	size: {
@@ -84,7 +84,7 @@ PLANETAS_NEUTRALES: [
   	  planetas: [
     	    "B"
   	  ],
-  	  tipo: DIFICIL
+  	  tipo: HUMANO
 	}
   ]
 }

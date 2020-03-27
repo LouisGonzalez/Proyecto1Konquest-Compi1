@@ -1,0 +1,178 @@
+package gramaticas4;
+import java_cup.runtime.Symbol;
+import java.util.ArrayList;
+import Pollitos.ArchivoConfiguracion;
+import Pollitos.Mapa;
+import Pollitos.Planetas;
+import Pollitos.PlanetasNeutrales;
+import Pollitos.Jugadores;
+import Pollitos.MapaPNeutrales;
+import Pollitos.Juego;
+import Pollitos.Impactos;
+import Pollitos.DatosImpacto;
+import Pollitos.NavesCamino;
+import Pollitos.Replay;
+import Pollitos.ResumenTurno;
+import Pollitos.DatosAcciones;
+import mapa.CreacionMapa;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
+import javax.swing.JTextArea;
+import javax.swing.JButton;
+import javax.swing.JPanel;
+import interfaz.VentanaPrincipal;
+import Pollitos.Turnos;
+import Pollitos.AccionesOnline;
+import java.util.ArrayList;
+
+parser code {:
+
+    public AccionesOnline online;
+    public static String totalErrores;
+    public JTextArea panelMensajes;
+    public ArrayList<AccionesOnline> listOnline;
+
+   public SintaxOnline(AnalizadorLexico4 lex, JTextArea panelMensajes, ArrayList<AccionesOnline> listOnline){
+        super(lex);
+        this.online = online;
+        this.panelMensajes = panelMensajes;
+        this.listOnline = listOnline;
+        
+    }
+
+    public void setAccion(String tipo, String mensaje, String accion){
+        System.out.println(tipo+" "+mensaje);
+    }
+  
+    public void syntax_error(Symbol s){
+        setAccion("ERROR", "Error sintaxis columna: "+s.right+" fila: "+s.left,"");
+        totalErrores += "ERROR: Error sintaxis columna: "+s.right+" fila: "+s.left+"\n";
+        panelMensajes.setText(totalErrores);
+    }
+
+    
+
+:}
+
+    terminal VERDADERO, FALSO, LLAVE_A, LLAVE_B, AGRUPACION_A, AGRUPACION_B, DOS_PUNTOS, COMA, PUNTO, COMILLAS,
+             MAPA, id, size, alAzar, pNeutrales, mapaCiego, acumular, NEUTRALES, mostrarNaves, mostrarEstadisticas,
+             produccion, finalizacion, PLANETAS, nombre, naves, porcMuertes, PLANETAS_NEUTRALES, JUGADORES, planetas,
+             tipo, HUMANO, DIFICIL, FACIL, ENTERO, DECIMAL, ID, filas, columnas, color, posX, posY, COLOR, SECUENCIAS,
+             TURNO, ACCIONES, Flota, planetaOrigen, planetaDestino, noNaves, noJugadorEnvio, noJugadorAtaque, CONQUISTADO,
+             turnoLlegada, verificador, IMPACTOS, navesRestantes, estado, mensaje, estadoJugador, noFlota, VIVO,
+             RESUMEN, JUGANDO, FUERA, jugadorAtacante, planetaAtacante, turnoJugador, GENERAL, turno;
+  
+    non terminal inicio, a;
+
+    non terminal NavesCamino c3, p1, c4, c5, c6, c7, c8, c9, c10, c11, c12;  
+
+    non terminal ArrayList<NavesCamino> c2;
+
+    non terminal ArrayList<DatosAcciones> c1, c;
+
+    non terminal Turnos f, f1, f2, f3, p5;
+
+    non terminal ResumenTurno e2;
+
+    non terminal ArrayList<ResumenTurno> e, e1, p3;
+
+    non terminal Impactos d4, d5, d6, d7, d8, d9, p2, d3;
+
+    non terminal ArrayList<Impactos> d2;
+
+    non terminal ArrayList<DatosImpacto> d1, d;
+
+    non terminal AccionesOnline b, p4;
+
+    start with inicio;
+
+    inicio ::= a
+;
+    a ::= SECUENCIAS LLAVE_A b:a LLAVE_B {: if(a.getDatosAcciones()==null || a.getListResumen()==null ||  a.getTurnos()==null){} else {  parser.listOnline.add(a);  } :}
+;
+    b ::= c:a b:e {: if(e!=null){ if(e.getDatosAcciones()==null){ e.setDatosAcciones(a); } else {} } RESULT=e; :}
+    | e:a b:e {: if(e!=null){ if(e.getListResumen()==null){ e.setListResumen(a); } else {} } RESULT=e; :}
+    | f:a b:e {: if(e!=null){ if(e.getTurnos()==null){ e.setTurnos(a); } else {} } RESULT=e; :}
+    | COMA p4:a {: RESULT=a; :}
+    | {: RESULT=new AccionesOnline(); :}
+;
+    p4 ::= c:a b:e {: if(e!=null){ if(e.getDatosAcciones()==null){ e.setDatosAcciones(a); } else {} } RESULT=e; :}
+    | e:a b:e {: if(e!=null){ if(e.getListResumen()==null){ e.setListResumen(a); } else {} } RESULT=e; :}
+    | f:a b:e {: if(e!=null){ if(e.getTurnos()==null){ e.setTurnos(a); } else {} } RESULT=e; :}
+;
+    c ::= ACCIONES LLAVE_A c1:a LLAVE_B {: RESULT=a; :}
+    | ACCIONES LLAVE_A LLAVE_B {: RESULT=new ArrayList<>(); :}
+;
+    c1 ::= ID:a DOS_PUNTOS AGRUPACION_A c2:b AGRUPACION_B c1:c {: DatosAcciones datos = new DatosAcciones(); datos.setNombreJugador(a.toString()); datos.setListNaves(b);  c.add(datos); RESULT=c; :}
+    | ID:a DOS_PUNTOS AGRUPACION_A c2:b AGRUPACION_B {: DatosAcciones datos = new DatosAcciones(); datos.setNombreJugador(a.toString()); datos.setListNaves(b); ArrayList<DatosAcciones> listAcciones = new ArrayList<>(); listAcciones.add(datos); RESULT=listAcciones; :}
+;   
+
+    c2 ::= Flota AGRUPACION_A c3:a AGRUPACION_B c2:e {: if(a.getNoFlota()==null || a.getPlanetaOrigen()==null || a.getPlanetaDestino() == null || a.getNoNaves()==null || a.getNoJugadorEnvio()==null || a.getNoJugadorAtaque()==null || a.getPorcentajeMuertes()==null || a.getTurnoLlegada()==null || a.getVerificador()==null){} else { e.add(a); RESULT=e; } :}
+    | Flota AGRUPACION_A c3:a AGRUPACION_B {: if(a.getNoFlota()==null || a.getPlanetaOrigen()==null || a.getPlanetaDestino() == null || a.getNoNaves()==null || a.getNoJugadorEnvio()==null || a.getNoJugadorAtaque()==null || a.getPorcentajeMuertes()==null || a.getTurnoLlegada()==null || a.getVerificador()==null){} else { ArrayList<NavesCamino> listNaves = new ArrayList<>(); listNaves.add(a); RESULT=listNaves; } :}
+;
+    c3 ::= c4:a c3:e {: if(e!=null){ if(e.getNoFlota()==null){ e.setNoFlota(a.getNoFlota()); } else {} } RESULT=e; :}
+    | c5:a c3:e {: if(e!=null){ if(e.getPlanetaOrigen()==null){ e.setPlanetaOrigen(a.getPlanetaOrigen()); } else {} } RESULT=e; :}
+    | c6:a c3:e {: if(e!=null){ if(e.getPlanetaDestino()==null){ e.setPlanetaDestino(a.getPlanetaDestino()); } else {} } RESULT=e; :}
+    | c7:a c3:e {: if(e!=null){ if(e.getNoNaves()==null){ e.setNoNaves(a.getNoNaves()); } else {  } } RESULT=e; :}
+    | c8:a c3:e {: if(e!=null){ if(e.getNoJugadorEnvio()==null){ e.setNoJugadorEnvio(a.getNoJugadorEnvio()); } else {} } RESULT=e; :}
+    | c9:a c3:e {: if(e!=null){ if(e.getNoJugadorAtaque()==null){ e.setNoJugadorAtaque(a.getNoJugadorAtaque()); } else {} } RESULT=e; :}
+    | c10:a c3:e {: if(e!=null){ if(e.getPorcentajeMuertes()==null){ e.setPorcentajeMuertes(a.getPorcentajeMuertes()); } else {} } RESULT=e; :}
+    | c11:a c3:e {: if(e!=null){ if(e.getTurnoLlegada()==null){ e.setTurnoLlegada(a.getTurnoLlegada()); } else {} } RESULT=e; :}
+    | c12:a c3:e {: if(e!=null){ if(e.getVerificador()==null){ e.setVerificador(a.getVerificador()); } else {} } RESULT=e; :}
+    | COMA p1:a {: RESULT=a; :}
+    | {: RESULT=new NavesCamino(); :}
+;
+    p1 ::= c4:a c3:e {: if(e!=null){ if(e.getNoFlota()==null){ e.setNoFlota(a.getNoFlota()); } else {} } RESULT=e; :}
+    | c5:a c3:e {: if(e!=null){ if(e.getPlanetaOrigen()==null){ e.setPlanetaOrigen(a.getPlanetaOrigen()); } else {} } RESULT=e; :}
+    | c6:a c3:e {: if(e!=null){ if(e.getPlanetaDestino()==null){ e.setPlanetaDestino(a.getPlanetaDestino()); } else {} } RESULT=e; :}
+    | c7:a c3:e {: if(e!=null){ if(e.getNoNaves()==null){ e.setNoNaves(a.getNoNaves()); } else {  } } RESULT=e; :}
+    | c8:a c3:e {: if(e!=null){ if(e.getNoJugadorEnvio()==null){ e.setNoJugadorEnvio(a.getNoJugadorEnvio()); } else {} } RESULT=e; :}
+    | c9:a c3:e {: if(e!=null){ if(e.getNoJugadorAtaque()==null){ e.setNoJugadorAtaque(a.getNoJugadorAtaque()); } else {} } RESULT=e; :}
+    | c10:a c3:e {: if(e!=null){ if(e.getPorcentajeMuertes()==null){ e.setPorcentajeMuertes(a.getPorcentajeMuertes()); } else {} } RESULT=e; :}
+    | c11:a c3:e {: if(e!=null){ if(e.getTurnoLlegada()==null){ e.setTurnoLlegada(a.getTurnoLlegada()); } else {} } RESULT=e; :}
+    | c12:a c3:e {: if(e!=null){ if(e.getVerificador()==null){ e.setVerificador(a.getVerificador()); } else {} } RESULT=e; :}
+;
+    c4 ::= noFlota DOS_PUNTOS ENTERO:a {: NavesCamino naves = new NavesCamino(); naves.setNoFlota((Integer) a); RESULT=naves; :}
+;
+    c5 ::= planetaOrigen DOS_PUNTOS ID:a {:  NavesCamino naves = new NavesCamino(); naves.setPlanetaOrigen(a.toString()); RESULT=naves; :}
+;
+    c6 ::= planetaDestino DOS_PUNTOS ID:a {: NavesCamino naves = new NavesCamino(); naves.setPlanetaDestino(a.toString()); RESULT=naves; :}
+;
+    c7 ::= noNaves DOS_PUNTOS ENTERO:a {: NavesCamino naves = new NavesCamino(); naves.setNoNaves((Integer) a); RESULT=naves; :}
+;
+    c8 ::= noJugadorEnvio DOS_PUNTOS ENTERO:a {: NavesCamino naves = new NavesCamino(); naves.setNoJugadorEnvio((Integer) a); RESULT=naves; :}
+;
+    c9 ::= noJugadorAtaque DOS_PUNTOS ENTERO:a {: NavesCamino naves = new NavesCamino(); naves.setNoJugadorAtaque((Integer) a ); RESULT=naves; :}
+;
+    c10 ::= porcMuertes DOS_PUNTOS DECIMAL:a {: NavesCamino naves = new NavesCamino(); naves.setPorcentajeMuertes(Float.parseFloat(a.toString())); RESULT=naves; :}
+;
+    c11 ::= turnoLlegada DOS_PUNTOS ENTERO:a {: NavesCamino naves = new NavesCamino(); naves.setTurnoLlegada((Integer) a); RESULT=naves; :}
+;
+    c12 ::= verificador DOS_PUNTOS VERDADERO:a {: NavesCamino naves = new NavesCamino(); naves.setVerificador(false); RESULT=naves; :}
+    | verificador DOS_PUNTOS FALSO:a {: NavesCamino naves = new NavesCamino(); naves.setVerificador(false); RESULT=naves; :}
+;
+    e ::= RESUMEN LLAVE_A e1:a LLAVE_B {: RESULT=a; :}
+;
+    e1 ::= e2:a e1:e {: e.add(a); RESULT=e; :}
+    | COMA p3:a {: RESULT=a; :}
+    | {: RESULT=new ArrayList<>(); :}
+;
+    p3 ::= e2:a e1:e {: e.add(a); RESULT=e; :}
+;
+    e2 ::= estado ID:a DOS_PUNTOS VERDADERO:b {: ResumenTurno resumen = new ResumenTurno(); resumen.setNombreJugador(b.toString()); resumen.setEstadoJugador(Boolean.valueOf(a.toString())); RESULT=resumen; :}
+    | estado ID:a DOS_PUNTOS FALSO:b {: ResumenTurno resumen = new ResumenTurno(); resumen.setNombreJugador(a.toString()); resumen.setEstadoJugador(Boolean.valueOf(a.toString())); RESULT=resumen; :}
+;
+    f ::= GENERAL LLAVE_A f1:a LLAVE_B {: RESULT=a; :} 
+;
+    f1 ::= f2:a f1:e {: if(e!=null){ if(e.getTurnoJugador()==null){ e.setTurnoJugador(a.getTurnoJugador()); } else { } } RESULT=e; :}
+    | f3:a f1:e {: if(e!=null){ if(e.getTurno()==null){ e.setTurno(a.getTurno()); } else {} } RESULT=e; :}
+    | COMA p5:a {: RESULT=a; :}
+    | {: RESULT=new Turnos(); :}
+;
+    p5 ::= f2:a f1:e {: if(e!=null){ if(e.getTurnoJugador()==null){ e.setTurnoJugador(a.getTurnoJugador()); } else { } } RESULT=e; :}
+    | f3:a f1:e {: if(e!=null){ if(e.getTurno()==null){ e.setTurno(a.getTurno()); } else {} } RESULT=e; :}
+;
+    f2 ::= turnoJugador DOS_PUNTOS ENTERO:a {: Turnos turno = new Turnos(); turno.setTurnoJugador((Integer) a); RESULT=turno; :}
+;
+    f3 ::= turno DOS_PUNTOS ENTERO:a {: Turnos turno = new Turnos(); turno.setTurno((Integer) a); RESULT=turno; :}
+;

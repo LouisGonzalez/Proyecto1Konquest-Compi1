@@ -74,20 +74,14 @@ public class AccionesImpacto {
         misDatos.getpNeutrales().get(nodoPlaneta).setNaves(Integer.toString(noNaves));
     }
 
-    public void destruirPlaneta(ArrayList<NavesCamino> listNaves, Juego misDatos, int jugadorAtacante, int jugadorAtacado, String planetaAtacante, String planetaAtacado) {
+    public void destruirPlaneta(int nodo, ArrayList<NavesCamino> listNaves, Juego misDatos, int jugadorAtacante, int jugadorAtacado, String planetaAtacante, String planetaAtacado) {
         int posX = 0;
         int posY = 0;
         String color = "";
         int nodoPlaneta = 0;
         Planetas nuevoPlaneta = null;
-        for (int i = 0; i < misDatos.getJugadores().get(jugadorAtacante).getMisPlanetas().size(); i++) {
-            Planetas planetaAux = misDatos.getJugadores().get(jugadorAtacante).getMisPlanetas().get(i);
-            if (planetaAux.getNombre().equals(planetaAtacante)) {
-                color = misDatos.getJugadores().get(jugadorAtacante).getColor();
-                break;
-            }
-        }
-
+        color = misDatos.getJugadores().get(jugadorAtacante).getColor();
+      
         for (int i = 0; i < misDatos.getJugadores().get(jugadorAtacado).getMisPlanetas().size(); i++) {
             Planetas planetaAux = misDatos.getJugadores().get(jugadorAtacado).getMisPlanetas().get(i);
             if (planetaAux.getNombre().equals(planetaAtacado)) {
@@ -98,7 +92,7 @@ public class AccionesImpacto {
                 break;
             }
         }
-
+        System.out.println(color+"soy el color");
         String[] colores = color.split(",");
         int[] convertidos = new int[colores.length];
         for (int i = 0; i < colores.length; i++) {
@@ -108,7 +102,12 @@ public class AccionesImpacto {
         misDatos.getJugadores().get(jugadorAtacado).getMisPlanetas().remove(nodoPlaneta);
         misDatos.getJugadores().get(jugadorAtacante).getMisPlanetas().add(nuevoPlaneta);
         JOptionPane.showMessageDialog(null, "Planeta: " + planetaAtacado + " ha sido conquistado por " + misDatos.getJugadores().get(jugadorAtacante).getNombre());
-        jugabilidad.eliminarFlotas(planetaAtacado, listNaves, jugadorAtacante);
+    
+        //ESTO LO BORRE SOLO PARA PROBAR ALGO, QUITA LAS // 
+        
+
+
+        jugabilidad.eliminarFlotas(nodo, planetaAtacado, listNaves, jugadorAtacante);
     
         
         aumentoPlanetasConquistados(misDatos, jugadorAtacante);
