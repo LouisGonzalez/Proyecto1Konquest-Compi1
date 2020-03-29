@@ -9,6 +9,7 @@ import Pollitos.Resultados;
 import gramaticas.AnalizadorLexico;
 import gramaticas.SintaxCreacionMapa;
 import gramaticas2.AnalizadorLexico2;
+import gramaticas2.SintaxGuardarPartida;
 import gramaticas3.AnalizadorLexico3;
 import gramaticas3.SintaxReplay;
 import java.awt.Color;
@@ -405,16 +406,15 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 AnalizadorLexico lexico = new AnalizadorLexico(new StringReader(texto));
                 AnalizadorLexico2 lexico2 = new AnalizadorLexico2(new StringReader(texto));
                 try {
-                    new SintaxCreacionMapa(lexico, mapa, panelMensajes, contador, txtNaves, datosJuego, btnTurno, listNaves, panelJuego, btnDistancia, btnFlotas).parse();
+                   new SintaxCreacionMapa(lexico, mapa, panelMensajes, contador, txtNaves, datosJuego, btnTurno, listNaves, panelJuego, btnDistancia, btnFlotas).parse();
                     textoReplay += "SECUENCIAS [\n";
                     System.out.println(textoReplay);
                     if (!datosJuego.isEmpty()) {
                         juego = datosJuego.get(0);
                         computadora.verificadorTipoInteligencia(juego, listNaves);
-
                     }
 
-                    /*  new SintaxGuardarPartida(lexico2, mapa, panelMensajes, contador, txtNaves, datosJuego, btnTurno, listNaves, panelJuego, btnDistancia, btnFlotas).parse();
+                   /* new SintaxGuardarPartida(lexico2, mapa, panelMensajes, contador, txtNaves, datosJuego, btnTurno, listNaves, panelJuego, btnDistancia, btnFlotas).parse();
                     textoReplay += "SECUENCIAS [\n";
                     System.out.println(textoReplay);
                     if (!datosJuego.isEmpty()) {
@@ -428,7 +428,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                     Logger.getLogger(VentanaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
                     JOptionPane.showMessageDialog(null, "ERROR");
                     panelMensajes.setText(SintaxCreacionMapa.totalErrores);
-                    //panelMensajes.setText(SintaxGuardarPartida.totalErrores);
+                   // panelMensajes.setText(SintaxGuardarPartida.totalErrores);
                 }
             } else {
                 System.out.println("no es un archivo compatible");
@@ -663,6 +663,8 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                         listNaves.clear();
                         new SintaxReplay(lexico, mapa, panelMensajes, contador, txtNaves, datosJuego, btnTurno, listNaves, panelJuego, btnDistancia, btnFlotas, listReplay).parse();
                         JOptionPane.showMessageDialog(null, "listo");
+                        
+                        //LO DE ABAJO SI SIRVExd
                         //acciones.lanzamientoFlotas(lblTurno, listReplay, juego, listNaves);
                         System.out.println(listNaves.size() + "sdss");
 

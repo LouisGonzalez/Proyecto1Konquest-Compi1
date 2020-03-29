@@ -8,6 +8,15 @@ public class ResumenTurno {
 
     private Boolean estadoJugador;
     private String nombreJugador;
+    private Boolean todoCorrecto;
+
+    public Boolean getTodoCorrecto() {
+        return todoCorrecto;
+    }
+
+    public void setTodoCorrecto(Boolean todoCorrecto) {
+        this.todoCorrecto = todoCorrecto;
+    }
 
     public String getNombreJugador() {
         return nombreJugador;

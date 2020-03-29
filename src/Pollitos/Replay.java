@@ -12,6 +12,15 @@ public class Replay {
     private ArrayList<DatosAcciones> listAcciones;
     private ArrayList<DatosImpacto> listImpactos;
     private ArrayList<ResumenTurno> listResumen;
+    private Boolean todoCorrecto;
+
+    public Boolean getTodoCorrecto() {
+        return todoCorrecto;
+    }
+
+    public void setTodoCorrecto(Boolean todoCorrecto) {
+        this.todoCorrecto = todoCorrecto;
+    }
 
     public ArrayList<ResumenTurno> getListResumen() {
         return listResumen;

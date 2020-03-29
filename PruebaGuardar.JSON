@@ -1,4 +1,4 @@
-{q
+{
   MAPA: {
 	id: "_mapa1_",
 	size: {
@@ -55,7 +55,7 @@ PLANETAS_NEUTRALES: [
   	  nombre: "E",
   	  naves: 11,
   	  produccion: 9,
-  	  porcentajeMuertes: 0.998501
+  	  porcentajeMuertes: 0.998501,
 	  posicionX: 2,
 	  posicionY: 9
 	},
@@ -63,7 +63,7 @@ PLANETAS_NEUTRALES: [
   	  nombre: "F",
   	  naves: 20,
   	  produccion: 25,
-  	  porcentajeMuertes: 0.21502
+  	  porcentajeMuertes: 0.21502,
 	  posicionX: 5,
 	  posicionY: 8
 	}
@@ -99,7 +99,7 @@ CAMBIOS: [
 	  planetaOrigen: B,
 	  planetaDestino: C,
 	  noNaves: 2,
-	  porcentajeMuertes: 0.5,
+	  porcentadjeMuertes: 0.5,
 	  llegada: 4,
 	  jugadorEnvio: 0,
 	  jugadorAtaque: 1	,
