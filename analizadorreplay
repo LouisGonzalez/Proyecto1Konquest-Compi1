@@ -6,16 +6,23 @@
 ;
     bb ::= bc bb
     | bf bb
+    | bx bb
     | COMA p2
     | 
+    | error
 ;
     p2 ::= bc bb
     | bf bb
+    | bx bb
+    | error
 ;
-    bc ::= ACCIONES ID LLAVE_A bd LLAVE_B COMA bc
+    bc ::= ACCIONES ID LLAVE_A bw LLAVE_B COMA
     | ACCIONES ID LLAVE_A LLAVE_B
 ;
-    bd ::= Flota AGRUPACION_A be AGRUPACION_B COMA bd
+    bw ::= ID DOS_PUNTOS AGRUPACION_A bd AGRUPACION_B bw
+    | ID DOS_PUNTOS LLAVE_A bd LLAVE_B
+
+    bd ::= Flota AGRUPACION_A be AGRUPACION_B bd
     | Flota AGRUPACION_A be AGRUPACION_B 
 ;
     be ::= bg be
@@ -29,6 +36,7 @@
     | bo be
     | COMA p5
     |
+    | error
 ;
     p5 ::= bg be
     | bh be
@@ -39,6 +47,7 @@
     | bm be
     | bn be
     | bo be
+    | error
 ;
     bg ::= noFlota DOS_PUNTOS ENTERO
 ;
@@ -62,20 +71,29 @@
     bf ::= IMPACTOS AGRUPACION_A bp AGRUPACION_B
     | IMPACTOS AGRUPACION_A AGRUPACION_B
 ;
-    bp ::= ID LLAVE_A bq LLAVE_B COMA bp
-    | ID LLAVE_A bq LLAVE_B
+    bp ::= ID LLAVE_A bv LLAVE_B bp
+    | ID LLAVE_A bv LLAVE_B
 ;
+    bv ::= ID AGRUPACION_A bq AGRUPACION_B COMA bv
+    | ID AGRUPACION_A bq AGRUPACION_B
+
     bq ::= br bq
     | bs bq
     | bt bq
     | bu bq
+    | cb bq
+    | cc bq
     | COMA p7
     |
+    | error
 ;
     p7 ::= br bq
     | bs bq
     | bt bq
     | bu bq
+    | cb bq
+    | cc bq
+    | error
 ;
     br ::= navesRestantes DOS_PUNTOS ENTERO
 ;
@@ -85,7 +103,19 @@
 ;
     bu ::= noFlota DOS_PUNTOS ENTERO
 ;
-
+    bx ::= RESUMEN LLAVE_A by LLAVE_B 
+;
+    by ::= bz by
+    | COMA p6
+    | 
+;
+    p6 ::= bz by
+;
+    bz ::= estado ID DOS_PUNTOS VERDADERO 
+    | estado ID DOS_PUNTOS FALSO
+;
+    a3 ::= turnoJugador DOS_PUNTOS ENTERO
+;
     
 
 

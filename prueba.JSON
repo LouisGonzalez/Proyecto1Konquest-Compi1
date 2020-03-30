@@ -11,7 +11,7 @@
 	acumular: false,
 	NEUTRALES: {
   	  mostrarNaves: true,
-  	  mostrarEstadisticas: true,
+  	  mostrarEstadisticas: false,
 	  produccion: 12
 	},
 	finalizacion: 0

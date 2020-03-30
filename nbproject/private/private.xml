@@ -18,14 +18,12 @@
             <file>file:/home/luisitopapurey/Escritorio/Compiladores%201/Proyecto1.Konquest/src/online/Enlace.java</file>
             <file>file:/home/luisitopapurey/Escritorio/Compiladores%201/Proyecto1.Konquest/src/interfaz/EstadisticasFinales.java</file>
             <file>file:/home/luisitopapurey/Escritorio/Compiladores%201/Proyecto1.Konquest/src/Pollitos/Turnos.java</file>
-            <file>file:/home/luisitopapurey/Escritorio/Compiladores%201/Proyecto1.Konquest/src/Pollitos/DatosGuardados.java</file>
             <file>file:/home/luisitopapurey/Escritorio/Compiladores%201/Proyecto1.Konquest/src/Pollitos/Mapa.java</file>
             <file>file:/home/luisitopapurey/Escritorio/Compiladores%201/Proyecto1.Konquest/src/gramaticas2/SintaxGuardarPartida.java</file>
             <file>file:/home/luisitopapurey/Escritorio/Compiladores%201/Proyecto1.Konquest/src/Pollitos/Impactos.java</file>
             <file>file:/home/luisitopapurey/Escritorio/Compiladores%201/Proyecto1.Konquest/src/mapa/CreacionJSON.java</file>
             <file>file:/home/luisitopapurey/Escritorio/Compiladores%201/Proyecto1.Konquest/src/Pollitos/Auxiliar.java</file>
             <file>file:/home/luisitopapurey/Escritorio/Compiladores%201/Proyecto1.Konquest/src/online/AccionesImpactos.java</file>
-            <file>file:/home/luisitopapurey/Escritorio/Compiladores%201/Proyecto1.Konquest/src/Pollitos/NavesCamino.java</file>
             <file>file:/home/luisitopapurey/Escritorio/Compiladores%201/Proyecto1.Konquest/src/mapa/Jugabilidad.java</file>
             <file>file:/home/luisitopapurey/Escritorio/Compiladores%201/Proyecto1.Konquest/src/Pollitos/AccionesOnline.java</file>
             <file>file:/home/luisitopapurey/Escritorio/Compiladores%201/Proyecto1.Konquest/src/online/Cliente.java</file>
@@ -60,6 +58,7 @@
             <file>file:/home/luisitopapurey/Escritorio/Compiladores%201/Proyecto1.Konquest/src/Pollitos/PlanetasNeutrales.java</file>
             <file>file:/home/luisitopapurey/Escritorio/Compiladores%201/Proyecto1.Konquest/src/AccionesComputadora/InteligenciaArtificial.java</file>
             <file>file:/home/luisitopapurey/Escritorio/Compiladores%201/Proyecto1.Konquest/src/online/Validaciones.java</file>
+            <file>file:/home/luisitopapurey/Escritorio/Compiladores%201/Proyecto1.Konquest/src/gramaticas/SintaxCreacionMapa.java</file>
             <file>file:/home/luisitopapurey/Escritorio/Compiladores%201/Proyecto1.Konquest/src/gramaticas3/SintaxReplay.java</file>
             <file>file:/home/luisitopapurey/Escritorio/Compiladores%201/Proyecto1.Konquest/src/Pollitos/Resultados.java</file>
             <file>file:/home/luisitopapurey/Escritorio/Compiladores%201/Proyecto1.Konquest/src/replay/AccionesResumen.java</file>

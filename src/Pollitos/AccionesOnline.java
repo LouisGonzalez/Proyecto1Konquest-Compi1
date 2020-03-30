@@ -14,10 +14,17 @@ import java.util.ArrayList;
 public class AccionesOnline {
 
     private ArrayList<DatosAcciones> datosAcciones;
-   // private ArrayList<DatosImpacto> listImpactos;
     private ArrayList<ResumenTurno> listResumen;
-    private Turnos turnos;
+    private Boolean todoCorrecto;
 
+    public Boolean getTodoCorrecto() {
+        return todoCorrecto;
+    }
+
+    public void setTodoCorrecto(Boolean todoCorrecto) {
+        this.todoCorrecto = todoCorrecto;
+    }
+  
     public ArrayList<DatosAcciones> getDatosAcciones() {
         return datosAcciones;
     }
@@ -26,14 +33,7 @@ public class AccionesOnline {
         this.datosAcciones = datosAcciones;
     }
 
-    /*    public ArrayList<DatosImpacto> getListImpactos() {
-        return listImpactos;
-    }
-
-    public void setListImpactos(ArrayList<DatosImpacto> listImpactos) {
-        this.listImpactos = listImpactos;
-    }*/
-
+    
     public ArrayList<ResumenTurno> getListResumen() {
         return listResumen;
     }
@@ -42,12 +42,6 @@ public class AccionesOnline {
         this.listResumen = listResumen;
     }
 
-    public Turnos getTurnos() {
-        return turnos;
-    }
-
-    public void setTurnos(Turnos turnos) {
-        this.turnos = turnos;
-    }
+    
     
 }

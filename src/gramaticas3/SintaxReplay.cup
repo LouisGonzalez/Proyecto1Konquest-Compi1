@@ -143,35 +143,29 @@ parser code {:
     a2 ::= SECUENCIAS AGRUPACION_A ba:a AGRUPACION_B {: if(a == null){ parser.panelMensajes.setText(parser.totalErrores); } else {  parser.traspasoDatosFlotas(parser.listReplay, a);  }       :}
     | SECUENCIAS AGRUPACION_A AGRUPACION_B 
 ;
-    ba ::= TURNO ENTERO:a DOS_PUNTOS LLAVE_A bb:b LLAVE_B COMA ba:c {: if(b.getListAcciones()==null) { parser.totalErrores += "Falta de atributo ACCIONES en campo TURNO "+a.toString()+". Linea: "+bleft+" Columna: "+bright+".\n"; b.setTodoCorrecto(false); }            
-                                                                       if(b.getListImpactos()==null) { parser.totalErrores += "Falta de atributo IMPACTOS en campo TURNO "+a.toString()+". Linea: "+bleft+" Columna: "+bright+".\n"; b.setTodoCorrecto(false); }            
-                                                                       if(b.getListResumen()==null) { parser.totalErrores += "Falta de atributo RESUMEN en campo TURNO "+a.toString()+". Linea: "+bleft+" Columna: "+bright+".\n"; b.setTodoCorrecto(false); }            
-                                                                       if(c == null){ RESULT=null; } else { if(b.getTodoCorrecto() == false){ RESULT=null; } else { b.setNoTurno((Integer) a); c.add(b); RESULT=c; } } :}
-    | TURNO ENTERO:a DOS_PUNTOS LLAVE_A bb:b LLAVE_B {: if(b.getListAcciones()==null) { parser.totalErrores += "Falta de atributo ACCIONES en campo TURNO "+a.toString()+". Linea: "+bleft+" Columna: "+bright+".\n"; b.setTodoCorrecto(false); }            
-                                                        if(b.getListImpactos()==null) { parser.totalErrores += "Falta de atributo IMPACTOS en campo TURNO "+a.toString()+". Linea: "+bleft+" Columna: "+bright+".\n"; b.setTodoCorrecto(false); }            
-                                                        if(b.getListResumen()==null) { parser.totalErrores += "Falta de atributo RESUMEN en campo TURNO "+a.toString()+". Linea: "+bleft+" Columna: "+bright+".\n"; b.setTodoCorrecto(false); }            
-                                                        if(b.getTodoCorrecto() == false){ RESULT=null; } else { b.setNoTurno((Integer) a); ArrayList<Replay> listReplay = new ArrayList<>(); listReplay.add(b); RESULT=listReplay; } :}
-    | error ba:a {: RESULT=a; :}
+    ba ::= TURNO ENTERO:a DOS_PUNTOS LLAVE_A bb:b LLAVE_B COMA ba:c {: if(c == null){ RESULT=null; } else { if(b.getTodoCorrecto() == false){ RESULT=null; } else { b.setNoTurno((Integer) a); c.add(b); RESULT=c; } } :}
+    | TURNO ENTERO:a DOS_PUNTOS LLAVE_A bb:b LLAVE_B {: if(b.getTodoCorrecto() == false){ RESULT=null; } else { b.setNoTurno((Integer) a); ArrayList<Replay> listReplay = new ArrayList<>(); listReplay.add(b); RESULT=listReplay; } :}
+    | error ba:a {: parser.totalErrores += "Atributo en un campo TURNO sentenciado de forma incorrecta.\n"; e.setTodoCorrecto(false); RESULT=a; :}
 ;
-    bb ::= bc:a bb:e {: if(e!=null){ if(e.getListAcciones()==null){ e.setListAcciones(a); } else { parser.totalErrores += "Sub-atributo ACCIONES en un campo TURNO sentenciado mas de una vez. Linea: "+aleft+" Columna: "+aright+".\n"; e.setTodoCorrecto(false); } } RESULT=e; :}                   
-    | bf:a bb:e {: if(e!=null){ if(e.getListImpactos()==null){ e.setListImpactos(a); } else { parser.totalErrores += "Sub-atributo IMPACTOS en un campo TURNO sentenciado mas de una vez. Linea: "+aleft+" Columna: "+aright+".\n"; e.setTodoCorrecto(false); } } RESULT=e; :}
-    | bx:a bb:e {: if(e!=null){ if(e.getListResumen()==null){ e.setListResumen(a); } else { parser.totalErrores += "Sub-atributo RESUMEN en un campo TURNO sentenciado mas de una vez. Linea: "+aleft+" Columna: "+aright+".\n"; e.setTodoCorrecto(false); } } RESULT=e; :}
+    bb ::= bc:a bb:e {: if(e!=null){ if(e.getListAcciones()==null){ if(a == null){ e.setTodoCorrecto(false); } else { e.setListAcciones(a); } } else { parser.totalErrores += "Sub-atributo ACCIONES en un campo TURNO sentenciado mas de una vez. Linea: "+aleft+" Columna: "+aright+".\n"; e.setTodoCorrecto(false); } }  RESULT=e;  :}                   
+    | bf:a bb:e {: if(e!=null){ if(e.getListImpactos()==null){ if(a == null){ e.setTodoCorrecto(false); } else { e.setListImpactos(a); } } else { parser.totalErrores += "Sub-atributo IMPACTOS en un campo TURNO sentenciado mas de una vez. Linea: "+aleft+" Columna: "+aright+".\n"; e.setTodoCorrecto(false); } } RESULT=e; :}
+    | bx:a bb:e {: if(e!=null){ if(e.getListResumen()==null){ if(a == null){ e.setTodoCorrecto(false); } else { e.setListResumen(a); } } else { parser.totalErrores += "Sub-atributo RESUMEN en un campo TURNO sentenciado mas de una vez. Linea: "+aleft+" Columna: "+aright+".\n"; e.setTodoCorrecto(false); } } RESULT=e; :}
     | COMA p2:a {: RESULT=a; :}
     | {: Replay replay = new Replay(); replay.setTodoCorrecto(true); RESULT=replay; :}
     | error bb:e {: parser.totalErrores += "Atributo en un campo TURNO sentenciado de forma incorrecta.\n"; e.setTodoCorrecto(false); RESULT=e; :}
 ;
-    p2 ::= bc:a bb:e {: if(e!=null){ if(e.getListAcciones()==null){ e.setListAcciones(a); } else { parser.totalErrores += "Sub-atributo ACCIONES en un campo TURNO sentenciado mas de una vez. Linea: "+aleft+" Columna: "+aright+".\n"; e.setTodoCorrecto(false); } } RESULT=e; :}                   
-    | bf:a bb:e {: if(e!=null){ if(e.getListImpactos()==null){ e.setListImpactos(a); } else { parser.totalErrores += "Sub-atributo IMPACTOS en un campo TURNO sentenciado mas de una vez. Linea: "+aleft+" Columna: "+aright+".\n"; e.setTodoCorrecto(false); } } RESULT=e; :}
-    | bx:a bb:e {: if(e!=null){ if(e.getListResumen()==null){ e.setListResumen(a); } else { parser.totalErrores += "Sub-atributo RESUMEN en un campo TURNO sentenciado mas de una vez. Linea: "+aleft+" Columna: "+aright+".\n"; e.setTodoCorrecto(false); } } RESULT=e; :}
+    p2 ::= bc:a bb:e {: if(e!=null){ if(e.getListAcciones()==null){ if(a == null){ e.setTodoCorrecto(false); } else { e.setListAcciones(a); } } else { parser.totalErrores += "Sub-atributo ACCIONES en un campo TURNO sentenciado mas de una vez. Linea: "+aleft+" Columna: "+aright+".\n"; e.setTodoCorrecto(false); } } RESULT=e; :}                   
+    | bf:a bb:e {: if(e!=null){ if(e.getListImpactos()==null){ if(a == null) { e.setTodoCorrecto(false); } else { e.setListImpactos(a); } } else { parser.totalErrores += "Sub-atributo IMPACTOS en un campo TURNO sentenciado mas de una vez. Linea: "+aleft+" Columna: "+aright+".\n"; e.setTodoCorrecto(false); } } RESULT=e; :}
+    | bx:a bb:e {: if(e!=null){ if(e.getListResumen()==null){ if(a == null) { e.setTodoCorrecto(false); } else { e.setListResumen(a); } } else { parser.totalErrores += "Sub-atributo RESUMEN en un campo TURNO sentenciado mas de una vez. Linea: "+aleft+" Columna: "+aright+".\n"; e.setTodoCorrecto(false); } } RESULT=e; :}
     | error bb:e {: parser.totalErrores += "Atributo en un campo TURNO sentenciado de forma incorrecta.\n"; e.setTodoCorrecto(false); RESULT=e; :}
 ;
-    bc ::= ACCIONES DOS_PUNTOS LLAVE_A bw:a LLAVE_B {: RESULT=a; :} 
+    bc ::= ACCIONES DOS_PUNTOS LLAVE_A bw:a LLAVE_B {:  RESULT=a; :} 
     | ACCIONES DOS_PUNTOS LLAVE_A LLAVE_B {: RESULT=new ArrayList<>(); :}
 ;
-    bw ::= ID:a DOS_PUNTOS AGRUPACION_A bd:b AGRUPACION_B bw:c {: DatosAcciones datos = new DatosAcciones(); datos.setNombreJugador(a.toString()); datos.setListNaves(b); c.add(datos); RESULT=c; :}
-    | ID:a DOS_PUNTOS AGRUPACION_A bd:b AGRUPACION_B {: DatosAcciones datos = new DatosAcciones(); datos.setNombreJugador(a.toString()); datos.setListNaves(b); ArrayList<DatosAcciones> listAcciones = new ArrayList<>(); listAcciones.add(datos); RESULT=listAcciones; :} 
+    bw ::= ID:a DOS_PUNTOS AGRUPACION_A bd:b AGRUPACION_B bw:c {:  if(c==null) { RESULT=null; } else { if(b == null){  RESULT=null; } else {  DatosAcciones datos = new DatosAcciones(); datos.setNombreJugador(a.toString()); datos.setListNaves(b); c.add(datos); RESULT=c; } } :}
+    | ID:a DOS_PUNTOS AGRUPACION_A bd:b AGRUPACION_B {: if(b == null){ RESULT=null; } else { DatosAcciones datos = new DatosAcciones(); datos.setNombreJugador(a.toString()); datos.setListNaves(b); ArrayList<DatosAcciones> listAcciones = new ArrayList<>(); listAcciones.add(datos); RESULT=listAcciones; } :} 
 ;
-    bd ::= Flota AGRUPACION_A be:a AGRUPACION_B COMA bd:e {: if(a.getNoFlota()==null) { parser.totalErrores += "Falta de atributo noFlota en campo FLOTA. Linea: "+aleft+" Columna: "+aright+".\n"; a.setTodoCorrecto(false); }
+    bd ::= Flota AGRUPACION_A be:a AGRUPACION_B bd:e {: if(a.getNoFlota()==null) { parser.totalErrores += "Falta de atributo noFlota en campo FLOTA. Linea: "+aleft+" Columna: "+aright+".\n"; a.setTodoCorrecto(false); }
                                                              if(a.getPlanetaOrigen()==null) { parser.totalErrores += "Falta de atributo planetaOrigen en campo FLOTA. Linea: "+aleft+" Columna: "+aright+".\n"; a.setTodoCorrecto(false); }
                                                              if(a.getPlanetaDestino()==null) { parser.totalErrores += "Falta de atributo planetaDestino en campo FLOTA. Linea: "+aleft+" Columna: "+aright+".\n"; a.setTodoCorrecto(false); }
                                                              if(a.getNoNaves()==null) { parser.totalErrores += "Falta de atributo noNaves en campo FLOTA. Linea: "+aleft+" Columna: "+aright+".\n"; a.setTodoCorrecto(false); }
@@ -180,9 +174,8 @@ parser code {:
                                                              if(a.getPorcentajeMuertes()==null) { parser.totalErrores += "Falta de atributo porcentajeMuertes en campo FLOTA. Linea: "+aleft+" Columna: "+aright+".\n"; a.setTodoCorrecto(false); }
                                                              if(a.getTurnoLlegada()==null) { parser.totalErrores += "Falta de atributo turnoLlegada en campo FLOTA. Linea: "+aleft+" Columna: "+aright+".\n"; a.setTodoCorrecto(false); }
                                                              if(a.getVerificador()==null) { parser.totalErrores += "Falta de atributo verificador en campo FLOTA. Linea: "+aleft+" Columna: "+aright+".\n"; a.setTodoCorrecto(false); }
-
-                     if(e == null){ RESULT=null; } else {   if(a.getTodoCorrecto() == false) { RESULT=null; } else { e.add(a); RESULT=e; } } :}                           
-    | Flota AGRUPACION_A be:a AGRUPACION_B {: if(a.getNoFlota()==null) { parser.totalErrores += "Falta de atributo noFlota en campo FLOTA. Linea: "+aleft+" Columna: "+aright+".\n"; a.setTodoCorrecto(false); }
+                     if(e == null){ RESULT=null; } else {  if(a.getTodoCorrecto() == false) { RESULT=null; } else { e.add(a); RESULT=e; } } :}                           
+    | Flota AGRUPACION_A be:a AGRUPACION_B  {: if(a.getNoFlota()==null) { parser.totalErrores += "Falta de atributo noFlota en campo FLOTA. Linea: "+aleft+" Columna: "+aright+".\n"; a.setTodoCorrecto(false); }
                                               if(a.getPlanetaOrigen()==null) { parser.totalErrores += "Falta de atributo planetaOrigen en campo FLOTA. Linea: "+aleft+" Columna: "+aright+".\n"; a.setTodoCorrecto(false); }
                                               if(a.getPlanetaDestino()==null) { parser.totalErrores += "Falta de atributo planetaDestino en campo FLOTA. Linea: "+aleft+" Columna: "+aright+".\n"; a.setTodoCorrecto(false); }
                                               if(a.getNoNaves()==null) { parser.totalErrores += "Falta de atributo noNaves en campo FLOTA. Linea: "+aleft+" Columna: "+aright+".\n"; a.setTodoCorrecto(false); }
@@ -240,11 +233,23 @@ parser code {:
     | IMPACTOS LLAVE_A LLAVE_B {: RESULT=new ArrayList<>(); :}
 ;
 
-    bp ::= ID:a LLAVE_A bv:b LLAVE_B bp:c {: DatosImpacto datos = new DatosImpacto(); datos.setNombreJugador(a.toString());  datos.setListImpactos(b); c.add(datos); RESULT=c; :}
-    | ID:a LLAVE_A bv:b LLAVE_B {: DatosImpacto datos = new DatosImpacto(); datos.setNombreJugador(a.toString()); datos.setListImpactos(b); ArrayList<DatosImpacto> listDatos = new ArrayList<>(); listDatos.add(datos); RESULT=listDatos; :}                                    
+    bp ::= ID:a LLAVE_A bv:b LLAVE_B bp:c {: if(c == null){ RESULT=null; } else {  if(b == null){ RESULT=null; } else { DatosImpacto datos = new DatosImpacto(); datos.setNombreJugador(a.toString());  datos.setListImpactos(b); c.add(datos); RESULT=c; } } :}
+    | ID:a LLAVE_A bv:b LLAVE_B {: if(b == null){ RESULT=null; } else { DatosImpacto datos = new DatosImpacto(); datos.setNombreJugador(a.toString()); datos.setListImpactos(b); ArrayList<DatosImpacto> listDatos = new ArrayList<>(); listDatos.add(datos); RESULT=listDatos; } :}                                    
 ; 
-    bv ::= ID:c AGRUPACION_A bq:a AGRUPACION_B COMA bv:e {: if(a.getNavesRestantes()==null || a.getEstado()==null || a.getMensaje()==null || a.getNoFlota()==null){ System.out.println("ERROR, falta de un atributo en IMPACTOS"); } else {    a.setNombrePlaneta(c.toString()); e.add(a);   RESULT=e;  }  :}  
-    | ID:c AGRUPACION_A bq:a AGRUPACION_B {: if(a.getNavesRestantes()==null || a.getEstado()==null || a.getMensaje()==null || a.getNoFlota()==null){ System.out.println("ERROR, falta de un atributo en IMPACTOS"); } else {  a.setNombrePlaneta(c.toString());  ArrayList<Impactos> listImpactos = new ArrayList<>();  listImpactos.add(a);  RESULT=listImpactos; } :}
+    bv ::= ID:c AGRUPACION_A bq:a AGRUPACION_B COMA bv:e {: if(a.getNavesRestantes()==null) { parser.totalErrores += "Falta de atributo navesRestantes en campo IMPACTOS. Linea: "+aleft+" Columna: "+aright+".\n"; a.setTodoCorrecto(false); }
+                                                            if(a.getEstado()==null) { parser.totalErrores += "Falta de atributo estado en campo IMPACTOS. Linea: "+aleft+" Columna: "+aright+".\n"; a.setTodoCorrecto(false); }
+                                                            if(a.getMensaje()==null) { parser.totalErrores += "Falta de atributo mensaje en campo IMPACTOS. Linea: "+aleft+" Columna: "+aright+".\n"; a.setTodoCorrecto(false); }
+                                                            if(a.getNoFlota()==null) { parser.totalErrores += "Falta de atributo noFlota en campo IMPACTOS. Linea: "+aleft+" Columna: "+aright+".\n"; a.setTodoCorrecto(false); }
+                                                            if(a.getJugadorAtacante()==null) { parser.totalErrores += "Falta de atributo jugadorAtacante en campo IMPACTOS. Linea: "+aleft+" Columna: "+aright+".\n"; a.setTodoCorrecto(false); }
+                                                            if(a.getPlanetaAtacante()==null) { parser.totalErrores += "Falta de atributo planetaAtacante en campo IMPACTOS. Linea: "+aleft+" Columna: "+aright+".\n"; a.setTodoCorrecto(false); }
+     if(e == null){ RESULT=null; } else { if(a.getTodoCorrecto() == false){ RESULT=null; } else { a.setNombrePlaneta(c.toString()); e.add(a);   RESULT=e; } } :}  
+    | ID:c AGRUPACION_A bq:a AGRUPACION_B {: if(a.getNavesRestantes()==null) { parser.totalErrores += "Falta de atributo navesRestantes en campo IMPACTOS. Linea: "+aleft+" Columna: "+aright+".\n"; a.setTodoCorrecto(false); }
+                                             if(a.getEstado()==null) { parser.totalErrores += "Falta de atributo estado en campo IMPACTOS. Linea: "+aleft+" Columna: "+aright+".\n"; a.setTodoCorrecto(false); }
+                                             if(a.getMensaje()==null) { parser.totalErrores += "Falta de atributo mensaje en campo IMPACTOS. Linea: "+aleft+" Columna: "+aright+".\n"; a.setTodoCorrecto(false); }
+                                             if(a.getNoFlota()==null) { parser.totalErrores += "Falta de atributo noFlota en campo IMPACTOS. Linea: "+aleft+" Columna: "+aright+".\n"; a.setTodoCorrecto(false); }
+                                             if(a.getJugadorAtacante()==null) { parser.totalErrores += "Falta de atributo jugadorAtacante en campo IMPACTOS. Linea: "+aleft+" Columna: "+aright+".\n"; a.setTodoCorrecto(false); }
+                                             if(a.getPlanetaAtacante()==null) { parser.totalErrores += "Falta de atributo planetaAtacante en campo IMPACTOS. Linea: "+aleft+" Columna: "+aright+".\n"; a.setTodoCorrecto(false); }
+                                             if(a.getTodoCorrecto() == false){ RESULT=null; } else { a.setNombrePlaneta(c.toString());  ArrayList<Impactos> listImpactos = new ArrayList<>();  listImpactos.add(a);  RESULT=listImpactos; } :}
 ;
     bq ::=  br:a bq:e {: if(e!=null){if(e.getNavesRestantes()==null){ e.setNavesRestantes(a.getNavesRestantes()); } else { parser.totalErrores += "Sub-atributo navesRestantes en campo IMPACTOS sentenciado mas de una vez. Linea: "+aleft+" Columna: "+aright+".\n"; e.setTodoCorrecto(false); }  } RESULT=e; :}
     | bs:a bq:e {: if(e!=null){if(e.getEstado()==null){ e.setEstado(a.getEstado()); } else { parser.totalErrores += "Sub-atributo estado en campo IMPACTOS sentenciado mas de una vez. Linea: "+aleft+" Columna: "+aright+".\n"; e.setTodoCorrecto(false); }  } RESULT=e; :}
@@ -273,7 +278,6 @@ parser code {:
 ;
     cc ::= planetaAtacante DOS_PUNTOS ID:a {: Impactos impacto = new Impactos(); impacto.setPlanetaAtacante(a.toString()); RESULT=impacto; :}
 ;
-
     bt ::= mensaje DOS_PUNTOS ID:a {: Impactos impacto = new Impactos();  impacto.setMensaje(a.toString()); RESULT=impacto; :}
 ;
     bu ::= noFlota DOS_PUNTOS ENTERO:a {: Impactos impacto = new Impactos(); impacto.setNoFlota((Integer) a); RESULT=impacto; :}
@@ -284,16 +288,14 @@ parser code {:
     | COMA p6:a {: RESULT=a; :}      
     | {: RESULT=new ArrayList<>(); :}
 ;
-    p6 ::= bz:a by:e  {: e.add(a); RESULT=e; :}
+    p6 ::= bz:a by:e  {: if(e!=null){ if(a.getTodoCorrecto() == false){ RESULT=null; } else { e.add(a); RESULT=e; } } else { RESULT=null; } :}
 ;
-    bz ::= estado ID:b DOS_PUNTOS VERDADERO:a {: ResumenTurno resumen = new ResumenTurno(); resumen.setNombreJugador(b.toString());  resumen.setEstadoJugador(Boolean.valueOf(a.toString())); RESULT=resumen; :}
-    | estado ID:b DOS_PUNTOS FALSO:a {: ResumenTurno resumen = new ResumenTurno(); resumen.setNombreJugador(b.toString()); resumen.setEstadoJugador(Boolean.valueOf(a.toString())); RESULT=resumen; :}
-    | error bz:e {: parser.totalErrores += "Atributo en campo RESUMEN sentenciado de forma incorrecta.\n"; e.setTodoCorrecto(false); RESULT=e; :}
+    bz ::= estado ID:b DOS_PUNTOS VERDADERO:a {: ResumenTurno resumen = new ResumenTurno(); resumen.setTodoCorrecto(true); resumen.setNombreJugador(b.toString());  resumen.setEstadoJugador(Boolean.valueOf(a.toString())); RESULT=resumen; :}
+    | estado ID:b DOS_PUNTOS FALSO:a {: ResumenTurno resumen = new ResumenTurno(); resumen.setTodoCorrecto(true); resumen.setNombreJugador(b.toString()); resumen.setEstadoJugador(Boolean.valueOf(a.toString())); RESULT=resumen; :}
+    | error bz:e {: parser.totalErrores += "Atributo en campo RESUMEN sentenciado de forma incorrecta   .\n"; e.setTodoCorrecto(false); RESULT=e; :}
 ;
     a3 ::= turnoJugador DOS_PUNTOS ENTERO:a {: VentanaPrincipal.contador = (Integer) a; :}
+  
 ;
-
-
-//MA;ANA TERMINAR DE PROBAR ESTE ANALIZADOR Y EMPEZAR CON EL ULTIMO QUE ES EL DE ONLINE ESE SE VA EASY :b
 
 

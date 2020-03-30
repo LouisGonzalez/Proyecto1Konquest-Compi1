@@ -332,7 +332,7 @@ parser code {:
     k ::= finalizacion DOS_PUNTOS ENTERO:a {: Mapa mapa = new Mapa(); mapa.setFinalizacion(a.toString()); RESULT=mapa; :}
 ;
     p ::= PLANETAS DOS_PUNTOS AGRUPACION_A r:a AGRUPACION_B  {: RESULT=a; :}
-    | PLANETAS DOS_PUNTOS AGRUPACION_A AGRUPACION_B 
+    | PLANETAS DOS_PUNTOS AGRUPACION_A AGRUPACION_B {: RESULT=new ArrayList<>(); :}
 ;
     r ::= LLAVE_A s:a LLAVE_B COMA r:e {: if(a.getNombre()==null) { parser.totalErrores += "Falta de atributo nombre en un campo PLANETAS. Linea: "+aleft+" Columna: "+aright+".\n"; a.setTodoCorrecto(false); } 
                                           if(a.getNaves()==null) { parser.totalErrores += "Falta de atributo naves en un campo PLANETAS. Linea: "+aleft+" Columna: "+aright+".\n"; a.setTodoCorrecto(false); } 

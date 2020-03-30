@@ -33,8 +33,4 @@ SECUENCIAS {
 	       estado j2: false,
 	       estado j1: true
 	   }
-	GENERAL {
-		turnoJugador: 1,
-	 	turno: 4
-	}
 }

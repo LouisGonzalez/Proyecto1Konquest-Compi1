@@ -62,8 +62,28 @@ public class MensajesEmergentes {
         } else if (encontrado2 == true) {
             PlanetasNeutrales neutral = misDatos.getpNeutrales().get(noPlaneta);
             matrizJuego[posY][posX].setToolTipText("Planeta: " + neutral.getNombre());
+            String texto = "<html>"
+                    + "<head>"
+                    + ""
+                    + "</head>"
+                    + "<body>"
+                    + "<div id='contenido'>"
+                    + "Planeta: "+neutral.getNombre() + "<br>";
+                 
+            if(misDatos.getMapa().getMapaPNeutral().getMostrarNaves().equals("true")){
+                texto += "Naves: " +neutral.getNaves() + "<br>";
+            }
+            if(misDatos.getMapa().getMapaPNeutral().getMostrarEstadisticas().equals("true")){
+                texto += "Produccion: " + neutral.getProduccion() + "<br>"
+                        + "Por. Muertes: " + neutral.getPorcentajeMuertes() + "<br>"
+                        + "Posicion X: " + neutral.getPosicionX() + "<br>"
+                        + "Posicion Y: " + neutral.getPosicionY() + "<br>";
+            }
+            texto += "</div>"
+                    + "</body>"
+                    + "</html>";
+            matrizJuego[posY][posX].setToolTipText(texto);
         }
-
     }
 
 }

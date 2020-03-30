@@ -663,9 +663,11 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                         listNaves.clear();
                         new SintaxReplay(lexico, mapa, panelMensajes, contador, txtNaves, datosJuego, btnTurno, listNaves, panelJuego, btnDistancia, btnFlotas, listReplay).parse();
                         JOptionPane.showMessageDialog(null, "listo");
-                        
-                        //LO DE ABAJO SI SIRVExd
-                        //acciones.lanzamientoFlotas(lblTurno, listReplay, juego, listNaves);
+                        if(!listReplay.isEmpty()){
+                            acciones.lanzamientoFlotas(lblTurno, listReplay, juego, listNaves);
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Debido a que hay errores dentro del archivo no es posible ejecutar el replay");
+                        }
                         System.out.println(listNaves.size() + "sdss");
 
                     } catch (Exception ex) {
