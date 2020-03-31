@@ -30,6 +30,10 @@ public class AccionesTurno {
 
     public void lanzamientoFlotas(JLabel lblJugador, JLabel lblTurno, ArrayList<Replay> listReplay, Juego misDatos, ArrayList<NavesCamino> listNaves, JTextArea panelMensajes) {
         for (int i = listReplay.size() - 1; i >= 0; i--) {
+            System.out.println(listReplay.get(i).getNoTurno()+"xzcxcczxxxxxxxxxxxxxx");
+            System.out.println(listReplay.get(i).getListImpactos().size()+"quiebre");
+            System.out.println(listReplay.get(i).getListResumen().size()+ "sdfs");
+            System.out.println(listReplay.get(i).getListAcciones().size() + "quiebre");
             VentanaPrincipal.contadorTurnos = listReplay.get(i).getNoTurno();
             lblTurno.setText("Turno: " + VentanaPrincipal.contadorTurnos);
             lblJugador.setText("Jugador: " + misDatos.getJugadores().get(VentanaPrincipal.contador).getNombre() );

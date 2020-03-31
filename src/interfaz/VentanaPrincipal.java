@@ -606,7 +606,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private void replayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_replayActionPerformed
         if (partidaOnline == false) {
             JFileChooser chooser = new JFileChooser();
-            panelMensajes.setText("");
             String path = "";
             SintaxCreacionMapa.totalErrores = "";
             String seleccion = "Seleccione el JSON para abrir el juego";
@@ -637,8 +636,10 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                     }
                     AnalizadorLexico3 lexico = new AnalizadorLexico3(new StringReader(texto));
                     try {
-
-                        listNaves.clear();
+                        if(contadorTurnos == 0){
+                            listNaves.clear();
+                        }
+                        listReplay.clear();
                         new SintaxReplay(lexico, mapa, panelMensajes, contador, txtNaves, datosJuego, btnTurno, listNaves, panelJuego, btnDistancia, btnFlotas, listReplay).parse();
                         JOptionPane.showMessageDialog(null, "listo");
                         if (!listReplay.isEmpty()) {

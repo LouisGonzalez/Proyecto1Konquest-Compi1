@@ -105,7 +105,7 @@ public class MedicionDistancias {
        int posYFinal = 0;
        int pitagoras = 0;
        pitagoras = resultadoDistancia(posX, posY, posX2, posY2, pitagoras, posXFinal, posYFinal);
-       JOptionPane.showMessageDialog(null, "La distancia entre los planetas es de: "+pitagoras);
+       JOptionPane.showMessageDialog(null, "La distancia entre el planeta "+misDatos.getJugadores().get(noJugador).getMisPlanetas().get(noPlaneta).getNombre()+" y el planeta "+misDatos.getJugadores().get(nodoJalar[0]).getMisPlanetas().get(nodoJalar[1]).getNombre()+" es de: "+pitagoras + " años luz.");
        
     }
     
@@ -118,7 +118,7 @@ public class MedicionDistancias {
         int posYFinal = 0;
         int pitagoras = 0;
         pitagoras = resultadoDistancia(posX, posY, posX2, posY2, pitagoras, posXFinal, posYFinal);
-        JOptionPane.showMessageDialog(null, "La distancia entre los planetas es de: "+pitagoras);
+        JOptionPane.showMessageDialog(null, "La distancia entre el planeta "+misDatos.getJugadores().get(noJugador).getMisPlanetas().get(noPlaneta).getNombre()+" y el planeta "+misDatos.getpNeutrales().get(noPlaneta2).getNombre()+" es de: "+pitagoras+" años luz.");
     }
     
     public void distanciaNeutralNeutral(int noPlaneta, int noPlaneta2, Juego misDatos){
