@@ -13,7 +13,7 @@ public class EstadisticasFinales extends javax.swing.JDialog {
     private DefaultTableModel dtmModel;
     private ArrayList<Resultados> listResultados;
     String primerLugar = "";
-    
+
     /**
      * Creates new form EstadisticasFinales
      */
@@ -26,16 +26,18 @@ public class EstadisticasFinales extends javax.swing.JDialog {
         cargarDatos();
         lblPrimerLugar.setText(primerLugar);
     }
-    
-    public String cargarDatos(){
-        primerLugar = listResultados.get(listResultados.size()-1).getJugador();
-        Object[] filas =  new Object[dtmModel.getColumnCount()];
-        for (int i = listResultados.size()-1; i >=0; i--) {
-            filas[0] = listResultados.get(i).getJugador();
-            filas[1] = listResultados.get(i).getTotalPlanetas();
-            filas[2] = listResultados.get(i).getPlanetasConquistados();
-            dtmModel.addRow(filas);
-            
+
+    public String cargarDatos() {
+        if (!listResultados.isEmpty()) {
+            primerLugar = listResultados.get(listResultados.size() - 1).getJugador();
+            Object[] filas = new Object[dtmModel.getColumnCount()];
+            for (int i = listResultados.size() - 1; i >= 0; i--) {
+                filas[0] = listResultados.get(i).getJugador();
+                filas[1] = listResultados.get(i).getTotalPlanetas();
+                filas[2] = listResultados.get(i).getPlanetasConquistados();
+                dtmModel.addRow(filas);
+
+            }
         }
         return primerLugar;
     }
@@ -150,7 +152,6 @@ public class EstadisticasFinales extends javax.swing.JDialog {
         listResultados.clear();
     }//GEN-LAST:event_btnAceptarActionPerformed
 
-    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAceptar;

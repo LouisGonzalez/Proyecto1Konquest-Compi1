@@ -30,6 +30,7 @@ public class GuardarPartida {
 
     public void crearJSON(Juego misDatos, ArrayList<NavesCamino> listNaves, String file) {
         File json = new File(file);
+        repartirPlanetas(misDatos);
         BufferedWriter buffer;
         try {
             buffer = new BufferedWriter(new FileWriter(json));
@@ -128,7 +129,12 @@ public class GuardarPartida {
                 buffer.write("\t  porcentajeMuertes: " + listNaves.get(i).getPorcentajeMuertes() + ",\n");
                 buffer.write("\t  llegada: " + listNaves.get(i).getTurnoLlegada() + ",\n");
                 buffer.write("\t  jugadorEnvio: " + listNaves.get(i).getNoJugadorEnvio() + ",\n");
-                buffer.write("\t  jugadorAtaque: " + listNaves.get(i).getNoJugadorAtaque() + ",\n");
+                if(listNaves.get(i).getNoJugadorAtaque() == null){
+                    buffer.write("\t  jugadorAtaque: " + -1 + ",\n");
+                } else {
+                    buffer.write("\t  jugadorAtaque: " + listNaves.get(i).getNoJugadorAtaque() + ",\n");
+                
+                }
                 buffer.write("\t  verificador: " + listNaves.get(i).getVerificador() + "\n");
                 if (i == listNaves.size() - 1) {
                     buffer.write("\t}\n");

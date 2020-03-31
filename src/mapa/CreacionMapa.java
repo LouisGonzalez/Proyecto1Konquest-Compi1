@@ -279,6 +279,7 @@ public class CreacionMapa {
         } else if (concordanciaNeutral == true) {
             matriz.setOpaque(true);
             matriz.setBorder(new LineBorder(Color.black));
+            matriz.setBackground(new Color(128, 128, 128, 128));
             ImageIcon imagen = new ImageIcon(getClass().getResource("/imagenes/circle.png"));
             Icon icono = new ImageIcon(imagen.getImage().getScaledInstance(panelFondo.getWidth() / columnas, panelFondo.getHeight() / filas, Image.SCALE_DEFAULT));
             matriz.setIcon(icono);

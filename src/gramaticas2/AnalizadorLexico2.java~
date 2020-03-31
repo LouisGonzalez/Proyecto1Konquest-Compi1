@@ -2,6 +2,7 @@
 
 package gramaticas2;
 import java_cup.runtime.Symbol;
+import interfaz.VentanaPrincipal;
 
 
 /**
@@ -565,6 +566,9 @@ public class AnalizadorLexico2 implements java_cup.runtime.Scanner {
   private int zzFinalHighSurrogate = 0;
 
   /* user code: */
+    
+ 
+    
     private Symbol symbol(int tipo){
         return new Symbol(tipo, yyline+1, yycolumn+1);
     }
@@ -962,7 +966,7 @@ public class AnalizadorLexico2 implements java_cup.runtime.Scanner {
             }
           case 59: break;
           case 2: 
-            { 
+            { String error = "Error lexico: "+yytext()+". Linea: "+(yyline+1)+" Columna: "+(yycolumn+1)+".\n"; VentanaPrincipal.notificarError(error);
             }
           case 60: break;
           case 3: 

@@ -8,6 +8,7 @@ package replay;
 import Pollitos.Juego;
 import Pollitos.Planetas;
 import interfaz.VentanaPrincipal;
+import static interfaz.VentanaPrincipal.contadorTurnos;
 import java.io.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -20,16 +21,32 @@ public class CreacionArchivoREPLAY {
 
     private int contador = 1;
 
-    public String creacionJSON(String path) {
+    public String creacionJSON(String path, Juego misDatos) {
         File replay = new File(path + "/replay" + contador + ".JSON");
         BufferedWriter buffer;
         if (replay.exists()) {
             contador++;
-            creacionJSON(path);
+            creacionJSON(path, misDatos);
         } else {
             try {
                 buffer = new BufferedWriter(new FileWriter(replay));
+                buffer.write("SECUENCIAS [\n");
                 buffer.write(VentanaPrincipal.textoReplay);
+                buffer.write("\t},\n");
+                buffer.write("\tTURNO " + VentanaPrincipal.contadorTurnos + ": {\n");
+                buffer.write("\t   ACCIONES: {\n");
+                buffer.write(VentanaPrincipal.aux);
+                buffer.write("\t   }\n");
+                buffer.write("\t   IMPACTOS {\n");
+                buffer.write(VentanaPrincipal.aux2);
+                buffer.write("\t   }\n");
+                buffer.write("\t   RESUMEN {\n");
+                textoNeutral(misDatos);
+                buffer.write(VentanaPrincipal.aux3);
+                buffer.write("\t   }\n");
+                buffer.write("\t}\n");
+                buffer.write("]\n");
+                buffer.write("turnoJugador: " + VentanaPrincipal.contador);
                 buffer.close();
             } catch (IOException ex) {
                 Logger.getLogger(CreacionArchivoREPLAY.class.getName()).log(Level.SEVERE, null, ex);

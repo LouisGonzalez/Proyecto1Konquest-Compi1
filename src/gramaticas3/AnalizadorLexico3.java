@@ -2,6 +2,7 @@
 
 package gramaticas3;
 import java_cup.runtime.Symbol;
+import interfaz.VentanaPrincipal;
 
 
 /**
@@ -1037,7 +1038,7 @@ public class AnalizadorLexico3 implements java_cup.runtime.Scanner {
             }
           case 68: break;
           case 2: 
-            { 
+            { String error = "Error lexico token: \""+yytext()+"\". Linea: "+(yyline+1)+" Columna: "+(yycolumn+1)+".\n"; VentanaPrincipal.notificarError(error);
             }
           case 69: break;
           case 3: 

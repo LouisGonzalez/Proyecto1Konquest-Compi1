@@ -2,6 +2,7 @@ package interfaz;
 
 import AccionesComputadora.InteligenciaArtificial;
 import Pollitos.AccionesOnline;
+import Pollitos.Auxiliar;
 import Pollitos.Juego;
 import Pollitos.NavesCamino;
 import Pollitos.Replay;
@@ -48,7 +49,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     public CreacionMapa mapa;
     public static JLabel[][] tablero;
     public String path = "";
-    private Juego juego = null;
+    private static Juego juego = null;
     private AccionesOnline datosOnline = null;
     public static int contador = 0;
     public static int contadorTurnos = 0;
@@ -60,6 +61,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     public static String aux3 = "";
     public String pathReplay = "";
     public boolean partidaOnline = false;
+    public static boolean errorLexico = false;
     private ArrayList<Juego> datosJuego = new ArrayList<>();
     private ArrayList<NavesCamino> listNaves = new ArrayList<>();
     private ArrayList<Resultados> finales = new ArrayList<>();
@@ -76,6 +78,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         initComponents();
         txtNaves.setEditable(false);
         panelJuego.setBackground(new Color(255, 255, 255, 100));
+        panelJuego.setVisible(false);
         panelFondo.setIcon(new ImageIcon(getClass().getResource("/imagenes/fondo.jpg")));
         jugabilidad = new Jugabilidad();
         validacionesOnline = new Validaciones();
@@ -157,8 +160,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         lblTurno.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
         lblTurno.setForeground(new java.awt.Color(255, 255, 255));
         getContentPane().add(lblTurno, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 60, 160, 20));
-
-        panelFondo.setIcon(new javax.swing.ImageIcon("/home/luisitopapurey/Escritorio/Compiladores 1/Proyecto1.Konquest/fondo.jpg")); // NOI18N
         getContentPane().add(panelFondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 60, 840, 650));
 
         btnTurno.setText("Terminar turno");
@@ -361,7 +362,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         VentanaNuevoJuego nuevo = new VentanaNuevoJuego(this, true, mapa, panelMensajes, contador, txtNaves, datosJuego, btnTurno, listNaves, panelJuego, btnDistancia, btnFlotas);
         nuevo.setVisible(true);
         if (!datosJuego.isEmpty()) {
-            textoReplay += "SECUENCIAS [\n";
             juego = datosJuego.get(0);
             datosJuego.clear();
             computadora.verificadorTipoInteligencia(juego, listNaves);
@@ -371,70 +371,77 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void itemLecturaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemLecturaActionPerformed
-        juego = new Juego();
-        datosJuego.clear();
-        JFileChooser chooser = new JFileChooser();
-        panelMensajes.setText("");
-        SintaxCreacionMapa.totalErrores = "";
-        String seleccion = "Seleccione el JSON para abrir el juego";
-        chooser.setCurrentDirectory(new File("."));
-        chooser.setDialogTitle(seleccion);
-        chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-        chooser.setAcceptAllFileFilterUsed(false);
-        if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
-            System.out.println("getCurrentDirectory(): " + chooser.getCurrentDirectory());
-            path = chooser.getCurrentDirectory().toString();
-            System.out.println("getSelectedFile(): " + chooser.getSelectedFile());
-            // archivoPrincipal = chooser.getSelectedFile().toString();
-            proyecto = new File(chooser.getSelectedFile().getAbsolutePath());
-            archivo = proyecto.toString();
-            if (archivo.endsWith(".JSON")) {
-                FileReader fr;
-                BufferedReader entrada;
-                String texto = "";
-                try {
-                    fr = new FileReader(proyecto);
-                    entrada = new BufferedReader(fr);
-                    while (entrada.ready()) {
-                        texto += entrada.readLine() + "\n";
+        if (juego == null) {
+            juego = new Juego();
+            datosJuego.clear();
+            JFileChooser chooser = new JFileChooser();
+            panelMensajes.setText("");
+            SintaxCreacionMapa.totalErrores = "";
+            String seleccion = "Seleccione el JSON para abrir el juego";
+            chooser.setCurrentDirectory(new File("."));
+            chooser.setDialogTitle(seleccion);
+            chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+            chooser.setAcceptAllFileFilterUsed(false);
+            if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+                System.out.println("getCurrentDirectory(): " + chooser.getCurrentDirectory());
+                path = chooser.getCurrentDirectory().toString();
+                System.out.println("getSelectedFile(): " + chooser.getSelectedFile());
+                // archivoPrincipal = chooser.getSelectedFile().toString();
+                proyecto = new File(chooser.getSelectedFile().getAbsolutePath());
+                archivo = proyecto.toString();
+                if (archivo.endsWith(".JSON")) {
+                    FileReader fr;
+                    BufferedReader entrada;
+                    String texto = "";
+                    try {
+                        fr = new FileReader(proyecto);
+                        entrada = new BufferedReader(fr);
+                        while (entrada.ready()) {
+                            texto += entrada.readLine() + "\n";
+                        }
+                    } catch (FileNotFoundException ex) {
+                        Logger.getLogger(VentanaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (IOException ex) {
+                        Logger.getLogger(VentanaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                } catch (FileNotFoundException ex) {
-                    Logger.getLogger(VentanaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (IOException ex) {
-                    Logger.getLogger(VentanaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                AnalizadorLexico lexico = new AnalizadorLexico(new StringReader(texto));
-                AnalizadorLexico2 lexico2 = new AnalizadorLexico2(new StringReader(texto));
-                try {
-                   new SintaxCreacionMapa(lexico, mapa, panelMensajes, contador, txtNaves, datosJuego, btnTurno, listNaves, panelJuego, btnDistancia, btnFlotas).parse();
-                    textoReplay += "SECUENCIAS [\n";
+                    AnalizadorLexico lexico = new AnalizadorLexico(new StringReader(texto));
+                    AnalizadorLexico2 lexico2 = new AnalizadorLexico2(new StringReader(texto));
+                    try {
+                        /* new SintaxCreacionMapa(lexico, mapa, panelMensajes, contador, txtNaves, datosJuego, btnTurno, listNaves, panelJuego, btnDistancia, btnFlotas).parse();
                     System.out.println(textoReplay);
                     if (!datosJuego.isEmpty()) {
                         juego = datosJuego.get(0);
                         computadora.verificadorTipoInteligencia(juego, listNaves);
-                    }
-
-                   /* new SintaxGuardarPartida(lexico2, mapa, panelMensajes, contador, txtNaves, datosJuego, btnTurno, listNaves, panelJuego, btnDistancia, btnFlotas).parse();
-                    textoReplay += "SECUENCIAS [\n";
-                    System.out.println(textoReplay);
-                    if (!datosJuego.isEmpty()) {
-                        juego = datosJuego.get(0);
-                        computadora.verificadorTipoInteligencia(juego, listNaves);
-
                     }*/
-                    lblTurno.setText("Turno: " + contadorTurnos);
 
-                } catch (Exception ex) {
-                    Logger.getLogger(VentanaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
-                    JOptionPane.showMessageDialog(null, "ERROR");
-                    panelMensajes.setText(SintaxCreacionMapa.totalErrores);
-                   // panelMensajes.setText(SintaxGuardarPartida.totalErrores);
+                        errorLexico = false;
+                        new SintaxGuardarPartida(lexico2, mapa, panelMensajes, contador, txtNaves, datosJuego, btnTurno, listNaves, panelJuego, btnDistancia, btnFlotas).parse();
+                        System.out.println(textoReplay);
+                        if (!datosJuego.isEmpty()) {
+                            juego = datosJuego.get(0);
+                            computadora.verificadorTipoInteligencia(juego, listNaves);
+                        }
+                        if (errorLexico == false) {
+                            lblTurno.setText("Turno: " + contadorTurnos);
+                        } else {
+                            panelJuego.removeAll();
+                            panelJuego.setVisible(false);
+                            juego = null;
+                        }
+
+                    } catch (Exception ex) {
+                        Logger.getLogger(VentanaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+                        JOptionPane.showMessageDialog(null, "ERROR");
+                        panelMensajes.setText(SintaxGuardarPartida.totalErrores);
+                    }
+                } else {
+                    System.out.println("no es un archivo compatible");
                 }
             } else {
-                System.out.println("no es un archivo compatible");
+                JOptionPane.showMessageDialog(null, "No hubo ninguna seleccion");
             }
         } else {
-            JOptionPane.showMessageDialog(null, "No hubo ninguna seleccion");
+            JOptionPane.showMessageDialog(null, "Hay una partida pendiente por favor finalizala para continuar.");
         }
     }//GEN-LAST:event_itemLecturaActionPerformed
 
@@ -453,15 +460,15 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 if (contador == juego.getJugadores().size()) {
                     contadorTurnos++;
                     contador = 0;
+                    String texto = panelMensajes.getText();
+                    String mensaje = texto + "Turno: " + contadorTurnos + "\n";
+                    panelMensajes.setText(mensaje);
+                    jugabilidad.verificacionNavesLlegada(listNaves, juego, panelMensajes);
                     if (juego.getMapa().getAcumular().equals("false")) {
                         cambioDatos.aumentoProduccion(juego);
                     } else {
                         cambioDatos.aumentoProduccionEn1(juego);
                     }
-                    String texto = panelMensajes.getText();
-                    String mensaje = texto + "Turno: " + contadorTurnos + "\n";
-                    panelMensajes.setText(mensaje);
-                    jugabilidad.verificacionNavesLlegada(listNaves, juego, panelMensajes);
                     cambioDatos.verificarGanador(juego, panelJuego, finales);
                     verificadorPlanetasJugador();
                 }
@@ -549,15 +556,15 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 contadorTurnos++;
 
                 contador = 0;
+                String texto = panelMensajes.getText();
+                String mensaje = texto + "Turno: " + contadorTurnos + "\n";
+                panelMensajes.setText(mensaje);
+                jugabilidad.verificacionNavesLlegada(listNaves, juego, panelMensajes);
                 if (juego.getMapa().getAcumular().equals("false")) {
                     cambioDatos.aumentoProduccion(juego);
                 } else {
                     cambioDatos.aumentoProduccionEn1(juego);
                 }
-                String texto = panelMensajes.getText();
-                String mensaje = texto + "Turno: " + contadorTurnos + "\n";
-                panelMensajes.setText(mensaje);
-                jugabilidad.verificacionNavesLlegada(listNaves, juego, panelMensajes);
                 cambioDatos.verificarGanador(juego, panelJuego, finales);
                 verificadorPlanetasJugador();
                 recursividadComputadora();
@@ -569,6 +576,14 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             System.out.println(textoReplay);
         }
     }//GEN-LAST:event_btnTurnoActionPerformed
+
+    public static void notificarError(String mensaje) {
+        panelMensajes.setText(mensaje);
+        juego = null;
+        panelJuego.removeAll();
+        panelJuego.setVisible(false);
+        errorLexico = true;
+    }
 
     public void recursividadComputadora() {
         if (contador < juego.getJugadores().size()) {
@@ -663,11 +678,10 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                         listNaves.clear();
                         new SintaxReplay(lexico, mapa, panelMensajes, contador, txtNaves, datosJuego, btnTurno, listNaves, panelJuego, btnDistancia, btnFlotas, listReplay).parse();
                         JOptionPane.showMessageDialog(null, "listo");
-                        if(!listReplay.isEmpty()){
+                        if (!listReplay.isEmpty()) {
                             acciones.lanzamientoFlotas(lblTurno, listReplay, juego, listNaves);
-                        } else {
-                            JOptionPane.showMessageDialog(null, "Debido a que hay errores dentro del archivo no es posible ejecutar el replay");
                         }
+
                         System.out.println(listNaves.size() + "sdss");
 
                     } catch (Exception ex) {
@@ -685,7 +699,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private void guardarReplayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_guardarReplayActionPerformed
         if (partidaOnline == false) {
             if (!path.equals("")) {
-                textoReplay += "\t},\n";
+                /* textoReplay += "\t},\n";
                 textoReplay += "\tTURNO " + contadorTurnos + ": {\n";
                 textoReplay += "\t   ACCIONES: {\n";
                 textoReplay += aux;
@@ -700,11 +714,9 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 textoReplay += aux3;
                 aux3 = "";
                 textoReplay += "\t   }\n";
-                textoReplay += "\t}\n";
-                textoReplay += "]\n";
-                textoReplay += "turnoJugador: " + contador;
+                textoReplay += "\t}\n";*/
                 System.out.println(textoReplay);
-                archivoReplay.creacionJSON(path);
+                archivoReplay.creacionJSON(path, juego);
             } else {
                 textoReplay = "";
                 JOptionPane.showMessageDialog(null, "No has abierto ningun juego para poder hacer replay.");
@@ -741,12 +753,10 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 AnalizadorLexico lexico = new AnalizadorLexico(new StringReader(texto));
                 try {
                     //      new SintaxOnline(lexico, panelMensajes, datosOnline).parse();
-
                     new SintaxCreacionMapa(lexico, mapa, panelMensajes, contador, txtNaves, datosJuego, btnTurno, listNaves, panelJuego, btnDistancia, btnFlotas).parse();
                     if (!datosJuego.isEmpty()) {
                         juego = datosJuego.get(0);
                     }
-
                     lblTurno.setText("Turno: " + contadorTurnos);
                 } catch (Exception ex) {
                     Logger.getLogger(VentanaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
@@ -759,18 +769,22 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         } else {
             JOptionPane.showMessageDialog(null, "No hubo ninguna seleccion");
         }
-        //partidaOnline = validacionesOnline.verificarMapa(juego, panelJuego, listNaves, datosOnline);
-
-        /* ConectadosOnline online = new ConectadosOnline(this, true);
-        online.setVisible(true);*/
     }//GEN-LAST:event_onlineActionPerformed
 
     private void btnFinalizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFinalizarActionPerformed
-        juego = null;
+        if (partidaOnline) {
+            partidaOnline = false;
+            soyAdder = false;
+            soyHost = false;
+        }
+        listReplay = new ArrayList<>();
         panelJuego.removeAll();
         panelJuego.setVisible(false);
         textoReplay = "";
         JOptionPane.showMessageDialog(null, "Partida finalizada con exito.");
+        panelMensajes.setText("");
+        cambioDatos.verificacionPartidaFin(juego, panelJuego, finales);
+        juego = null;        
     }//GEN-LAST:event_btnFinalizarActionPerformed
 
     private void opcionHostActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_opcionHostActionPerformed
@@ -880,8 +894,8 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenuItem opcionHost;
     private javax.swing.JMenu opcionesGuardar;
     private javax.swing.JLabel panelFondo;
-    private javax.swing.JPanel panelJuego;
-    private javax.swing.JTextArea panelMensajes;
+    public static javax.swing.JPanel panelJuego;
+    public static javax.swing.JTextArea panelMensajes;
     private javax.swing.JPanel panelOpciones;
     private javax.swing.JMenuItem replay;
     private javax.swing.JTextField txtNaves;

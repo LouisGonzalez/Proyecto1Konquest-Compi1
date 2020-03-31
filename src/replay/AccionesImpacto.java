@@ -104,13 +104,8 @@ public class AccionesImpacto {
         JOptionPane.showMessageDialog(null, "Planeta: " + planetaAtacado + " ha sido conquistado por " + misDatos.getJugadores().get(jugadorAtacante).getNombre());
     
         //ESTO LO BORRE SOLO PARA PROBAR ALGO, QUITA LAS // 
-        
-
-
         jugabilidad.eliminarFlotas(nodo, planetaAtacado, listNaves, jugadorAtacante);
-    
-        
-        aumentoPlanetasConquistados(misDatos, jugadorAtacante);
+      aumentoPlanetasConquistados(misDatos, jugadorAtacante);
     }
     
     public void aumentoPlanetasConquistados(Juego misDatos, int jugadorAtacante){
@@ -166,19 +161,13 @@ public class AccionesImpacto {
     }
 
     public void eliminarFlotaAtacante(ArrayList<NavesCamino> listNaves, int nodoFlota) {
-        
-       System.out.println("-----------------------------------------------------");
+        System.out.println("-----------------------------------------------------");
         System.out.println(nodoFlota + "supuesto nodo a ser eliminado");
         System.out.println(listNaves.get(nodoFlota).getPlanetaOrigen()+"HA SIDO ELIMINADO");
         System.out.println(listNaves.size()-1 + "aqui se ELIMINA");
-        
         NavesCamino aux = listNaves.get(nodoFlota);
         aux.setVerificador(true);
         listNaves.set(nodoFlota, aux);
-        
-        
-        
-        
     }
 
 }

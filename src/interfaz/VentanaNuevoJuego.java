@@ -628,7 +628,7 @@ public class VentanaNuevoJuego extends javax.swing.JDialog {
                         for (int k = 0; k < neutrales.size(); k++) {
                             if (j == Integer.parseInt(neutrales.get(k).getPosicionX()) && i == Integer.parseInt(neutrales.get(k).getPosicionY())) {
                                 if (neutrales.get(k).isInterruptor() == false) {
-                                    previo.setBackground(new Color(128, 128, 128));
+                                    previo.setBackground(new Color(128, 128, 128, 128));
                                     neutrales.get(k).setInterruptor(true);
                                 }
                             }

@@ -1,4 +1,6 @@
-  a2 ::= SECUENCIAS LLAVE_A ba LLAVE_B
+    inicio ::= a2 a3
+;
+    a2 ::= SECUENCIAS LLAVE_A ba LLAVE_B
     | SECUENCIAS LLAVE_A LLAVE_B
 ;
     ba ::= TURNO ENTERO AGRUPACION_A bb AGRUPACION_B COMA ba

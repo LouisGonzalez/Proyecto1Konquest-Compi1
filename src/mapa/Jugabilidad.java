@@ -291,11 +291,13 @@ public class Jugabilidad {
                     int navesAtacanteLlegada = totalNavesAtacante - navesAtacanteDestruidas;
                     int navesDefensaDestruidas = (int) (navesPlanetaAtacado * porcMuerteAtacante);
                     int totalNavesDefensa = navesPlanetaAtacado - navesDefensaDestruidas;
-                    if (totalNavesDefensa <= navesAtacanteLlegada) {
+                    System.out.println(navesPlanetaAtacado+"---"+navesAtacanteLlegada+"----"+totalNavesAtacante+"----"+navesAtacanteDestruidas);
+                    System.out.println(navesAtacanteLlegada+"afsfdsfsdfdsfdsf");
+                    if (navesPlanetaAtacado < navesAtacanteLlegada) {
 
                         devolverJugadorAlJuego(misDatos, jugadorEnvio);
-
-                        misDatos.getJugadores().get(jugadorAtaque).getMisPlanetas().get(noPlaneta).setNaves(Integer.toString(totalNavesDefensa));
+                        int navesRestantes = navesAtacanteLlegada - navesPlanetaAtacado;
+                        misDatos.getJugadores().get(jugadorAtaque).getMisPlanetas().get(noPlaneta).setNaves(Integer.toString(navesRestantes));
                         Planetas aux = misDatos.getJugadores().get(jugadorAtaque).getMisPlanetas().get(noPlaneta);
                         aux.setColor(misDatos.getJugadores().get(jugadorEnvio).getColor());
                         String[] color = aux.getColor().split(",");
@@ -320,17 +322,18 @@ public class Jugabilidad {
                         
                         
                         JOptionPane.showMessageDialog(null, "Planeta: " + planetaAtaque + " ha sido conquistado por " + misDatos.getJugadores().get(jugadorEnvio).getNombre());
-                        archivo.textoNavesImpactadas(misDatos, i, jugadorAtaque, planetaAtaque, totalNavesDefensa, "CONQUISTADO ", jugadorEnvio, planetaOrigen);
+                        archivo.textoNavesImpactadas(misDatos, i, jugadorAtaque, planetaAtaque, navesRestantes, "CONQUISTADO ", jugadorEnvio, planetaOrigen);
                         String texto = panelMensajes.getText();
                         String mensaje = texto + "    Planeta: " + planetaAtaque + " ha sido conquistado por " + misDatos.getJugadores().get(jugadorEnvio).getNombre() + "\n";
                         panelMensajes.setText(mensaje);
                         verificadorExistenciaPlanetas(misDatos, jugadorAtaque, listNaves);
                     } else {
-                        misDatos.getJugadores().get(jugadorAtaque).getMisPlanetas().get(noPlaneta).setNaves(Integer.toString(totalNavesDefensa));
+                        int navesRestantes = navesPlanetaAtacado - navesAtacanteLlegada;
+                        misDatos.getJugadores().get(jugadorAtaque).getMisPlanetas().get(noPlaneta).setNaves(Integer.toString(navesRestantes));
                         JOptionPane.showMessageDialog(null, "Planeta: " + planetaAtaque + " ha bloqueado un ataque proveniente del planeta: " + listNaves.get(i).getPlanetaOrigen());
                         String texto = panelMensajes.getText();
                         String mensaje = texto + "    Planeta: " + planetaAtaque + " ha bloqueado un ataque proveniente del planeta: " + listNaves.get(i).getPlanetaOrigen() + "\n";
-                        archivo.textoNavesImpactadas(misDatos, i, jugadorAtaque, planetaAtaque, totalNavesDefensa, "VIVO", jugadorEnvio, planetaOrigen);
+                        archivo.textoNavesImpactadas(misDatos, i, jugadorAtaque, planetaAtaque, navesRestantes, "VIVO", jugadorEnvio, planetaOrigen);
                         panelMensajes.setText(mensaje);
                     }
 
@@ -348,7 +351,7 @@ public class Jugabilidad {
         }
     }
 
-        public void eliminarFlotas(int nodo, String nombrePlaneta, ArrayList<NavesCamino> listNaves, int cambioJugador) {
+            public void eliminarFlotas(int nodo, String nombrePlaneta, ArrayList<NavesCamino> listNaves, int cambioJugador) {
 
         /*for (int i = 0; i < listNaves.size(); i++) {
             if (listNaves.get(i).getPlanetaOrigen().equals(nombrePlaneta) && listNaves.get(i).getVerificador() == false) {
@@ -408,11 +411,12 @@ public class Jugabilidad {
             int totalNavesLlegada = navesAtacante - navesAtacanteDestruidas;
             int navesDefensaDestruidas = (int) (navesNeutral * porcMuerteAtacante);
             int navesDefensa = navesNeutral - navesDefensaDestruidas;
-
-            if (navesDefensa <= totalNavesLlegada) {
+            System.out.println(navesNeutral+"xxxxxxxxxxxxxx"+totalNavesLlegada+"xxxxxx");
+            if (navesNeutral < totalNavesLlegada) {
                 Planetas planetas = new Planetas();
+                int navesRestantes = totalNavesLlegada - navesNeutral;
                 planetas.setNombre(misDatos.getpNeutrales().get(planetaNeutral).getNombre());
-                planetas.setNaves(misDatos.getpNeutrales().get(planetaNeutral).getNaves());
+                planetas.setNaves(Integer.toString(navesRestantes));
                 planetas.setColor(misDatos.getJugadores().get(jugadorEnvio).getColor());
                 planetas.setInterruptor(misDatos.getpNeutrales().get(planetaNeutral).isInterruptor());
                 planetas.setPorcentajeMuertes(misDatos.getpNeutrales().get(planetaNeutral).getPorcentajeMuertes());
@@ -421,10 +425,10 @@ public class Jugabilidad {
                 planetas.setProduccion(misDatos.getpNeutrales().get(planetaNeutral).getProduccion());
                 misDatos.getJugadores().get(jugadorEnvio).getMisPlanetas().add(planetas);
                 misDatos.getpNeutrales().remove(planetaNeutral);
-                String[] color = planetas.getColor().split(",");
+                String[] color = misDatos.getJugadores().get(jugadorEnvio).getColor().split(",");
                 int[] colores = new int[color.length];
                 for (int j = 0; j < colores.length; j++) {
-                    colores[i] = Integer.parseInt(color[i]);
+                    colores[j] = Integer.parseInt(color[j]);
                 }
                 if (misDatos.getJugadores().get(jugadorEnvio).getPlanetasConquistados() == 0) {
                     misDatos.getJugadores().get(jugadorEnvio).setPlanetasConquistados(1);
@@ -439,15 +443,16 @@ public class Jugabilidad {
                 String texto = panelMensajes.getText();
                 String mensaje = texto + "    Planeta Neutral: " + planetaAtaque + " ha sido conquistado por " + misDatos.getJugadores().get(jugadorEnvio).getNombre() + "\n";
 
-                archivo.textoNeutralAtacado(planetaAtaque, "CONQUISTADO", i, navesDefensa, jugadorEnvio, planetaOrigen);
+                archivo.textoNeutralAtacado(planetaAtaque, "CONQUISTADO", i, navesRestantes, jugadorEnvio, planetaOrigen);
 
                 panelMensajes.setText(mensaje);
             } else {
-                misDatos.getpNeutrales().get(planetaNeutral).setNaves(Integer.toString(navesDefensa));
+                int navesRestantes = navesNeutral - totalNavesLlegada;
+                misDatos.getpNeutrales().get(planetaNeutral).setNaves(Integer.toString(navesRestantes));
                 JOptionPane.showMessageDialog(null, "Planeta Neutral: " + planetaAtaque + " ha bloqueado un ataque proveniente del planeta: " + listNaves.get(i).getPlanetaOrigen());
                 String texto = panelMensajes.getText();
                 String mensaje = texto + "    Planeta Neutral: " + planetaAtaque + " ha bloqueado un ataque proveniente del planeta: " + listNaves.get(i).getPlanetaOrigen() + "\n";
-                archivo.textoNeutralAtacado(planetaAtaque, "VIVO", i, navesDefensa, jugadorEnvio, planetaOrigen);
+                archivo.textoNeutralAtacado(planetaAtaque, "VIVO", i, navesRestantes, jugadorEnvio, planetaOrigen);
                 panelMensajes.setText(mensaje);
             }
             listNaves.get(i).setVerificador(true);

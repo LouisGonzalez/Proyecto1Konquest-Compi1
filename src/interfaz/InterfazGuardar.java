@@ -143,7 +143,6 @@ public class InterfazGuardar extends javax.swing.JDialog {
 
     private void btnDirectorioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDirectorioActionPerformed
             JFileChooser chooser = new JFileChooser();
-            String path = "";
             String seleccion = "Seleccione el JSON para abrir el juego";
             chooser.setCurrentDirectory(new File("."));
             chooser.setDialogTitle(seleccion);
@@ -153,6 +152,7 @@ public class InterfazGuardar extends javax.swing.JDialog {
                 System.out.println("getCurrentDirectory(): " + chooser.getCurrentDirectory());
                 System.out.println("getSelectedFile(): " + chooser.getSelectedFile());
                 path = chooser.getSelectedFile().toString();
+                txtDirectorio.setText(path);
             }
         
     }//GEN-LAST:event_btnDirectorioActionPerformed

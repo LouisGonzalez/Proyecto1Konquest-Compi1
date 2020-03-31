@@ -31,8 +31,6 @@ public class AccionesTurno {
         for (int i = listReplay.size() - 1; i >= 0; i--) {
             VentanaPrincipal.contadorTurnos = listReplay.get(i).getNoTurno();
             lblTurno.setText("Turno: " + VentanaPrincipal.contadorTurnos);
-            aumentoProduccion(misDatos);
-
             for (int j = listReplay.get(i).getListAcciones().size() - 1; j >= 0; j--) {
                 String nombreJugador = listReplay.get(i).getListAcciones().get(j).getNombreJugador();
                 Integer nodoJugador = impacto.busquedaJugador(misDatos, nombreJugador);
@@ -89,6 +87,7 @@ public class AccionesTurno {
                         Logger.getLogger(AccionesImpacto.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
+                
             }
             for (int a = 0; a < listNaves.size(); a++) {
                 if (listNaves.get(a).getVerificador()) {
@@ -96,7 +95,9 @@ public class AccionesTurno {
                     a--;
                 }
             }
-
+            aumentoProduccion(misDatos);
+            aumentoProduccionNeutrales(misDatos);
+            
             for (int j = listReplay.get(i).getListResumen().size() - 1; j >= 0; j--) {
                 ResumenTurno aux = listReplay.get(i).getListResumen().get(j);
                 resumen.verificarEstadoJugadores(misDatos, aux, listNaves);
@@ -108,7 +109,6 @@ public class AccionesTurno {
             }
 
         }
-
     }
 
     public Integer nodoJugador(Juego misDatos, String nombreJugador) {
@@ -145,6 +145,24 @@ public class AccionesTurno {
                 }
             }
 
+        }
+    }
+    
+    public void aumentoProduccionNeutrales(Juego misDatos){
+        if(misDatos.getMapa().getAcumular().equals("false")){
+            for (int i = 0; i < misDatos.getpNeutrales().size(); i++) {
+                int produccion = Integer.parseInt(misDatos.getpNeutrales().get(i).getProduccion());
+                int naves = Integer.parseInt(misDatos.getpNeutrales().get(i).getNaves());
+                int nuevasNaves = naves + produccion;
+                misDatos.getpNeutrales().get(i).setNaves(Integer.toString(nuevasNaves));
+            }
+        } else {
+            for (int i = 0; i < misDatos.getpNeutrales().size(); i++) {
+                int naves = Integer.parseInt(misDatos.getpNeutrales().get(i).getNaves());
+                int nuevasNaves = naves + 1;
+                misDatos.getpNeutrales().get(i).setNaves(Integer.toString(nuevasNaves));
+            }
+            
         }
     }
 

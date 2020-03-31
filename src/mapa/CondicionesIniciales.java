@@ -99,14 +99,31 @@ public class CondicionesIniciales {
             }
         }
         if (vencido == true && aux.get(aux.size() - 1).getNoPlanetas() > 0) {
-            JOptionPane.showMessageDialog(null, "Has ganado :D");
             agregarResultadosFinales(finales, aux, misDatos);
             panelJuego.removeAll();
             panelJuego.setVisible(false);
-
             EstadisticasFinales resultados = new EstadisticasFinales(null, true, finales);
             resultados.setVisible(true);
         }
+
+    }
+
+    public void verificacionPartidaFin(Juego misDatos, JPanel panelJuego, ArrayList<Resultados> finales) {
+        ArrayList<Auxiliar> aux = new ArrayList<>();
+        for (int i = 0; i < misDatos.getJugadores().size(); i++) {
+            Auxiliar nodo = new Auxiliar();
+            int totalPlanetas = misDatos.getJugadores().get(i).getMisPlanetas().size();
+            nodo.setNoJugador(i);
+            nodo.setNoPlanetas(totalPlanetas);
+            aux.add(nodo);
+        }
+        ordenamientoArray(aux);
+        agregarResultadosFinales(finales, aux, misDatos);
+        panelJuego.removeAll();
+        panelJuego.setVisible(false);
+
+        EstadisticasFinales resultados = new EstadisticasFinales(null, true, finales);
+        resultados.setVisible(true);
 
     }
 

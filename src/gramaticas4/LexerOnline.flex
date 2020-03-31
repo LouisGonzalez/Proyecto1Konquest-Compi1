@@ -1,5 +1,6 @@
 package gramaticas4;
 import java_cup.runtime.Symbol;
+import interfaz.VentanaPrincipal;
 
 %%
 %public 
@@ -74,7 +75,7 @@ Espacio = {Salto} | [ \t\f]
          ({Numero2}{Numero}*{Punto}|{Punto}|{Numero}{Punto}){Numero}*{Numero}                       {return symbol(sym.DECIMAL, new Double(yytext()));}
          ({Letra}|{Caracteres1})({Letra}|{Numero}|{Caracteres1}|{Caracteres2})*      {return symbol(sym.ID, new String(yytext()));}
          {Espacio}*                                                                  {/*Ignore*/}
-          .                                                                          {}
+         .                                                                           { String error = "Error lexico token: \""+yytext()+"\". Linea: "+(yyline+1)+" Columna: "+(yycolumn+1)+".\n"; VentanaPrincipal.notificarError(error); }
 
 
 

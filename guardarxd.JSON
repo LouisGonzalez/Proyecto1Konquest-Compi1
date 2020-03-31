@@ -1,0 +1,93 @@
+{
+   MAPA: {
+	id: "$aappp",
+	size: {
+	   filas: 5,
+	   columnas: 6
+	},
+	alAzar: false,
+	planetasNeutrales: 2,
+	mapaCiego: false,
+	acumular: false,
+	NEUTRALES: {
+	   mostrarNaves: true,
+	   mostrarEstadisticas: true,
+	   produccion: 0
+	},
+	finalizacion: 0
+},
+   PLANETAS: [
+	{
+	  nombre: "P1",
+	  naves: 10,
+	  produccion: 5,
+	  porcentajeMuertes: 0.5,
+	  posicionX: 1,
+	  posicionY: 2
+	},
+	{
+	  nombre: "P2",
+	  naves: 8,
+	  produccion: 8,
+	  porcentajeMuertes: 0.5,
+	  posicionX: 2,
+	  posicionY: 3
+	}
+   ],
+   PLANETAS_NEUTRALES: [
+	{
+	  nombre: "n1",
+	  naves: 2,
+	  produccion: 3,
+	  porcentajeMuertes: 0.5,
+	  posicionX: 0,
+	  posicionY: 1
+	},
+	{
+	  nombre: "n2",
+	  naves: 5,
+	  produccion: 5,
+	  porcentajeMuertes: 0.5,
+	  posicionX: 3,
+	  posicionY: 2
+	}
+   ],
+   JUGADORES: [
+	{
+	  nombre: "j1",
+	  color: "153,0,0,75",
+	 planetas: [
+	     "P1"
+	  ],
+	  tipo: HUMANO,
+	  enJuego: true,
+	  planetasConquistados: 0
+	},
+	{
+	  nombre: "j2",
+	  color: "0,204,153,75",
+	 planetas: [
+	     "P2"
+	  ],
+	  tipo: HUMANO,
+	  enJuego: true,
+	  planetasConquistados: 0
+	}
+   ]
+}
+CAMBIOS: [
+	turno: 0,
+	turnoJugador: 1,
+	NAVES_CAMINO [		{
+	  noFlota: 1,
+	  planetaOrigen: P2,
+	  planetaDestino: n2,
+	  noNaves: 0,
+	  porcentajeMuertes: 0.5,
+	  llegada: 1,
+	  jugadorEnvio: 0,
+	  jugadorAtaque: -1,
+	  verificador: false
+	}
+	]
+]

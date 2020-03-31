@@ -17,6 +17,7 @@
             <file>file:/home/luisitopapurey/Escritorio/Compiladores%201/Proyecto1.Konquest/src/gramaticas2/AnalizadorLexico2.java</file>
             <file>file:/home/luisitopapurey/Escritorio/Compiladores%201/Proyecto1.Konquest/src/online/Enlace.java</file>
             <file>file:/home/luisitopapurey/Escritorio/Compiladores%201/Proyecto1.Konquest/src/interfaz/EstadisticasFinales.java</file>
+            <file>file:/home/luisitopapurey/Escritorio/Compiladores%201/Proyecto1.Konquest/src/gramaticas4/SintaxOnline.java</file>
             <file>file:/home/luisitopapurey/Escritorio/Compiladores%201/Proyecto1.Konquest/src/Pollitos/Turnos.java</file>
             <file>file:/home/luisitopapurey/Escritorio/Compiladores%201/Proyecto1.Konquest/src/Pollitos/Mapa.java</file>
             <file>file:/home/luisitopapurey/Escritorio/Compiladores%201/Proyecto1.Konquest/src/gramaticas2/SintaxGuardarPartida.java</file>
@@ -24,8 +25,6 @@
             <file>file:/home/luisitopapurey/Escritorio/Compiladores%201/Proyecto1.Konquest/src/mapa/CreacionJSON.java</file>
             <file>file:/home/luisitopapurey/Escritorio/Compiladores%201/Proyecto1.Konquest/src/Pollitos/Auxiliar.java</file>
             <file>file:/home/luisitopapurey/Escritorio/Compiladores%201/Proyecto1.Konquest/src/online/AccionesImpactos.java</file>
-            <file>file:/home/luisitopapurey/Escritorio/Compiladores%201/Proyecto1.Konquest/src/mapa/Jugabilidad.java</file>
-            <file>file:/home/luisitopapurey/Escritorio/Compiladores%201/Proyecto1.Konquest/src/Pollitos/AccionesOnline.java</file>
             <file>file:/home/luisitopapurey/Escritorio/Compiladores%201/Proyecto1.Konquest/src/online/Cliente.java</file>
             <file>file:/home/luisitopapurey/Escritorio/Compiladores%201/Proyecto1.Konquest/src/gramaticas2/sym.java</file>
             <file>file:/home/luisitopapurey/Escritorio/Compiladores%201/Proyecto1.Konquest/src/gramaticas2/LexerGuardarPartida.flex</file>
@@ -33,7 +32,6 @@
             <file>file:/home/luisitopapurey/Escritorio/Compiladores%201/Proyecto1.Konquest/src/gramaticas/SintaxCreacionMapa.cup</file>
             <file>file:/home/luisitopapurey/Escritorio/Compiladores%201/Proyecto1.Konquest/src/mapa/MedicionDistancias.java</file>
             <file>file:/home/luisitopapurey/Escritorio/Compiladores%201/Proyecto1.Konquest/src/interfaz/VentanaPrincipal.java</file>
-            <file>file:/home/luisitopapurey/Escritorio/Compiladores%201/Proyecto1.Konquest/src/online/AccionesMovimiento.java</file>
             <file>file:/home/luisitopapurey/Escritorio/Compiladores%201/Proyecto1.Konquest/src/mapa/CreacionMapa.java</file>
             <file>file:/home/luisitopapurey/Escritorio/Compiladores%201/Proyecto1.Konquest/src/mapa/MiniMapa.java</file>
             <file>file:/home/luisitopapurey/Escritorio/Compiladores%201/Proyecto1.Konquest/src/interfaz/FlotasEnviadas.java</file>
@@ -50,6 +48,7 @@
             <file>file:/home/luisitopapurey/Escritorio/Compiladores%201/Proyecto1.Konquest/src/mapa/MensajesEmergentes.java</file>
             <file>file:/home/luisitopapurey/Escritorio/Compiladores%201/Proyecto1.Konquest/src/replay/AccionesImpacto.java</file>
             <file>file:/home/luisitopapurey/Escritorio/Compiladores%201/Proyecto1.Konquest/src/replay/AccionesTurno.java</file>
+            <file>file:/home/luisitopapurey/Escritorio/Compiladores%201/Proyecto1.Konquest/src/gramaticas/LexerCreacionMapa.flex</file>
             <file>file:/home/luisitopapurey/Escritorio/Compiladores%201/Proyecto1.Konquest/src/Pollitos/MapaPNeutrales.java</file>
             <file>file:/home/luisitopapurey/Escritorio/Compiladores%201/Proyecto1.Konquest/src/interfaz/UbicacionPlanetas.java</file>
             <file>file:/home/luisitopapurey/Escritorio/Compiladores%201/Proyecto1.Konquest/src/Pollitos/ResumenTurno.java</file>
@@ -64,7 +63,6 @@
             <file>file:/home/luisitopapurey/Escritorio/Compiladores%201/Proyecto1.Konquest/src/replay/AccionesResumen.java</file>
             <file>file:/home/luisitopapurey/Escritorio/Compiladores%201/Proyecto1.Konquest/src/gramaticas2/SintaxGuardarPartida.cup</file>
             <file>file:/home/luisitopapurey/Escritorio/Compiladores%201/Proyecto1.Konquest/src/gramaticas4/SintaxOnline.cup</file>
-            <file>file:/home/luisitopapurey/Escritorio/Compiladores%201/Proyecto1.Konquest/src/interfaz/AdderOnline.java</file>
         </group>
     </open-files>
 </project-private>

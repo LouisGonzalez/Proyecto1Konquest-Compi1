@@ -1,0 +1,81 @@
+{
+   MAPA: {
+	id: "$aa",
+	size: {
+	   filas: 5,
+	   columnas: 9
+	},
+	alAzar: true,
+	planetasNeutrales: 3,
+	mapaCiego: false,
+	acumular: false,
+	NEUTRALES: {
+	   mostrarNaves: false,
+	   mostrarEstadisticas: false,
+	   produccion: 0
+	},
+	finalizacion: 0
+},
+   PLANETAS: [
+	{
+	  nombre: "P1",
+	  naves: 13,
+	  produccion: 6,
+	  porcentajeMuertes: 0.405755138115353,
+	  posicionX: 0,
+	  posicionY: 1
+	},
+	{
+	  nombre: "P2",
+	  naves: 18,
+	  produccion: 3,
+	  porcentajeMuertes: 0.5945116984495992,
+	  posicionX: 0,
+	  posicionY: 2
+	}
+   ],
+   PLANETAS_NEUTRALES: [
+	{
+	  nombre: "N0",
+	  naves: 1,
+	  produccion: 0,
+	  porcentajeMuertes: 0.22024410325596644,
+	  posicionX: 4,
+	  posicionY: 1
+	},
+	{
+	  nombre: "N1",
+	  naves: 3,
+	  produccion: 0,
+	  porcentajeMuertes: 0.6474495823188523,
+	  posicionX: 1,
+	  posicionY: 0
+	},
+	{
+	  nombre: "N2",
+	  naves: 5,
+	  produccion: 0,
+	  porcentajeMuertes: 0.6171739537580901,
+	  posicionX: 4,
+	  posicionY: 3
+	}
+   ],
+   JUGADORES: [
+	{
+	  nombre: "j1",
+	  color:  "153,0,153,75",
+	  planetas: [
+	     "P1"
+	  ],
+	  tipo: HUMANO
+	},
+	{
+	  nombre: "j2",
+	  color:  "153,51,0,75",
+	  planetas: [
+	     "P2"
+	  ],
+	  tipo: HUMANO
+	}
+   ]
+}
