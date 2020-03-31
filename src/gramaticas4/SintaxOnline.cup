@@ -155,13 +155,14 @@ parser code {:
 ;
     e ::= RESUMEN LLAVE_A e1:a LLAVE_B {: RESULT=a; :}
 ;
-    e1 ::= e2:a e1:e {:  if(e!=null){ if(a.getTodoCorrecto() == null){ RESULT=null; } else {  e.add(a); RESULT=e; } } else { RESULT=null; } :}
+    e1 ::= e2:a e1:e {:    e.add(a); RESULT=e; :}
     | COMA p3:a {: RESULT=a; :}
     | {: RESULT=new ArrayList<>(); :}
 ;
-    p3 ::= e2:a e1:e {: if(e!=null){ if(a.getTodoCorrecto() == false){ RESULT=null; } else { e.add(a); RESULT=e; } } else { RESULT=null; } :}
+    p3 ::= e2:a e1:e {: e.add(a); RESULT=e;  :}
 ;
     e2 ::= estado ID:a DOS_PUNTOS VERDADERO:b {: ResumenTurno resumen = new ResumenTurno(); resumen.setNombreJugador(b.toString()); resumen.setEstadoJugador(Boolean.valueOf(a.toString())); RESULT=resumen; :}
     | estado ID:a DOS_PUNTOS FALSO:b {: ResumenTurno resumen = new ResumenTurno(); resumen.setNombreJugador(a.toString()); resumen.setEstadoJugador(Boolean.valueOf(a.toString())); RESULT=resumen; :}
     | error e2:e {: parser.totalErrores += "Atributo en campo RESUMEN sentenciado de forma incorrecta.\n"; e.setTodoCorrecto(false); RESULT=e; :}
+    
 ;

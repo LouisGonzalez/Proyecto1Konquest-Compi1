@@ -16,6 +16,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JTextArea;
 
 /**
  *
@@ -27,10 +28,12 @@ public class AccionesTurno {
     private final AccionesFlotas flotas = new AccionesFlotas();
     private final AccionesResumen resumen = new AccionesResumen();
 
-    public void lanzamientoFlotas(JLabel lblTurno, ArrayList<Replay> listReplay, Juego misDatos, ArrayList<NavesCamino> listNaves) {
+    public void lanzamientoFlotas(JLabel lblJugador, JLabel lblTurno, ArrayList<Replay> listReplay, Juego misDatos, ArrayList<NavesCamino> listNaves, JTextArea panelMensajes) {
         for (int i = listReplay.size() - 1; i >= 0; i--) {
             VentanaPrincipal.contadorTurnos = listReplay.get(i).getNoTurno();
             lblTurno.setText("Turno: " + VentanaPrincipal.contadorTurnos);
+            lblJugador.setText("Jugador: " + misDatos.getJugadores().get(VentanaPrincipal.contador).getNombre() );
+            panelMensajes.append("Turno: "+VentanaPrincipal.contadorTurnos+"\n");
             for (int j = listReplay.get(i).getListAcciones().size() - 1; j >= 0; j--) {
                 String nombreJugador = listReplay.get(i).getListAcciones().get(j).getNombreJugador();
                 Integer nodoJugador = impacto.busquedaJugador(misDatos, nombreJugador);
@@ -73,11 +76,13 @@ public class AccionesTurno {
                     }
                     if (impactoAux.getEstado().equals("VIVO")) {
                         JOptionPane.showMessageDialog(null, "Planeta " + planetaAux + " ha sido atacado por " + misDatos.getJugadores().get(impactoAux.getJugadorAtacante()).getNombre());
+                        
+                        panelMensajes.append("    Planeta "+ planetaAux + " ha bloqueado un ataque proveniente del jugador " + misDatos.getJugadores().get(impactoAux.getJugadorAtacante()).getNombre() + "\n");
                     } else {
                         if (nodoJugador == null) {
-                            impacto.destruirNeutral(misDatos, impactoAux.getJugadorAtacante(), impactoAux.getPlanetaAtacante(), planetaAux);
+                            impacto.destruirNeutral(panelMensajes, misDatos, impactoAux.getJugadorAtacante(), impactoAux.getPlanetaAtacante(), planetaAux);
                         } else {
-                            impacto.destruirPlaneta(impactoAux.getNoFlota(), listNaves, misDatos, impactoAux.getJugadorAtacante(), nodoJugador, impactoAux.getPlanetaAtacante(), planetaAux);
+                            impacto.destruirPlaneta(panelMensajes, impactoAux.getNoFlota(), listNaves, misDatos, impactoAux.getJugadorAtacante(), nodoJugador, impactoAux.getPlanetaAtacante(), planetaAux);
                         }
                     }
                     impacto.eliminarFlotaAtacante(listNaves, impactoAux.getNoFlota());

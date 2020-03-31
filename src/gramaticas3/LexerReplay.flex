@@ -104,8 +104,8 @@ Espacio = {Salto} | [ \t\f]
          "DIFICIL"                                                                   {return symbol(sym.DIFICIL, new String(yytext()));}
          "FACIL"                                                                     {return symbol(sym.FACIL, new String(yytext()));}
          {Numero}*{Coma}{Numero}*{Coma}{Numero}*{Coma}{Numero}*                      {return symbol(sym.COLOR, new String(yytext()));}
-         ("(-"{Numero}+")") | {Numero}+                                              {return symbol(sym.ENTERO, new Integer(yytext()));}
-         ({Numero2}{Numero}*{Punto}|{Punto}|{Numero}{Punto}){Numero}*{Numero}                       {return symbol(sym.DECIMAL, new Double(yytext()));}
+          {Caracteres2}|("(-"{Numero}+")") | {Numero}+ | {Caracteres2}{Numero}+                                            {return symbol(sym.ENTERO, new Integer(yytext()));}
+        ({Numero2}{Numero}*{Punto}|{Punto}|{Numero}{Punto}){Numero}*{Numero}                       {return symbol(sym.DECIMAL, new Double(yytext()));}
          ({Letra}|{Caracteres1})({Letra}|{Numero}|{Caracteres1}|{Caracteres2})*      {return symbol(sym.ID, new String(yytext()));}
          {Espacio}*                                                                  {/*Ignore*/}
          .                                                                          { String error = "Error lexico token: \""+yytext()+"\". Linea: "+(yyline+1)+" Columna: "+(yycolumn+1)+".\n"; VentanaPrincipal.notificarError(error); }

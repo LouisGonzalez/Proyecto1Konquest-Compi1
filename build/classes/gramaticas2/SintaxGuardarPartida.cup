@@ -214,6 +214,7 @@ parser code {:
     public void traspasoDatosFlotas(ArrayList<NavesCamino> listNaves, ArrayList<NavesCamino> listTemporal){
         for(int i = 0; i < listTemporal.size(); i++){
             listNaves.add(listTemporal.get(i));
+            System.out.println("entro aqui");
         }
 
     }
@@ -351,7 +352,7 @@ parser code {:
     k ::= finalizacion DOS_PUNTOS ENTERO:a {: Mapa mapa = new Mapa(); mapa.setFinalizacion(a.toString()); RESULT=mapa; :}
 ;
     p ::= PLANETAS DOS_PUNTOS AGRUPACION_A r:a AGRUPACION_B  {: RESULT=a; :}
-    | PLANETAS DOS_PUNTOS AGRUPACION_A AGRUPACION_B 
+    | PLANETAS DOS_PUNTOS AGRUPACION_A AGRUPACION_B {: RESULT=new ArrayList<>(); :}
 ;
     r ::= LLAVE_A s:a LLAVE_B COMA r:e {: if(a.getNombre()==null){ parser.totalErrores += "Falta de atributo nombre en un campo PLANETAS. Linea: "+aleft+" Columna: "+aright+".\n"; a.setTodoCorrecto(false); }
                                           if(a.getNaves()==null){ parser.totalErrores += "Falta de atributo naves en un campo PLANETAS. Linea: "+aleft+" Columna: "+aright+".\n"; a.setTodoCorrecto(false); }
@@ -507,7 +508,7 @@ parser code {:
     | bq:a bo:e {: if(e!=null){if(e.getTurnoJugador()==null){ e.setTurnoJugador(a.getTurnoJugador()); } else { parser.totalErrores2 += "Sub-atributo turnoJugador en campo CAMBIOS sentenciado mas de una vez. Linea: "+aleft+" Columna: "+aright+"\n"; e.setTodoCorrecto(false); } } RESULT=e; :}
     | bc:a bo:e {: if(e!=null){if(e.getListNaves()==null){ e.setListNaves(a); } else { parser.totalErrores2 += "Sub-atributo NAVES_CAMINO en campo CAMBIOS sentenciado mas de una vez. Linea: "+aleft+" Columna: "+aright+"\n"; e.setTodoCorrecto(false); }  } RESULT=e; :}
     | COMA rep1:a {: RESULT=a; :}
-    | {: DatosGuardados datos = new DatosGuardados(); datos.setTodoCorrecto(false); RESULT=datos; :}
+    | {: DatosGuardados datos = new DatosGuardados(); datos.setTodoCorrecto(true); RESULT=datos; :}
     | error bo:e {: parser.totalErrores2 += "Atributo en campo CAMBIOS definido de forma incorrecta.\n"; e.setTodoCorrecto(false); RESULT=e; :}
 ;
     rep1 ::=bb:a bo:e {: if(e!=null){if(e.getContador()==null){ e.setContador(a.getContador()); } else { parser.totalErrores2 += "Sub-atributo turno en campo CAMBIOS sentenciado mas de una vez. Linea: "+aleft+" Columna: "+aright+"\n"; e.setTodoCorrecto(false); }  } RESULT=e; :}

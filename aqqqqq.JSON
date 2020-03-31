@@ -1,0 +1,105 @@
+{
+   MAPA: {
+	id: "aqqqqq",
+	size: {
+	   filas: 7,
+	   columnas: 7
+	},
+	alAzar: false,
+	planetasNeutrales: 2,
+	mapaCiego: false,
+	acumular: false,
+	NEUTRALES: {
+	   mostrarNaves: false,
+	   mostrarEstadisticas: true,
+	   produccion: 0
+	},
+	finalizacion: 0
+},
+   PLANETAS: [
+	{
+	  nombre: "P1",
+	  naves: 8,
+	  produccion: 8,
+	  porcentajeMuertes: 0.5,
+	  posicionX: 1,
+	  posicionY: 4
+	},
+	{
+	  nombre: "P2",
+	  naves: 4,
+	  produccion: 4,
+	  porcentajeMuertes: 0.5,
+	  posicionX: 4,
+	  posicionY: 1
+	},
+	{
+	  nombre: "P3",
+	  naves: 6,
+	  produccion: 6,
+	  porcentajeMuertes: 0.5,
+	  posicionX: 3,
+	  posicionY: 4
+	},
+	{
+	  nombre: "P4",
+	  naves: 2,
+	  produccion: 2,
+	  porcentajeMuertes: 0.5,
+	  posicionX: 1,
+	  posicionY: 2
+	}
+   ],
+   PLANETAS_NEUTRALES: [
+	{
+	  nombre: "n1",
+	  naves: 5,
+	  produccion: 5,
+	  porcentajeMuertes: 0.5,
+	  posicionX: 2,
+	  posicionY: 2
+	},
+	{
+	  nombre: "n2",
+	  naves: 4,
+	  produccion: 4,
+	  porcentajeMuertes: 0.4,
+	  posicionX: 5,
+	  posicionY: 4
+	}
+   ],
+   JUGADORES: [
+	{
+	  nombre: "j1",
+	  color:  "255,255,0,75",
+	  planetas: [
+	     "P1"
+	  ],
+	  tipo: FACIL
+	},
+	{
+	  nombre: "j2",
+	  color:  "0,204,51,75",
+	  planetas: [
+	     "P2"
+	  ],
+	  tipo: HUMANO
+	},
+	{
+	  nombre: "j3",
+	  color:  "255,0,0,75",
+	  planetas: [
+	     "P3"
+	  ],
+	  tipo: DIFICIL
+	},
+	{
+	  nombre: "j4",
+	  color:  "0,51,204,75",
+	  planetas: [
+	     "P4"
+	  ],
+	  tipo: HUMANO
+	}
+   ]
+}

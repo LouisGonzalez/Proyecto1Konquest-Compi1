@@ -1,373 +1,173 @@
-SECUENCIAS [
-	TURNO 0: {
-	   ACCIONES: {
-	     j2: [
-	         Flota [
-	           noFlota: 1,
-	           planetaOrigen: P2,
-	           planetaDestino: n2,
-	           noNaves: 0,
-	           noJugadorEnvio: 0,
-	           noJugadorAtaque: -1,
-	           porcentajeMuertes: 0.5,
-	           turnoLlegada: 1,
-	           verificador: false
-	         ]
-	       ]
-	     j1: [
-	         Flota [
-	           noFlota: 1,
-	           planetaOrigen: P1,
-	           planetaDestino: n1,
-	           noNaves: 0,
-	           noJugadorEnvio: 1,
-	           noJugadorAtaque: -1,
-	           porcentajeMuertes: 0.5,
-	           turnoLlegada: 1,
-	           verificador: false
-	         ]
-	       ]
-	   }
-	   IMPACTOS {
-	   }
-	   RESUMEN {
-	       estado j2: true,
-	       estado j1: true
-	   }
+{
+   MAPA: {
+	id: "aqqqqq",
+	size: {
+	   filas: 7,
+	   columnas: 7
 	},
-	TURNO 1: {
-	   ACCIONES: {
-	     j2: [
-	         Flota [
-	           noFlota: 1,
-	           planetaOrigen: P2,
-	           planetaDestino: n2,
-	           noNaves: 5,
-	           noJugadorEnvio: 0,
-	           noJugadorAtaque: -1,
-	           porcentajeMuertes: 0.5,
-	           turnoLlegada: 2,
-	           verificador: false
-	         ]
-	       ]
-	     j1: [
-	         Flota [
-	           noFlota: 1,
-	           planetaOrigen: P1,
-	           planetaDestino: n1,
-	           noNaves: 15,
-	           noJugadorEnvio: 1,
-	           noJugadorAtaque: -1,
-	           porcentajeMuertes: 0.5,
-	           turnoLlegada: 2,
-	           verificador: false
-	         ]
-	       ]
-	   }
-	   IMPACTOS {
-	       NEUTRAL {
-	         n2 [
-	           navesRestantes: 10,
-	           estado: VIVO,
-	           mensaje: dd,
-	           noFlota:0,
-	           jugadorAtacante: 0,
-	           planetaAtacante: P2
-	         ]
-	       }
-	       NEUTRAL {
-	         n1 [
-	           navesRestantes: 5,
-	           estado: VIVO,
-	           mensaje: dd,
-	           noFlota:1,
-	           jugadorAtacante: 1,
-	           planetaAtacante: P1
-	         ]
-	       }
-	   }
-	   RESUMEN {
-	       estado j2: true,
-	       estado j1: true
-	   }
+	alAzar: false,
+	planetasNeutrales: 2,
+	mapaCiego: false,
+	acumular: false,
+	NEUTRALES: {
+	   mostrarNaves: false,
+	   mostrarEstadisticas: true,
+	   produccion: 0
 	},
-	TURNO 2: {
-	   ACCIONES: {
-	     j2: [
-	         Flota [
-	           noFlota: 1,
-	           planetaOrigen: P2,
-	           planetaDestino: n1,
-	           noNaves: 19,
-	           noJugadorEnvio: 0,
-	           noJugadorAtaque: 1,
-	           porcentajeMuertes: 0.5,
-	           turnoLlegada: 4,
-	           verificador: false
-	         ]
-	       ]
-	     j1: [
-	         Flota [
-	           noFlota: 1,
-	           planetaOrigen: P1,
-	           planetaDestino: P2,
-	           noNaves: 0,
-	           noJugadorEnvio: 1,
-	           noJugadorAtaque: 0,
-	           porcentajeMuertes: 0.5,
-	           turnoLlegada: 3,
-	           verificador: false
-	         ]
-	       ]
-	   }
-	   IMPACTOS {
-	       NEUTRAL {
-	         n2 [
-	           navesRestantes: 12,
-	           estado: VIVO,
-	           mensaje: dd,
-	           noFlota:0,
-	           jugadorAtacante: 0,
-	           planetaAtacante: P2
-	         ]
-	       }
-	       NEUTRAL {
-	         n1 [
-	           navesRestantes: 0,
-	           estado: CONQUISTADO,
-	           mensaje: dd,
-	           noFlota:1,
-	           jugadorAtacante: 1,
-	           planetaAtacante: P1
-	         ]
-	       }
-	   }
-	   RESUMEN {
-	       estado j2: true,
-	       estado j1: true
-	   }
+	finalizacion: 0
+},
+   PLANETAS: [
+	{
+	  nombre: "P4",
+	  naves: 3,
+	  produccion: 2,
+	  porcentajeMuertes: 0.5,
+	  posicionX: 1,
+	  posicionY: 2
 	},
-	TURNO 3: {
-	   ACCIONES: {
-	     j2: [
-	         Flota [
-	           noFlota: 2,
-	           planetaOrigen: P2,
-	           planetaDestino: n2,
-	           noNaves: 0,
-	           noJugadorEnvio: 0,
-	           noJugadorAtaque: -1,
-	           porcentajeMuertes: 0.5,
-	           turnoLlegada: 4,
-	           verificador: false
-	         ]
-	       ]
-	     j1: [
-	         Flota [
-	           noFlota: 1,
-	           planetaOrigen: P1,
-	           planetaDestino: P2,
-	           noNaves: 0,
-	           noJugadorEnvio: 1,
-	           noJugadorAtaque: 0,
-	           porcentajeMuertes: 0.5,
-	           turnoLlegada: 4,
-	           verificador: false
-	         ]
-	       ]
-	   }
-	   IMPACTOS {
-	       j2 {
-	         P2 [
-	           navesRestantes: 8,
-	           estado: VIVO,
-	           mensaje: dd,
-	           noFlota:1,
-	           jugadorAtacante: 1,
-	           planetaAtacante: P1
-	         ]
-	       }
-	   }
-	   RESUMEN {
-	       estado j2: true,
-	       estado j1: true
-	   }
+	{
+	  nombre: "P1",
+	  naves: 17,
+	  produccion: 8,
+	  porcentajeMuertes: 0.5,
+	  posicionX: 1,
+	  posicionY: 4
 	},
-	TURNO 4: {
-	   ACCIONES: {
-	   }
-	   IMPACTOS {
-	       j1 {
-	         n1 [
-	           navesRestantes: 4,
-	           estado: CONQUISTADO ,
-	           mensaje: dd,
-	           noFlota:0,
-	           jugadorAtacante: 0,
-	           planetaAtacante: P2
-	         ]
-	       }
-	       NEUTRAL {
-	         n2 [
-	           navesRestantes: 22,
-	           estado: VIVO,
-	           mensaje: dd,
-	           noFlota:1,
-	           jugadorAtacante: 0,
-	           planetaAtacante: P2
-	         ]
-	       }
-	       j2 {
-	         P2 [
-	           navesRestantes: 16,
-	           estado: VIVO,
-	           mensaje: dd,
-	           noFlota:2,
-	           jugadorAtacante: 1,
-	           planetaAtacante: P1
-	         ]
-	       }
-	   }
-	   RESUMEN {
-	       estado j2: true,
-	       estado j1: true
-	   }
+	{
+	  nombre: "P2",
+	  naves: 4,
+	  produccion: 4,
+	  porcentajeMuertes: 0.5,
+	  posicionX: 4,
+	  posicionY: 1
+	},
+	{
+	  nombre: "P3",
+	  naves: 0,
+	  produccion: 6,
+	  porcentajeMuertes: 0.5,
+	  posicionX: 3,
+	  posicionY: 4
+	},
+   ],
+   PLANETAS_NEUTRALES: [
+	{
+	  nombre: "n1",
+	  naves: 19,
+	  produccion: 5,
+	  porcentajeMuertes: 0.5,
+	  posicionX: 2,
+	  posicionY: 2
+	},
+	{
+	  nombre: "n2",
+	  naves: 16,
+	  produccion: 4,
+	  porcentajeMuertes: 0.4,
+	  posicionX: 5,
+	  posicionY: 4
 	}
+   ],
+   JUGADORES: [
+	{
+	  nombre: "j1",
+	  color: "255,255,0,75",
+	 planetas: [
+	     "P1"
+	     "P4",
+	  ],
+	  tipo: FACIL,
+	  enJuego: true,
+	  planetasConquistados: 1
 	},
-	TURNO 4: {
-	   ACCIONES: {
-	     j2: [
-	         Flota [
-	           noFlota: 1,
-	           planetaOrigen: P2,
-	           planetaDestino: n2,
-	           noNaves: 0,
-	           noJugadorEnvio: 0,
-	           noJugadorAtaque: -1,
-	           porcentajeMuertes: 0.5,
-	           turnoLlegada: 5,
-	           verificador: false
-	         ]
-	       ]
-	     j1: [
-	         Flota [
-	           noFlota: 1,
-	           planetaOrigen: P1,
-	           planetaDestino: n1,
-	           noNaves: 15,
-	           noJugadorEnvio: 1,
-	           noJugadorAtaque: 0,
-	           porcentajeMuertes: 0.5,
-	           turnoLlegada: 5,
-	           verificador: false
-	         ]
-	       ]
-	   }
-	   IMPACTOS {
-	   }
-	   RESUMEN {
-	       estado j2: true,
-	       estado j1: true
-	   }
+	{
+	  nombre: "j2",
+	  color: "0,204,51,75",
+	 planetas: [
+	     "P2"
+	  ],
+	  tipo: HUMANO,
+	  enJuego: true,
+	  planetasConquistados: 0
 	},
-	TURNO 5: {
-	   ACCIONES: {
-	     j2: [
-	         Flota [
-	           noFlota: 1,
-	           planetaOrigen: P2,
-	           planetaDestino: P1,
-	           noNaves: 24,
-	           noJugadorEnvio: 0,
-	           noJugadorAtaque: 1,
-	           porcentajeMuertes: 0.5,
-	           turnoLlegada: 6,
-	           verificador: false
-	         ]
-	       ]
-	     j1: [
-	         Flota [
-	           noFlota: 1,
-	           planetaOrigen: P1,
-	           planetaDestino: P2,
-	           noNaves: 0,
-	           noJugadorEnvio: 1,
-	           noJugadorAtaque: 0,
-	           porcentajeMuertes: 0.5,
-	           turnoLlegada: 6,
-	           verificador: false
-	         ]
-	       ]
-	   }
-	   IMPACTOS {
-	       NEUTRAL {
-	         n2 [
-	           navesRestantes: 27,
-	           estado: VIVO,
-	           mensaje: dd,
-	           noFlota:0,
-	           jugadorAtacante: 0,
-	           planetaAtacante: P2
-	         ]
-	       }
-	       j2 {
-	         n1 [
-	           navesRestantes: 1,
-	           estado: CONQUISTADO ,
-	           mensaje: dd,
-	           noFlota:1,
-	           jugadorAtacante: 1,
-	           planetaAtacante: P1
-	         ]
-	       }
-	   }
-	   RESUMEN {
-	       estado j2: true,
-	       estado j1: true
-	   }
+	{
+	  nombre: "j3",
+	  color: "255,0,0,75",
+	 planetas: [
+	     "P3"
+	  ],
+	  tipo: DIFICIL,
+	  enJuego: true,
+	  planetasConquistados: 1
 	},
-	TURNO 6: {
-	   ACCIONES: {
-	     j2: [
-	         Flota [
-	           noFlota: 1,
-	           planetaOrigen: P2,
-	           planetaDestino: n2,
-	           noNaves: 0,
-	           noJugadorEnvio: 0,
-	           noJugadorAtaque: -1,
-	           porcentajeMuertes: 0.5,
-	           turnoLlegada: 7,
-	           verificador: false
-	         ]
-	       ]
-	   }
-	   IMPACTOS {
-	       j1 {
-	         P1 [
-	           navesRestantes: 2,
-	           estado: CONQUISTADO ,
-	           mensaje: dd,
-	           noFlota:0,
-	           jugadorAtacante: 0,
-	           planetaAtacante: P2
-	         ]
-	       }
-	       j2 {
-	         P2 [
-	           navesRestantes: 8,
-	           estado: VIVO,
-	           mensaje: dd,
-	           noFlota:1,
-	           jugadorAtacante: 1,
-	           planetaAtacante: P1
-	         ]
-	       }
-	   }
-	   RESUMEN {
-	       estado j2: true,
-	       estado j1: true
-	   }
+	{
+	  nombre: "j4",
+	  color: "0,51,204,75",
+	 planetas: [
+	  ],
+	  tipo: HUMANO,
+	  enJuego: false,
+	  planetasConquistados: 0
 	}
+   ]
+}
+CAMBIOS: [
+	turno: 3,
+	turnoJugador: 2,
+	NAVES_CAMINO [		{
+	  noFlota: 1,
+	  planetaOrigen: P1,
+	  planetaDestino: P2,
+	  noNaves: 0,
+	  porcentajeMuertes: 0.5,
+	  llegada: 4,
+	  jugadorEnvio: 3,
+	  jugadorAtaque: 2,
+	  verificador: false
+	},
+	{
+	  noFlota: 2,
+	  planetaOrigen: P3,
+	  planetaDestino: P4,
+	  noNaves: 4,
+	  porcentajeMuertes: 0.5,
+	  llegada: 4,
+	  jugadorEnvio: 1,
+	  jugadorAtaque: 0,
+	  verificador: false
+	},
+	{
+	  noFlota: 3,
+	  planetaOrigen: P2,
+	  planetaDestino: n1,
+	  noNaves: 8,
+	  porcentajeMuertes: 0.5,
+	  llegada: 4,
+	  jugadorEnvio: 2,
+	  jugadorAtaque: -1,
+	  verificador: false
+	},
+	{
+	  noFlota: 3,
+	  planetaOrigen: P1,
+	  planetaDestino: P3,
+	  noNaves: 4,
+	  porcentajeMuertes: 0.5,
+	  llegada: 4,
+	  jugadorEnvio: 3,
+	  jugadorAtaque: 1,
+	  verificador: false
+	},
+	{
+	  noFlota: 2,
+	  planetaOrigen: P3,
+	  planetaDestino: P4,
+	  noNaves: 6,
+	  porcentajeMuertes: 0.5,
+	  llegada: 5,
+	  jugadorEnvio: 1,
+	  jugadorAtaque: 3,
+	  verificador: false
+	}
+	]
 ]
-turnoJugador: 1

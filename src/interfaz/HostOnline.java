@@ -50,8 +50,7 @@ public class HostOnline extends javax.swing.JDialog implements Observer {
     private JTextField txtNaves;
     private JButton btnTurno;
     private JLabel lblTurno;
-    
-    
+
     /**
      * Creates new form HostOnline
      */
@@ -142,7 +141,6 @@ public class HostOnline extends javax.swing.JDialog implements Observer {
         c.start();
     }//GEN-LAST:event_jButton1ActionPerformed
 
-   
     @Override
     public void update(java.util.Observable o, Object arg) {
         try {
@@ -151,41 +149,35 @@ public class HostOnline extends javax.swing.JDialog implements Observer {
             new SintaxOnline(lexico, panelMensajes, listOnline).parse();
             datosOnline = listOnline.get(0);
             listOnline.clear();
-            
+
             acciones.agregarNaves(misDatos, datosOnline, listNaves);
             acciones.actualizarTurno(misDatos, datosOnline);
-            
-            
-            if (contador == misDatos.getJugadores().size()) {
-                    contadorTurnos++;
-                    contador = 0;
-                    if (misDatos.getMapa().getAcumular().equals("false")) {
-                        cambioDatos.aumentoProduccion(misDatos);
-                    } else {
-                        cambioDatos.aumentoProduccionEn1(misDatos);
-                    }
-                    String texto = panelMensajes.getText();
-                    String mensaje = texto + "Turno: " + contadorTurnos + "\n";
-                    panelMensajes.setText(mensaje);
-                    jugabilidad.verificacionNavesLlegada(listNaves, misDatos, panelMensajes);
-                    cambioDatos.verificarGanador(misDatos, panelJuego, finales);
-                    verificadorPlanetasJugador();
-                }
-                lblTurno.setText("Turno: " + contadorTurnos);
-                txtNaves.setText("");
-                txtNaves.setEditable(false);
-                btnTurno.setEnabled(false);
 
-            
-            
-            
-            
-            
-            
+            if (contador == misDatos.getJugadores().size()) {
+                contadorTurnos++;
+                contador = 0;
+                String texto = panelMensajes.getText();
+                String mensaje = texto + "Turno: " + contadorTurnos + "\n";
+                panelMensajes.setText(mensaje);
+                jugabilidad.verificacionNavesLlegada(listNaves, misDatos, panelMensajes);
+                if (misDatos.getMapa().getAcumular().equals("false")) {
+                    cambioDatos.aumentoProduccion(misDatos);
+                } else {
+                    cambioDatos.aumentoProduccionEn1(misDatos);
+                }
+                cambioDatos.verificarGanador(misDatos, panelJuego, finales);
+                verificadorPlanetasJugador();
+            }
+            lblTurno.setText("Turno: " + contadorTurnos);
+            txtNaves.setText("");
+            txtNaves.setEditable(false);
+            btnTurno.setEnabled(false);
+
             datosOnline = null;
         } catch (Exception ex) {
             Logger.getLogger(AdderOnline.class.getName()).log(Level.SEVERE, null, ex);
         }
+
     }
 
     public void verificadorPlanetasJugador() {
@@ -196,7 +188,7 @@ public class HostOnline extends javax.swing.JDialog implements Observer {
             }
         }
     }
-    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JScrollPane jScrollPane1;

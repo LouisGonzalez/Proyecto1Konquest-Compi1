@@ -1,0 +1,16 @@
+SECUENCIAS [
+	},
+	TURNO 0: {
+	   ACCIONES: {
+	   }
+	   IMPACTOS {
+	   }
+	   RESUMEN {
+	       estado j4: true,
+	       estado j3: true,
+	       estado j2: true,
+	       estado j1: true
+	   }
+	}
+]
+turnoJugador: 0

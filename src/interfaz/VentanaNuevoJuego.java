@@ -12,6 +12,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.util.ArrayList;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
@@ -73,7 +74,11 @@ public class VentanaNuevoJuego extends javax.swing.JDialog {
         this.txtNaves = txtNaves;
         this.datosJuego = datosJuego;
         this.panelJuego2 = panelJuego2;
-        dtmModelNeutral = (DefaultTableModel) tablaNeutrales.getModel();
+        panelJuego.setBackground(new Color(255, 255, 255, 100));
+        panelMapa.setBackground(new Color(255, 255, 255, 100));
+        panelOpciones.setBackground(new Color(255, 255, 255, 100));
+         panelFondo.setIcon(new ImageIcon(getClass().getResource("/imagenes/Fotolia_106777298_Subscription_XXL.jpg")));
+       dtmModelNeutral = (DefaultTableModel) tablaNeutrales.getModel();
     }
 
     @SuppressWarnings("unchecked")
@@ -131,6 +136,7 @@ public class VentanaNuevoJuego extends javax.swing.JDialog {
         btnCancelar = new javax.swing.JButton();
         btnDirectorio = new javax.swing.JButton();
         txtDirectorio = new javax.swing.JTextField();
+        panelFondo = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -180,10 +186,12 @@ public class VentanaNuevoJuego extends javax.swing.JDialog {
                     .addGroup(panelJuegoLayout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(panelJuegoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelJuegoLayout.createSequentialGroup()
+                            .addGroup(panelJuegoLayout.createSequentialGroup()
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 233, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(panelJuegoLayout.createSequentialGroup()
                                 .addComponent(btnAgregarJugador, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 42, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 43, Short.MAX_VALUE)
                                 .addComponent(btnEliminarJugador, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addContainerGap())
         );
@@ -418,14 +426,13 @@ public class VentanaNuevoJuego extends javax.swing.JDialog {
                 .addGap(29, 29, 29)
                 .addGroup(panelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(panelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(btnPrevio, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(panelOpcionesLayout.createSequentialGroup()
-                            .addComponent(spinFinalizacion, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(4, 4, 4)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE))
-                        .addComponent(checkAcumular, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(checkMapaCiego, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btnPrevio, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelOpcionesLayout.createSequentialGroup()
+                        .addComponent(spinFinalizacion, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(4, 4, 4)
+                        .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(checkAcumular, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(checkMapaCiego, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnModificar, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(panelPrevio, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(panelOpcionesLayout.createSequentialGroup()
@@ -523,6 +530,7 @@ public class VentanaNuevoJuego extends javax.swing.JDialog {
             }
         });
         getContentPane().add(txtDirectorio, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 600, 460, -1));
+        getContentPane().add(panelFondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 970, 640));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -809,6 +817,7 @@ public class VentanaNuevoJuego extends javax.swing.JDialog {
     private javax.swing.JLabel lblPosX;
     private javax.swing.JLabel lblPosY;
     private javax.swing.JLabel lblProduccion;
+    private javax.swing.JLabel panelFondo;
     private javax.swing.JPanel panelJuego;
     private javax.swing.JPanel panelMapa;
     private javax.swing.JPanel panelOpciones;

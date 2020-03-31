@@ -9,10 +9,15 @@ import Pollitos.AccionesOnline;
 import Pollitos.Juego;
 import Pollitos.NavesCamino;
 import Pollitos.Resultados;
+import gramaticas.AnalizadorLexico;
+import gramaticas.SintaxCreacionMapa;
 import gramaticas4.AnalizadorLexico4;
 import gramaticas4.SintaxOnline;
 import static interfaz.VentanaPrincipal.contador;
 import static interfaz.VentanaPrincipal.contadorTurnos;
+import static interfaz.VentanaPrincipal.panelJuego;
+import static interfaz.VentanaPrincipal.panelMensajes;
+import java.awt.Color;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Observer;
@@ -25,6 +30,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import mapa.CondicionesIniciales;
+import mapa.CreacionMapa;
 import mapa.Jugabilidad;
 import online.AccionesMovimiento;
 import online.Cliente;
@@ -49,11 +55,14 @@ public class AdderOnline extends javax.swing.JDialog implements Observer {
     private JTextField txtNaves;
     private JButton btnTurno;
     private JLabel lblTurno;
+    private CreacionMapa mapa;
+    private ArrayList<Juego> datosJuego;
+    private JButton btnDistancia, btnFlotas;
 
     /**
      * Creates new form Addernline
      */
-    public AdderOnline(java.awt.Frame parent, boolean modal, Juego misDatos, ArrayList<NavesCamino> listNaves, JTextArea panelMensajes, AccionesOnline datosOnline, ArrayList<Resultados> finales, JPanel panelJuego, JLabel lblTurno, JTextField txtNaves, JButton btnTurno) {
+    public AdderOnline(java.awt.Frame parent, boolean modal, Juego misDatos, ArrayList<NavesCamino> listNaves, JTextArea panelMensajes, AccionesOnline datosOnline, ArrayList<Resultados> finales, JPanel panelJuego, JLabel lblTurno, JTextField txtNaves, JButton btnTurno, CreacionMapa mapa, ArrayList<Juego> datosJuego, JButton btnDistancia, JButton btnFlotas) {
         super(parent, modal);
         initComponents();
         this.misDatos = misDatos;
@@ -65,6 +74,10 @@ public class AdderOnline extends javax.swing.JDialog implements Observer {
         this.panelJuego = panelJuego;
         this.txtNaves = txtNaves;
         this.btnTurno = btnTurno;
+        this.datosJuego = datosJuego;
+        this.btnDistancia = btnDistancia;
+        this.btnFlotas = btnFlotas;
+        this.mapa = mapa;
         setLocationRelativeTo(null);
         Servidor server = new Servidor(7000);
         server.addObserver(this);
@@ -144,46 +157,68 @@ public class AdderOnline extends javax.swing.JDialog implements Observer {
 
     @Override
     public void update(java.util.Observable o, Object arg) {
-        try {
-            texto.setText((String) arg);
-            AnalizadorLexico4 lexico = new AnalizadorLexico4(new StringReader((String) arg));
-            new SintaxOnline(lexico, panelMensajes, listOnline).parse();
-            datosOnline = listOnline.get(0);
-            listOnline.clear();
-            acciones.agregarNaves(misDatos, datosOnline, listNaves);
-            acciones.actualizarTurno(misDatos, datosOnline);
-            if (contador == misDatos.getJugadores().size()) {
-                contadorTurnos++;
-                contador = 0;
-                if (misDatos.getMapa().getAcumular().equals("false")) {
-                    cambioDatos.aumentoProduccion(misDatos);
-                } else {
-                    cambioDatos.aumentoProduccionEn1(misDatos);
+        if (VentanaPrincipal.envioMapa == false) {
+                VentanaPrincipal.envioMapa = true;
+                AnalizadorLexico lexico = new AnalizadorLexico(new StringReader((String) arg));
+            try {
+                panelJuego.setBackground(new Color(255, 255, 255, 100));
+        panelJuego.setVisible(false);
+        new SintaxCreacionMapa(lexico, mapa, panelMensajes, contador, txtNaves, datosJuego, btnTurno, listNaves, panelJuego, btnDistancia, btnFlotas).parse();
+                if (!datosJuego.isEmpty()) {
+                   // misDatos = datosJuego.get(0);
+                    panelJuego.setVisible(true);
                 }
-                String texto = panelMensajes.getText();
-                String mensaje = texto + "Turno: " + contadorTurnos + "\n";
-                panelMensajes.setText(mensaje);
-                jugabilidad.verificacionNavesLlegada(listNaves, misDatos, panelMensajes);
-                cambioDatos.verificarGanador(misDatos, panelJuego, finales);
-                verificadorPlanetasJugador();
+            } catch (Exception ex) {
+                Logger.getLogger(AdderOnline.class.getName()).log(Level.SEVERE, null, ex);
             }
-            lblTurno.setText("Turno: " + contadorTurnos);
-            txtNaves.setText("");
-            txtNaves.setEditable(false);
-            btnTurno.setEnabled(false);
+        } else {
 
-            datosOnline = null;
+            try {
+                texto.setText((String) arg);
+                AnalizadorLexico4 lexico = new AnalizadorLexico4(new StringReader((String) arg));
+                new SintaxOnline(lexico, panelMensajes, listOnline).parse();
+                datosOnline = listOnline.get(0);
+                listOnline.clear();
+                acciones.agregarNaves(datosJuego.get(0), datosOnline, listNaves);
+                acciones.actualizarTurno(datosJuego.get(0), datosOnline);
+                if (contador == datosJuego.get(0).getJugadores().size()) {
+                    contadorTurnos++;
+                    contador = 0;
+                    String texto = panelMensajes.getText();
+                    String mensaje = texto + "Turno: " + contadorTurnos + "\n";
+                    panelMensajes.setText(mensaje);
+                    jugabilidad.verificacionNavesLlegada(listNaves, datosJuego.get(0), panelMensajes);
+                    if (datosJuego.get(0).getMapa().getAcumular().equals("false")) {
+                        cambioDatos.aumentoProduccion(datosJuego.get(0));
+                    } else {
+                        cambioDatos.aumentoProduccionEn1(datosJuego.get(0));
+                    }
+                    cambioDatos.verificarGanador(datosJuego.get(0), panelJuego, finales);
+                    verificadorPlanetasJugador(datosJuego.get(0));
+                }
+                lblTurno.setText("Turno: " + contadorTurnos);
+                txtNaves.setText("");
+                txtNaves.setEditable(false);
+                btnTurno.setEnabled(false);
 
-        } catch (Exception ex) {
-            Logger.getLogger(AdderOnline.class.getName()).log(Level.SEVERE, null, ex);
+                datosOnline = null;
+
+            } catch (Exception ex) {
+                Logger.getLogger(AdderOnline.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 
-    public void verificadorPlanetasJugador() {
+    public boolean retornarBooleano(boolean envioMapa) {
+        envioMapa = true;
+        return envioMapa;
+    }
+
+    public void verificadorPlanetasJugador(Juego misDatos) {
         if (contador < misDatos.getJugadores().size()) {
             if (misDatos.getJugadores().get(contador).getEnJuego().equals("false") && misDatos.getJugadores().get(contador).getTipo().equals("HUMANO")) {
                 contador++;
-                verificadorPlanetasJugador();
+                verificadorPlanetasJugador(misDatos);
             }
         }
     }

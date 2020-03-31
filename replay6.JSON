@@ -1,0 +1,164 @@
+SECUENCIAS [
+	TURNO 3: {
+	   ACCIONES: {
+	     j2: [
+	         Flota [
+	           noFlota: 2,
+	           planetaOrigen: P2,
+	           planetaDestino: P3,
+	           noNaves: 4,
+	           noJugadorEnvio: 2,
+	           noJugadorAtaque: 1,
+	           porcentajeMuertes: 0.5,
+	           turnoLlegada: 6,
+	           verificador: false
+	         ]
+	       ]
+	     j1: [
+	         Flota [
+	           noFlota: 3,
+	           planetaOrigen: P1,
+	           planetaDestino: P3,
+	           noNaves: 14,
+	           noJugadorEnvio: 3,
+	           noJugadorAtaque: 1,
+	           porcentajeMuertes: 0.5,
+	           turnoLlegada: 5,
+	           verificador: false
+	         ]
+	       ]
+	   }
+	   IMPACTOS {
+	   }
+	   RESUMEN {
+	       estado j4: false,
+	       estado j3: true,
+	       estado j2: true,
+	       estado j1: true
+	   }
+	},
+	TURNO 4: {
+	   ACCIONES: {
+	     j3: [
+	         Flota [
+	           noFlota: 2,
+	           planetaOrigen: P3,
+	           planetaDestino: P4,
+	           noNaves: 10,
+	           noJugadorEnvio: 1,
+	           noJugadorAtaque: 3,
+	           porcentajeMuertes: 0.5,
+	           turnoLlegada: 6,
+	           verificador: false
+	         ]
+	       ]
+	     j2: [
+	         Flota [
+	           noFlota: 2,
+	           planetaOrigen: P2,
+	           planetaDestino: P3,
+	           noNaves: 8,
+	           noJugadorEnvio: 2,
+	           noJugadorAtaque: 1,
+	           porcentajeMuertes: 0.5,
+	           turnoLlegada: 7,
+	           verificador: false
+	         ]
+	       ]
+	     j1: [
+	         Flota [
+	           noFlota: 2,
+	           planetaOrigen: P1,
+	           planetaDestino: P3,
+	           noNaves: 0,
+	           noJugadorEnvio: 3,
+	           noJugadorAtaque: 1,
+	           porcentajeMuertes: 0.5,
+	           turnoLlegada: 6,
+	           verificador: false
+	         ]
+	       ]
+	   }
+	   IMPACTOS {
+	       j2 {
+	         P2 [
+	           navesRestantes: 4,
+	           estado: VIVO,
+	           mensaje: dd,
+	           noFlota:0,
+	           jugadorAtacante: 3,
+	           planetaAtacante: P1
+	         ]
+	       }
+	       j1 {
+	         P4 [
+	           navesRestantes: 1,
+	           estado: VIVO,
+	           mensaje: dd,
+	           noFlota:1,
+	           jugadorAtacante: 1,
+	           planetaAtacante: P3
+	         ]
+	       }
+	       NEUTRAL {
+	         n1 [
+	           navesRestantes: 15,
+	           estado: VIVO,
+	           mensaje: dd,
+	           noFlota:2,
+	           jugadorAtacante: 2,
+	           planetaAtacante: P2
+	         ]
+	       }
+	       j3 {
+	         P3 [
+	           navesRestantes: 4,
+	           estado: VIVO,
+	           mensaje: dd,
+	           noFlota:3,
+	           jugadorAtacante: 3,
+	           planetaAtacante: P1
+	         ]
+	       }
+	   }
+	   RESUMEN {
+	       estado j4: false,
+	       estado j3: true,
+	       estado j2: true,
+	       estado j1: true
+	   }
+	},
+	TURNO 5: {
+	   ACCIONES: {
+	   }
+	   IMPACTOS {
+	       j1 {
+	         P4 [
+	           navesRestantes: 0,
+	           estado: VIVO,
+	           mensaje: dd,
+	           noFlota:0,
+	           jugadorAtacante: 1,
+	           planetaAtacante: P3
+	         ]
+	       }
+	       j3 {
+	         P3 [
+	           navesRestantes: 7,
+	           estado: CONQUISTADO ,
+	           mensaje: dd,
+	           noFlota:2,
+	           jugadorAtacante: 3,
+	           planetaAtacante: P1
+	         ]
+	       }
+	   }
+	   RESUMEN {
+	       estado j4: false,
+	       estado j3: false,
+	       estado j2: true,
+	       estado j1: true
+	   }
+	}
+]
+turnoJugador: 2

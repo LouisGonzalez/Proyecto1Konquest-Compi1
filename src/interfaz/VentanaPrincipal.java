@@ -2,7 +2,6 @@ package interfaz;
 
 import AccionesComputadora.InteligenciaArtificial;
 import Pollitos.AccionesOnline;
-import Pollitos.Auxiliar;
 import Pollitos.Juego;
 import Pollitos.NavesCamino;
 import Pollitos.Replay;
@@ -61,6 +60,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     public static String aux3 = "";
     public String pathReplay = "";
     public boolean partidaOnline = false;
+    public static boolean envioMapa = false;
     public static boolean errorLexico = false;
     private ArrayList<Juego> datosJuego = new ArrayList<>();
     private ArrayList<NavesCamino> listNaves = new ArrayList<>();
@@ -121,10 +121,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         guardar2 = new javax.swing.JMenuItem();
         guardarReplay = new javax.swing.JMenuItem();
         replay = new javax.swing.JMenuItem();
-        jMenu1 = new javax.swing.JMenu();
-        jMenuItem2 = new javax.swing.JMenuItem();
-        jMenuItem3 = new javax.swing.JMenuItem();
-        online = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         opcionHost = new javax.swing.JMenuItem();
         opcionAdder = new javax.swing.JMenuItem();
@@ -169,8 +165,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             }
         });
 
-        lblJugador.setText("Jugador");
-
         txtNaves.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtNavesKeyTyped(evt);
@@ -204,12 +198,12 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             panelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelOpcionesLayout.createSequentialGroup()
                 .addGap(10, 10, 10)
-                .addGroup(panelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblMensaje, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblJugador, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(25, 25, 25)
+                .addGroup(panelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(lblJugador, javax.swing.GroupLayout.DEFAULT_SIZE, 135, Short.MAX_VALUE)
+                    .addComponent(lblMensaje, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(31, 31, 31)
                 .addComponent(lblDistancia, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(40, 40, 40)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(panelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(btnFlotas, javax.swing.GroupLayout.DEFAULT_SIZE, 165, Short.MAX_VALUE)
                     .addComponent(btnDistancia, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -225,7 +219,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             .addGroup(panelOpcionesLayout.createSequentialGroup()
                 .addGap(5, 5, 5)
                 .addGroup(panelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblJugador)
+                    .addComponent(lblJugador, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnFlotas)
                     .addComponent(btnFinalizar))
                 .addGroup(panelOpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -301,34 +295,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             }
         });
         itemNuevo.add(replay);
-
-        jMenu1.setText("jMenu1");
-
-        jMenuItem2.setText("Crear conexion");
-        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem2ActionPerformed(evt);
-            }
-        });
-        jMenu1.add(jMenuItem2);
-
-        jMenuItem3.setText("Esperar conexion");
-        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem3ActionPerformed(evt);
-            }
-        });
-        jMenu1.add(jMenuItem3);
-
-        itemNuevo.add(jMenu1);
-
-        online.setText("Online");
-        online.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                onlineActionPerformed(evt);
-            }
-        });
-        itemNuevo.add(online);
 
         jMenuBar1.add(itemNuevo);
 
@@ -407,13 +373,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                     AnalizadorLexico lexico = new AnalizadorLexico(new StringReader(texto));
                     AnalizadorLexico2 lexico2 = new AnalizadorLexico2(new StringReader(texto));
                     try {
-                        /* new SintaxCreacionMapa(lexico, mapa, panelMensajes, contador, txtNaves, datosJuego, btnTurno, listNaves, panelJuego, btnDistancia, btnFlotas).parse();
-                    System.out.println(textoReplay);
-                    if (!datosJuego.isEmpty()) {
-                        juego = datosJuego.get(0);
-                        computadora.verificadorTipoInteligencia(juego, listNaves);
-                    }*/
-
                         errorLexico = false;
                         new SintaxGuardarPartida(lexico2, mapa, panelMensajes, contador, txtNaves, datosJuego, btnTurno, listNaves, panelJuego, btnDistancia, btnFlotas).parse();
                         System.out.println(textoReplay);
@@ -423,6 +382,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                         }
                         if (errorLexico == false) {
                             lblTurno.setText("Turno: " + contadorTurnos);
+                            lblJugador.setText("Jugador: " + juego.getJugadores().get(contador).getNombre());
                         } else {
                             panelJuego.removeAll();
                             panelJuego.setVisible(false);
@@ -456,21 +416,26 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         if (partidaOnline) {
             contador++;
             if (txtNaves.isEditable()) {
-                verificadorPlanetasJugador();
-                if (contador == juego.getJugadores().size()) {
+                verificadorPlanetasJugador(datosJuego.get(0));
+                if (contador != datosJuego.get(0).getJugadores().size()) {
+                    lblJugador.setText("Jugador: " + datosJuego.get(0).getJugadores().get(contador).getNombre());
+                }
+
+                if (contador == datosJuego.get(0).getJugadores().size()) {
                     contadorTurnos++;
                     contador = 0;
                     String texto = panelMensajes.getText();
                     String mensaje = texto + "Turno: " + contadorTurnos + "\n";
                     panelMensajes.setText(mensaje);
-                    jugabilidad.verificacionNavesLlegada(listNaves, juego, panelMensajes);
-                    if (juego.getMapa().getAcumular().equals("false")) {
-                        cambioDatos.aumentoProduccion(juego);
+                    jugabilidad.verificacionNavesLlegada(listNaves, datosJuego.get(0), panelMensajes);
+                    if (datosJuego.get(0).getMapa().getAcumular().equals("false")) {
+                        cambioDatos.aumentoProduccion(datosJuego.get(0));
                     } else {
-                        cambioDatos.aumentoProduccionEn1(juego);
+                        cambioDatos.aumentoProduccionEn1(datosJuego.get(0));
                     }
-                    cambioDatos.verificarGanador(juego, panelJuego, finales);
-                    verificadorPlanetasJugador();
+                    verificadorPlanetasJugador(datosJuego.get(0));
+                    lblJugador.setText("Jugador: " + datosJuego.get(0).getJugadores().get(contador).getNombre());
+
                 }
                 lblTurno.setText("Turno: " + contadorTurnos);
                 txtNaves.setText("");
@@ -485,15 +450,13 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             textoOnline += "\t}\n";
             aux = "";
             textoOnline += "\tRESUMEN {\n";
-            archivoReplay.textoNeutral(juego);
+            archivoReplay.textoNeutral(datosJuego.get(0));
             textoOnline += aux3;
             aux3 = "";
             textoOnline += "\t}\n";
-            textoOnline += "\tGENERAL {\n";
-            textoOnline += "\t   turnoJugador: " + contador + ",\n";
-            textoOnline += "\t   turno: " + contadorTurnos + "\n";
-            textoOnline += "\t}\n";
             textoOnline += "}";
+            cambioDatos.verificarGanador(datosJuego.get(0), panelJuego, finales);
+
             if (soyHost) {
                 Cliente cliente = new Cliente(7000, textoOnline);
                 Thread miHilo = new Thread(cliente);
@@ -505,6 +468,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 miHilo.start();
 
             }
+
             textoOnline = "";
         } else {
             if (txtNaves.isEditable() == false) {
@@ -512,28 +476,25 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 if (contador == 0) {
                     if (juego.getJugadores().get(contador).getTipo().equals("HUMANO") && juego.getJugadores().get(contador).getEnJuego().equals("true")) {
                         if (contador == juego.getJugadores().size() - 1) {
-                            //      textoReplay += "\t     ]\n";
                         } else {
-                            //    textoReplay += "\t     ],\n";
-                            //     textoReplay += "\t     " + juego.getJugadores().get(contador).getNombre() + "\n";
                         }
                         contador++;
-                        verificadorPlanetasJugador();
+                        verificadorPlanetasJugador(juego);
                         recursividadComputadora();
                     }
                 } else if (contador > 0) {
                     if (juego.getJugadores().get(contador).getTipo().equals("HUMANO") && juego.getJugadores().get(contador).getEnJuego().equals("true")) {
                         if (contador == juego.getJugadores().size() - 1) {
-                            //        textoReplay += "\t     ]\n";
                         } else {
-                            //      textoReplay += "\t     ],\n";
-                            //      textoReplay += "\t     " + juego.getJugadores().get(contador).getNombre() + "\n";
                         }
                         contador++;
                         recursividadComputadora();
-                        verificadorPlanetasJugador();
+                        verificadorPlanetasJugador(juego);
                     }
                 }
+            }
+            if (contador != juego.getJugadores().size()) {
+                lblJugador.setText("Jugador: " + juego.getJugadores().get(contador).getNombre());
             }
             if (contador == juego.getJugadores().size()) {
                 archivoReplay.textoNeutral(juego);
@@ -566,8 +527,10 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                     cambioDatos.aumentoProduccionEn1(juego);
                 }
                 cambioDatos.verificarGanador(juego, panelJuego, finales);
-                verificadorPlanetasJugador();
+                verificadorPlanetasJugador(juego);
                 recursividadComputadora();
+                lblJugador.setText("Jugador: " + juego.getJugadores().get(contador).getNombre());
+
             }
             lblTurno.setText("Turno: " + contadorTurnos);
             txtNaves.setText("");
@@ -594,11 +557,11 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         }
     }
 
-    public void verificadorPlanetasJugador() {
+    public void verificadorPlanetasJugador(Juego juego) {
         if (contador < juego.getJugadores().size()) {
             if (juego.getJugadores().get(contador).getEnJuego().equals("false") && juego.getJugadores().get(contador).getTipo().equals("HUMANO")) {
                 contador++;
-                verificadorPlanetasJugador();
+                verificadorPlanetasJugador(juego);
             }
         }
     }
@@ -679,7 +642,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                         new SintaxReplay(lexico, mapa, panelMensajes, contador, txtNaves, datosJuego, btnTurno, listNaves, panelJuego, btnDistancia, btnFlotas, listReplay).parse();
                         JOptionPane.showMessageDialog(null, "listo");
                         if (!listReplay.isEmpty()) {
-                            acciones.lanzamientoFlotas(lblTurno, listReplay, juego, listNaves);
+                            acciones.lanzamientoFlotas(lblJugador, lblTurno, listReplay, juego, listNaves, panelMensajes);
                         }
 
                         System.out.println(listNaves.size() + "sdss");
@@ -699,22 +662,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private void guardarReplayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_guardarReplayActionPerformed
         if (partidaOnline == false) {
             if (!path.equals("")) {
-                /* textoReplay += "\t},\n";
-                textoReplay += "\tTURNO " + contadorTurnos + ": {\n";
-                textoReplay += "\t   ACCIONES: {\n";
-                textoReplay += aux;
-                aux = "";
-                textoReplay += "\t   }\n";
-                textoReplay += "\t   IMPACTOS {\n";
-                textoReplay += aux2;
-                aux2 = "";
-                textoReplay += "\t   }\n";
-                textoReplay += "\t   RESUMEN {\n";
-                archivoReplay.textoNeutral(juego);
-                textoReplay += aux3;
-                aux3 = "";
-                textoReplay += "\t   }\n";
-                textoReplay += "\t}\n";*/
                 System.out.println(textoReplay);
                 archivoReplay.creacionJSON(path, juego);
             } else {
@@ -727,50 +674,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_guardarReplayActionPerformed
 
-    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
-
-    }//GEN-LAST:event_jMenuItem2ActionPerformed
-
-    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
-        Enlace servidor = new Enlace();
-        servidor.servidor(panelMensajes);
-    }//GEN-LAST:event_jMenuItem3ActionPerformed
-
-    private void onlineActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onlineActionPerformed
-        datosJuego.clear();
-        if (juego != null) {
-            JOptionPane.showMessageDialog(null, "Hay un juego en proceso, finaliza partida para continuar");
-        }
-        JFileChooser chooser = validacionesOnline.abrirArchivo(juego, datosJuego, panelMensajes);
-        if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
-            System.out.println("getCurrentDirectory(): " + chooser.getCurrentDirectory());
-            path = chooser.getCurrentDirectory().toString();
-            System.out.println("getSelectedFile(): " + chooser.getSelectedFile());
-            proyecto = new File(chooser.getSelectedFile().getAbsolutePath());
-            archivo = proyecto.toString();
-            if (archivo.endsWith(".JSON")) {
-                String texto = validacionesOnline.validarArchivo(archivo, proyecto);
-                AnalizadorLexico lexico = new AnalizadorLexico(new StringReader(texto));
-                try {
-                    //      new SintaxOnline(lexico, panelMensajes, datosOnline).parse();
-                    new SintaxCreacionMapa(lexico, mapa, panelMensajes, contador, txtNaves, datosJuego, btnTurno, listNaves, panelJuego, btnDistancia, btnFlotas).parse();
-                    if (!datosJuego.isEmpty()) {
-                        juego = datosJuego.get(0);
-                    }
-                    lblTurno.setText("Turno: " + contadorTurnos);
-                } catch (Exception ex) {
-                    Logger.getLogger(VentanaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
-                    JOptionPane.showMessageDialog(null, "ERROR");
-                    //     panelMensajes.setText(SintaxCreacionMapa.totalErrores);
-                }
-            } else {
-                System.out.println("no es un archivo compatible");
-            }
-        } else {
-            JOptionPane.showMessageDialog(null, "No hubo ninguna seleccion");
-        }
-    }//GEN-LAST:event_onlineActionPerformed
-
     private void btnFinalizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFinalizarActionPerformed
         if (partidaOnline) {
             partidaOnline = false;
@@ -781,89 +684,79 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         panelJuego.removeAll();
         panelJuego.setVisible(false);
         textoReplay = "";
+        lblTurno.setText("");
+        lblJugador.setText("");
         JOptionPane.showMessageDialog(null, "Partida finalizada con exito.");
         panelMensajes.setText("");
         cambioDatos.verificacionPartidaFin(juego, panelJuego, finales);
-        juego = null;        
+        juego = null;
     }//GEN-LAST:event_btnFinalizarActionPerformed
 
     private void opcionHostActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_opcionHostActionPerformed
         datosJuego.clear();
-        if (juego != null) {
+        if (datosJuego.size() > 0) {
             JOptionPane.showMessageDialog(null, "Hay un juego en proceso, finaliza partida para continuar");
-        }
-        JFileChooser chooser = validacionesOnline.abrirArchivo(juego, datosJuego, panelMensajes);
-        if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
-            System.out.println("getCurrentDirectory(): " + chooser.getCurrentDirectory());
-            path = chooser.getCurrentDirectory().toString();
-            System.out.println("getSelectedFile(): " + chooser.getSelectedFile());
-            proyecto = new File(chooser.getSelectedFile().getAbsolutePath());
-            archivo = proyecto.toString();
-            if (archivo.endsWith(".JSON")) {
-                String texto = validacionesOnline.validarArchivo(archivo, proyecto);
-                AnalizadorLexico lexico = new AnalizadorLexico(new StringReader(texto));
-                try {
-                    new SintaxCreacionMapa(lexico, mapa, panelMensajes, contador, txtNaves, datosJuego, btnTurno, listNaves, panelJuego, btnDistancia, btnFlotas).parse();
-                    if (!datosJuego.isEmpty()) {
-                        juego = datosJuego.get(0);
-                        HostOnline host = new HostOnline(new JFrame(), false, juego, listNaves, panelMensajes, datosOnline, finales, panelJuego, lblTurno, txtNaves, btnTurno);
-                        partidaOnline = validacionesOnline.verificarMapa(juego, panelJuego, listNaves, datosOnline, host);
-                        if (host.isVisible()) {
-                            soyHost = true;
+        } else {
+            JFileChooser chooser = validacionesOnline.abrirArchivo(juego, datosJuego, panelMensajes);
+            if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+                System.out.println("getCurrentDirectory(): " + chooser.getCurrentDirectory());
+                path = chooser.getCurrentDirectory().toString();
+                System.out.println("getSelectedFile(): " + chooser.getSelectedFile());
+                proyecto = new File(chooser.getSelectedFile().getAbsolutePath());
+                archivo = proyecto.toString();
+                if (archivo.endsWith(".JSON")) {
+                    String texto = validacionesOnline.validarArchivo(archivo, proyecto);
+                    AnalizadorLexico lexico = new AnalizadorLexico(new StringReader(texto));
+                    try {
+                        new SintaxCreacionMapa(lexico, mapa, panelMensajes, contador, txtNaves, datosJuego, btnTurno, listNaves, panelJuego, btnDistancia, btnFlotas).parse();
+                        if (!datosJuego.isEmpty()) {
+                            juego = datosJuego.get(0);
+                            HostOnline host = new HostOnline(new JFrame(), false, datosJuego.get(0), listNaves, panelMensajes, datosOnline, finales, panelJuego, lblTurno, txtNaves, btnTurno);
+                            partidaOnline = validacionesOnline.verificarMapa(datosJuego.get(0), panelJuego, listNaves, datosOnline, host);
+                            if (partidaOnline == false) {
+                                datosJuego = new ArrayList<>();
+                            } else {
+                                Cliente cliente = new Cliente(7000, texto);
+                                Thread miHilo = new Thread(cliente);
+                                miHilo.start();
+
+                            }
+                            if (host.isVisible()) {
+                                soyHost = true;
+                            }
                         }
+                        lblTurno.setText("Turno: " + contadorTurnos);
+                    } catch (Exception ex) {
+                        Logger.getLogger(VentanaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+                        JOptionPane.showMessageDialog(null, "ERROR");
                     }
-                    lblTurno.setText("Turno: " + contadorTurnos);
-                } catch (Exception ex) {
-                    Logger.getLogger(VentanaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
-                    JOptionPane.showMessageDialog(null, "ERROR");
+                } else {
+                    System.out.println("no es un archivo compatible");
                 }
             } else {
-                System.out.println("no es un archivo compatible");
+                JOptionPane.showMessageDialog(null, "No hubo ninguna seleccion");
             }
-        } else {
-            JOptionPane.showMessageDialog(null, "No hubo ninguna seleccion");
         }
-
     }//GEN-LAST:event_opcionHostActionPerformed
 
     private void opcionAdderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_opcionAdderActionPerformed
         datosJuego.clear();
         if (juego != null) {
             JOptionPane.showMessageDialog(null, "Hay un juego en proceso, finaliza partida para continuar");
-        }
-        JFileChooser chooser = validacionesOnline.abrirArchivo(juego, datosJuego, panelMensajes);
-        if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
-            System.out.println("getCurrentDirectory(): " + chooser.getCurrentDirectory());
-            path = chooser.getCurrentDirectory().toString();
-            System.out.println("getSelectedFile(): " + chooser.getSelectedFile());
-            proyecto = new File(chooser.getSelectedFile().getAbsolutePath());
-            archivo = proyecto.toString();
-            if (archivo.endsWith(".JSON")) {
-                String texto = validacionesOnline.validarArchivo(archivo, proyecto);
-                AnalizadorLexico lexico = new AnalizadorLexico(new StringReader(texto));
-                try {
-                    new SintaxCreacionMapa(lexico, mapa, panelMensajes, contador, txtNaves, datosJuego, btnTurno, listNaves, panelJuego, btnDistancia, btnFlotas).parse();
-                    if (!datosJuego.isEmpty()) {
-                        juego = datosJuego.get(0);
-                        AdderOnline adder = new AdderOnline(new JFrame(), false, juego, listNaves, panelMensajes, datosOnline, finales, panelJuego, lblTurno, txtNaves, btnTurno);
-
-                        partidaOnline = validacionesOnline.verificarMapa2(juego, panelJuego, listNaves, datosOnline, adder);
-                        if (adder.isVisible()) {
-                            soyAdder = true;
-                        }
-
-                    }
-                    lblTurno.setText("Turno: " + contadorTurnos);
-                } catch (Exception ex) {
-                    Logger.getLogger(VentanaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
-                    JOptionPane.showMessageDialog(null, "ERROR");
-                }
-            } else {
-                JOptionPane.showMessageDialog(null, "Este no es un archivo compatible");
-            }
         } else {
-            JOptionPane.showMessageDialog(null, "No hubo ninguna seleccion");
+            AdderOnline adder = new AdderOnline(new JFrame(), false, juego, listNaves, panelMensajes, datosOnline, finales, panelJuego, lblTurno, txtNaves, btnTurno, mapa, datosJuego, btnDistancia, btnFlotas);
+            adder.setVisible(true);
+            partidaOnline = true;
+            if (partidaOnline == false) {
+                juego = null;
+            }
+            if (adder.isVisible()) {
+                soyAdder = true;
+            }
+
         }
+        lblTurno.setText("Turno: " + contadorTurnos);
+
 
     }//GEN-LAST:event_opcionAdderActionPerformed
 
@@ -878,18 +771,14 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenuItem guardarReplay;
     private javax.swing.JMenuItem itemLectura;
     private javax.swing.JMenu itemNuevo;
-    private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem2;
-    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblDistancia;
     private javax.swing.JLabel lblJugador;
     private javax.swing.JLabel lblMensaje;
     private javax.swing.JLabel lblTurno;
-    private javax.swing.JMenuItem online;
     private javax.swing.JMenuItem opcionAdder;
     private javax.swing.JMenuItem opcionHost;
     private javax.swing.JMenu opcionesGuardar;

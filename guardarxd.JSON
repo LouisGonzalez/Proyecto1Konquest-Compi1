@@ -78,7 +78,8 @@
 CAMBIOS: [
 	turno: 0,
 	turnoJugador: 1,
-	NAVES_CAMINO [		{
+	NAVES_CAMINO [		
+	{
 	  noFlota: 1,
 	  planetaOrigen: P2,
 	  planetaDestino: n2,

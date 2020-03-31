@@ -48,7 +48,7 @@
 	  porcentajeMuertes: 0.5,
 	  posicionX: 3,
 	  posicionY: 4
-	},
+	}
    ],
    PLANETAS_NEUTRALES: [
 	{

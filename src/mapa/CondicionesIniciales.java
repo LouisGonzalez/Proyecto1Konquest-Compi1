@@ -89,9 +89,7 @@ public class CondicionesIniciales {
             aux.add(nodo);
         }
         ordenamientoArray(aux);
-
         boolean vencido = true;
-
         for (int i = 0; i < aux.size() - 1; i++) {
             if (aux.get(i).getNoPlanetas() > 0) {
                 vencido = false;

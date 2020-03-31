@@ -262,15 +262,6 @@ public class Jugabilidad {
             String planetaOrigen = listNaves.get(i).getPlanetaOrigen();
 
             Integer jugadorAtaque = busquedaPlaneta(misDatos, planetaAtaque);
-            
-            
-            
-            
-            
-            
-            
-            
-            
 
             if (jugadorAtaque != null) {
                 if (listNaves.get(i).getTurnoLlegada() == VentanaPrincipal.contadorTurnos) {
@@ -291,8 +282,8 @@ public class Jugabilidad {
                     int navesAtacanteLlegada = totalNavesAtacante - navesAtacanteDestruidas;
                     int navesDefensaDestruidas = (int) (navesPlanetaAtacado * porcMuerteAtacante);
                     int totalNavesDefensa = navesPlanetaAtacado - navesDefensaDestruidas;
-                    System.out.println(navesPlanetaAtacado+"---"+navesAtacanteLlegada+"----"+totalNavesAtacante+"----"+navesAtacanteDestruidas);
-                    System.out.println(navesAtacanteLlegada+"afsfdsfsdfdsfdsf");
+                    System.out.println(navesPlanetaAtacado + "---" + navesAtacanteLlegada + "----" + totalNavesAtacante + "----" + navesAtacanteDestruidas);
+                    System.out.println(navesAtacanteLlegada + "afsfdsfsdfdsfdsf");
                     if (navesPlanetaAtacado < navesAtacanteLlegada) {
 
                         devolverJugadorAlJuego(misDatos, jugadorEnvio);
@@ -316,11 +307,9 @@ public class Jugabilidad {
                             int nuevoValor = planetasConquistados + 1;
                             misDatos.getJugadores().get(jugadorEnvio).setPlanetasConquistados(nuevoValor);
                         }
-                        
+
                         eliminarFlotas(i, planetaAtaque, listNaves, jugadorEnvio);
-                        
-                        
-                        
+
                         JOptionPane.showMessageDialog(null, "Planeta: " + planetaAtaque + " ha sido conquistado por " + misDatos.getJugadores().get(jugadorEnvio).getNombre());
                         archivo.textoNavesImpactadas(misDatos, i, jugadorAtaque, planetaAtaque, navesRestantes, "CONQUISTADO ", jugadorEnvio, planetaOrigen);
                         String texto = panelMensajes.getText();
@@ -351,26 +340,10 @@ public class Jugabilidad {
         }
     }
 
-            public void eliminarFlotas(int nodo, String nombrePlaneta, ArrayList<NavesCamino> listNaves, int cambioJugador) {
-
-        /*for (int i = 0; i < listNaves.size(); i++) {
-            if (listNaves.get(i).getPlanetaOrigen().equals(nombrePlaneta) && listNaves.get(i).getVerificador() == false) {
-                NavesCamino navesAux;
-                navesAux = listNaves.get(i);
-                navesAux.setVerificador(true);
-                listNaves.set(i, navesAux);
-                System.out.println(i + "supuesto nodo a ser eliminado ENTRARAsdfddddddddddddddddddddddddddddddd");
-                System.out.println(listNaves.size() - 1);
-            }
-        }*/
-        
-        
-        
-        
+    public void eliminarFlotas(int nodo, String nombrePlaneta, ArrayList<NavesCamino> listNaves, int cambioJugador) {
         NavesCamino navesAux = listNaves.get(nodo);
         navesAux.setVerificador(true);
         listNaves.set(nodo, navesAux);
-        
 
     }
 
@@ -411,7 +384,7 @@ public class Jugabilidad {
             int totalNavesLlegada = navesAtacante - navesAtacanteDestruidas;
             int navesDefensaDestruidas = (int) (navesNeutral * porcMuerteAtacante);
             int navesDefensa = navesNeutral - navesDefensaDestruidas;
-            System.out.println(navesNeutral+"xxxxxxxxxxxxxx"+totalNavesLlegada+"xxxxxx");
+            System.out.println(navesNeutral + "xxxxxxxxxxxxxx" + totalNavesLlegada + "xxxxxx");
             if (navesNeutral < totalNavesLlegada) {
                 Planetas planetas = new Planetas();
                 int navesRestantes = totalNavesLlegada - navesNeutral;
